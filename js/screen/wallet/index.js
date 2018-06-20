@@ -17,7 +17,7 @@ import RequestData from '../../utils/https/RequestData';
 import Spinner from 'react-native-loading-spinner-overlay';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-class Home extends BaseScreen {
+class Wallet extends BaseScreen {
 		constructor(props) {
 			super(props);
 			this.state = {
@@ -46,7 +46,7 @@ class Home extends BaseScreen {
 								<Left style={[common_styles.headerLeft, {flex:0.15}]}>
 								</Left>
 								<Body style={styles.headerBody}>
-									<Text style={common_styles.bold}>Latest price</Text>
+									<Text style={common_styles.bold}>My wallets</Text>
 								</Body>
 								<Right style={[common_styles.headerRight, {flex:0.15}]}>
 									<Button
@@ -58,9 +58,11 @@ class Home extends BaseScreen {
 								</Right>
 							</Header>
 							{/* END header */}
+
+
 						</Container>
 				);
 		}
 }
 
-export default Home;
+export default Wallet;

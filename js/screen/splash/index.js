@@ -20,7 +20,7 @@ import RequestData from '../../utils/https/RequestData';
 import DeviceInfo from 'react-native-device-info';
 import store from 'react-native-simple-store';
 
-const launchscreenLogo = require("../../../img/logo.jpeg");
+const launchscreenLogo = require("../../../img/logo.png");
 
 class Splash extends BaseScreen {
 	constructor(props) {
@@ -32,6 +32,9 @@ class Splash extends BaseScreen {
 	}
 		//like onload event
 		componentDidMount() {
+			setTimeout(() => {
+				this._navigateTo('Main');
+			}, C_Const.SPLASH_TIMER);
 		}
 	 //==========
 		render() {

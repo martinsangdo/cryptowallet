@@ -27,22 +27,25 @@ import BaseScreen from "./js/base/BaseScreen"
 import Splash from "./js/screen/splash";
 import Home from "./js/screen/home";
 import Setting from "./js/screen/setting";
-import Wallets from "./js/screen/home";
+import Wallet from "./js/screen/wallet";
 import News from "./js/screen/home";
+
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 //https://github.com/react-navigation/react-navigation/issues/628
 const AppNavigator = StackNavigator({
 				BaseScreen: {screen: BaseScreen},
 				Splash: {screen: Splash},
 				Setting: {screen: Setting},
+				Wallet: {screen: Wallet},
 				//define tab bar
 				Main: {
 					screen: TabNavigator({
-						Home: {   //tab 1
-								screen: Home,
+						Price: {   //tab 1
+								screen: Wallet,
 								navigationOptions: ({ navigation, screenProps }) => ({
 										tabBarIcon: ({ tintColor }) => (
-											<Image source={(tintColor==C_Const.ACTIVE_COLOR)?homeActiveIcon:homeIcon} style={[common_styles.tab_icon]}/>
+											<FontAwesome name="area-chart" style={{color:tintColor}}/>
 										),
 								})
 						},
@@ -50,7 +53,7 @@ const AppNavigator = StackNavigator({
 								screen: Home,
 								navigationOptions: ({ navigation, screenProps }) => ({
 										tabBarIcon: ({ tintColor }) => (
-											<Image source={(tintColor==C_Const.ACTIVE_COLOR)?courseActiveIcon:courseIcon} style={[common_styles.tab_icon]}/>
+											<FontAwesome name="google-wallet" style={{color:tintColor}}/>
 										),
 								})
 						},
@@ -58,7 +61,7 @@ const AppNavigator = StackNavigator({
 							screen: News,
 							navigationOptions: ({ navigation, screenProps }) => ({
 									tabBarIcon: ({ tintColor }) => (
-										<Image source={(tintColor==C_Const.ACTIVE_COLOR)?notifActiveIcon:notifIcon} style={[common_styles.tab_icon, {marginRight:5}]}/>
+										<FontAwesome name="newspaper-o" style={{color:tintColor}}/>
 									),
 							})
 						},
@@ -66,7 +69,7 @@ const AppNavigator = StackNavigator({
 								screen: Setting,
 								navigationOptions: ({ navigation, screenProps }) => ({
 										tabBarIcon: ({ tintColor }) => (
-											<Image source={(tintColor==C_Const.ACTIVE_COLOR)?profileActiveIcon:profileIcon} style={[common_styles.tab_icon]}/>
+											<Icon name="ios-settings" style={{color:tintColor, fontSize:16}}/>
 										),
 								})
 						}
