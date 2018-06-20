@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "973040703089",
+    "firebase_url": "https://blockbod-19cb2.firebaseio.com",
+    "project_id": "blockbod-19cb2",
+    "storage_bucket": "blockbod-19cb2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:973040703089:android:c3d754450c7894e4",
+        "android_client_info": {
+          "package_name": "com.xufagroup.blockbod"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "973040703089-5a3pqat3s8d68tfcvjj6ejev292vv7ri.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "973040703089-5a3pqat3s8d68tfcvjj6ejev292vv7ri.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMbxPAm7MgHlKiNzsQb4gweCOFLGmjSbk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
