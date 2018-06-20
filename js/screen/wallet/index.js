@@ -10,12 +10,14 @@ import styles from "./style";    //CSS defined here
 import {API_URI} from '../../utils/api_uri';
 import store from 'react-native-simple-store';
 import RNExitApp from 'react-native-exit-app';
+import {setting, Coinbase} from "../../utils/config";
 
 import Utils from "../../utils/functions";
 import {C_Const, C_MULTI_LANG} from '../../utils/constant';
 import RequestData from '../../utils/https/RequestData';
 import Spinner from 'react-native-loading-spinner-overlay';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import CryptoJS from 'crypto-js';
 
 class Wallet extends BaseScreen {
 		constructor(props) {
@@ -32,8 +34,14 @@ class Wallet extends BaseScreen {
 		componentDidMount() {
 			//get language
 		}
-		//
-		_open_qr_scanner = () => {
+		//test some API
+		_test = () => {
+      //https://github.com/brix/crypto-js
+      var rawHmac = CryptoJS.HmacSHA256('abc', Coinbase.SECRET_KEY).toString();
+      var e64 = CryptoJS.enc.Base64.parse(rawHmac);
+      var eHex = e64.toString(CryptoJS.enc.Hex);
+
+      Utils.dlog(eHex);
 
 		};
 		//==========
@@ -59,6 +67,8 @@ class Wallet extends BaseScreen {
 							</Header>
 							{/* END header */}
 
+              <TouchableOpacity
+                onPress={()=>this._test()}><Text>Test</Text></TouchableOpacity>
 
 						</Container>
 				);

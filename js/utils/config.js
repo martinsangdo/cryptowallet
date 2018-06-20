@@ -4,14 +4,10 @@
  */
 
 export const setting = {
-  HOME_PAGE: 'http://summitasia.com/',
-  IP: 'http://app.summitasia.com/',    //API IP
-  // IP: 'http://192.168.20.254:8055/',    //local API IP
+  IP: 'https://api.coinbase.com/v2/',    //API IP
 };
 
-//account: app.summitasia@gmail.com
-export const google = {
-  config: {
-    GoogleMapAPIKey: 'AIzaSyC8vasS-ASoBuaSj46PFKGmmiXyKSM44d0'
-  }
+export const Coinbase = {
+  API_KEY: 'WmZCHPk3xoNvU9yO',
+  SECRET_KEY: '8wWDiLUgls6aUHLg4AfyP35wMDuweIfL'
 };
