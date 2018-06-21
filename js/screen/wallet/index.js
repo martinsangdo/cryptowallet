@@ -39,6 +39,11 @@ class Wallet extends BaseScreen {
 		}
 		//DB
 		_test2 = () => {
+			this.ref.get().then((documentSnapshot) => {
+				documentSnapshot.forEach(function(doc) {
+				 console.log(doc.id, " => ", doc.data());
+		 		});
+		  });
 
 		};
 		//test some API
