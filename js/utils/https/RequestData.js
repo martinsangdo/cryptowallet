@@ -16,15 +16,6 @@ exports.sentPostRequest = function (urlString, params, callback) {
 		this.sentPostRequestWithHeader(urlString, null, params, callback);
 };
 
-exports.sentPostRequestWithLanguageHeader = function (urlString, lang, params, callback) {
-	var headers = {
-		'Accept': 'application/json',
-		'Content-Type': 'application/json; charset=utf-8',
-		'language': lang
-	};
-	this.sentPostRequestWithHeader(urlString, headers, params, callback);
-};
-
 exports.sentPostRequestWithExtraHeaders = function (urlString, extra_headers, params, callback) {
 	var headers = API_URI.DEFAULT_REQUEST_HEADER;
 	if (!Utils.isEmpty(extra_headers)){
@@ -111,12 +102,12 @@ exports.sentGetRequestWithHeader = function (urlString, headers, callback) {
 		if (Utils.isEmpty(headers)) {
 				headers = API_URI.DEFAULT_REQUEST_HEADER;
 		}
-
+		console.log(headers);
 		fetch(urlString, {
 				method: 'GET',
 				headers: headers
 		}).then((response) => {
-			// console.log(response);
+			console.log(response);
 			return response.json()}
 		)
 				.then((responseJson) => {

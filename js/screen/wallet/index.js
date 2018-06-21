@@ -32,17 +32,30 @@ class Wallet extends BaseScreen {
 		}
 		//
 		componentDidMount() {
-			//get language
+			this._test();
 		}
 		//test some API
 		_test = () => {
       //https://github.com/brix/crypto-js
-      var rawHmac = CryptoJS.HmacSHA256('abc', Coinbase.SECRET_KEY).toString();
-      var e64 = CryptoJS.enc.Base64.parse(rawHmac);
-      var eHex = e64.toString(CryptoJS.enc.Hex);
+			var timestamp = Math.floor(Date.now() / 1000);
+			var message = timestamp + 'GET' + '/v2/user';
+			var rawHmac = CryptoJS.HmacSHA256(message, Coinbase.SECRET_KEY).toString();
+			var e64 = CryptoJS.enc.Base64.parse(rawHmac);
+			var eHex = e64.toString(CryptoJS.enc.Hex);
 
-      Utils.dlog(eHex);
-
+			var extra_headers = {
+				'CB-ACCESS-SIGN': eHex,
+				'CB-ACCESS-TIMESTAMP': timestamp
+			};
+			// Utils.xlog('extra header', extra_headers);
+			RequestData.sentGetRequestWithExtraHeaders(API_URI.GET_CURRENT_USER_INFO, extra_headers, {},
+				(detail, error) => {
+				if (detail != null){
+						Utils.xlog('detail', detail);
+				} else {
+						Utils.xlog('error', error);
+				}
+			});
 		};
 		//==========
 		render() {
