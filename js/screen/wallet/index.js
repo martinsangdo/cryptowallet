@@ -11,6 +11,7 @@ import {API_URI} from '../../utils/api_uri';
 import store from 'react-native-simple-store';
 import RNExitApp from 'react-native-exit-app';
 import {setting, Coinbase} from "../../utils/config";
+import firebase from 'react-native-firebase';
 
 import Utils from "../../utils/functions";
 import {C_Const, C_MULTI_LANG} from '../../utils/constant';
@@ -22,6 +23,7 @@ import CryptoJS from 'crypto-js';
 class Wallet extends BaseScreen {
 		constructor(props) {
 			super(props);
+			this.ref = firebase.firestore().collection('users');
 			this.state = {
 				offset: 0,
 				data_list: [],
@@ -32,8 +34,13 @@ class Wallet extends BaseScreen {
 		}
 		//
 		componentDidMount() {
-			this._test();
+			// this._test();
+			this._test2();
 		}
+		//DB
+		_test2 = () => {
+
+		};
 		//test some API
 		_test = () => {
       //https://github.com/brix/crypto-js

@@ -58,7 +58,6 @@
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		B60F800CD1784913AEFD1F63 /* libRNFirebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 640B0AAB21D141459A1DE8AA /* libRNFirebase.a */; };
 		BA9C88E17EAB4904A0C2E654 /* Roboto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8391159E77D64BBFAC22F7CA /* Roboto.ttf */; };
-		D0A0CA43FB5447518131B950 /* libRNRandomBytes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A81DF034AD34FB18DA1A28D /* libRNRandomBytes.a */; };
 		DF6841A34144865AAD46F654 /* libPods-CryptoWallet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 91F4CBFE19B80BFFC75FF111 /* libPods-CryptoWallet.a */; };
 		E3958FCA340643F0B9D28695 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ABFC0DCE7FA7472F81C3DE4E /* Ionicons.ttf */; };
 		F24466DBBE8D41A2AFC8E862 /* libUdpSockets.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F2EF53219B7546E99A8781EB /* libUdpSockets.a */; };
@@ -517,7 +516,6 @@
 				8710F789FD424E5DA2E764C8 /* libRNVectorIcons.a in Frameworks */,
 				B60F800CD1784913AEFD1F63 /* libRNFirebase.a in Frameworks */,
 				DF6841A34144865AAD46F654 /* libPods-CryptoWallet.a in Frameworks */,
-				D0A0CA43FB5447518131B950 /* libRNRandomBytes.a in Frameworks */,
 				64792679454C4FAB87397B5E /* libRNOS.a in Frameworks */,
 				53B25C159D8D49D5876F69A2 /* libTcpSockets.a in Frameworks */,
 				F24466DBBE8D41A2AFC8E862 /* libUdpSockets.a in Frameworks */,
@@ -1526,9 +1524,12 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-CryptoWallet/Pods-CryptoWallet-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/gRPC/gRPCCertificates.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/gRPCCertificates.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
