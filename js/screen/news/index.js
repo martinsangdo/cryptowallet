@@ -38,7 +38,7 @@ class News extends BaseScreen {
 		_keyExtractor = (item) => item.id;
 		//render the list. MUST use "item" as param
 		_renderItem = ({item}) => (
-      <TouchableOpacity onPress={() => this._open_detail(item.id)}>
+      <TouchableOpacity onPress={() => this._open_detail(item.index)}>
         <View style={styles.item_row}>
           <View>
             <Image style={styles.thumb} source={{uri: Utils.isEmpty(item.img_src)?null:item.img_src}}/>
@@ -66,9 +66,11 @@ class News extends BaseScreen {
                 // Utils.dlog(list[i]);
                 me.state.data_list.push({
                     id: list[i]['id'],
+                    index: me.state.data_list.length,
                     title: Utils.decodeHtml(list[i]['title']['rendered']),
                     img_src: C_Const.ICON_URL,
-                    date: Utils.formatDatetime(list[i]['date'])
+                    date: Utils.formatDatetime(list[i]['date']),
+                    content: list[i]['content']['rendered']
                 });
                 me.state.key_list[list[i]['id']] = true;
                 me._get_feature_media(me.state.data_list.length - 1, list[i]['_links']['wp:featuredmedia'][0]['href']);
@@ -105,8 +107,10 @@ class News extends BaseScreen {
 
 		};
     //
-    _open_detail = () => {
-
+    _open_detail = (index) => {
+      this.props.navigation.navigate('ArticleDetail', {
+				detail: this.state.data_list[index],
+			});
     };
 		//
 		_load_more = () => {

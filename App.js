@@ -29,6 +29,7 @@ import Market from "./js/screen/market";
 import News from "./js/screen/news";
 import Wallet from "./js/screen/wallet";
 import Setting from "./js/screen/setting";
+import ArticleDetail from "./js/screen/news/detail";
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
@@ -40,11 +41,12 @@ const AppNavigator = StackNavigator({
 				Wallet: {screen: Wallet},
 				News: {screen: News},
 				Setting: {screen: Setting},
+				ArticleDetail: {screen: ArticleDetail},
 				//define tab bar
 				Main: {
 					screen: TabNavigator({
 						Market: {   //tab 1
-								screen: News,
+								screen: Market,
 								navigationOptions: ({ navigation, screenProps }) => ({
 										tabBarIcon: ({ tintColor }) => (
 											<FontAwesome name="area-chart" style={{color:tintColor}}/>
@@ -52,7 +54,7 @@ const AppNavigator = StackNavigator({
 								})
 						},
 						News: {   //tab 2
-							screen: Market,
+							screen: News,
 							navigationOptions: ({ navigation, screenProps }) => ({
 									tabBarIcon: ({ tintColor }) => (
 										<FontAwesome name="newspaper-o" style={{color:tintColor}}/>
