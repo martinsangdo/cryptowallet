@@ -22,5 +22,6 @@ export const API_URI = {
 		//Market
 		GET_CURRENT_PRICE: setting.PRICE_IP + 'ticker/?limit=20',
 		//News
-		GET_NEWS_LIST: setting.NEWS_IP + 'posts?per_page=20'
+		GET_NEWS_LIST: setting.NEWS_IP + 'posts?per_page=20',
+		GET_MEDIA_LIST: 'media'
 };

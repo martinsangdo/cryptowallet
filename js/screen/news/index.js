@@ -63,7 +63,7 @@ class News extends BaseScreen {
 						var len = list.length;
             for (var i=0; i<len; i++){
               if (!me.state.key_list[list[i]['id']] || me.state.key_list[list[i]['id']]==null){
-                Utils.dlog(list[i]);
+                // Utils.dlog(list[i]);
                 me.state.data_list.push({
                     id: list[i]['id'],
                     title: Utils.decodeHtml(list[i]['title']['rendered']),
@@ -71,6 +71,7 @@ class News extends BaseScreen {
                     date: Utils.formatDatetime(list[i]['date'])
                 });
                 me.state.key_list[list[i]['id']] = true;
+                me._get_feature_media(me.state.data_list.length - 1, list[i]['_links']['wp:featuredmedia'][0]['href']);
               }
             }
 						if (len < C_Const.PAGE_LEN){
@@ -87,6 +88,18 @@ class News extends BaseScreen {
 				});
 			});
 		};
+    //get media list of a post
+    _get_feature_media = (item_index, featured_media_url) => {
+      RequestData.sentGetRequest(featured_media_url,
+        (detail, error) => {
+          if (!(Utils.isEmpty(detail) || Utils.isEmpty(detail['media_details']) || Utils.isEmpty(detail['media_details']['sizes']) ||
+              Utils.isEmpty(detail['media_details']['sizes']['medium']) || Utils.isEmpty(detail['media_details']['sizes']['medium']['source_url']))){
+            var medium_size_url = detail['media_details']['sizes']['medium']['source_url'];
+            this.state.data_list[item_index]['img_src'] = medium_size_url;
+            this.forceUpdate();
+          }
+        });
+    };
 		//
 		_refresh_list = () => {
 
