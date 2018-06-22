@@ -102,12 +102,12 @@ exports.sentGetRequestWithHeader = function (urlString, headers, callback) {
 		if (Utils.isEmpty(headers)) {
 				headers = API_URI.DEFAULT_REQUEST_HEADER;
 		}
-		console.log(headers);
+		// console.log(headers);
 		fetch(urlString, {
 				method: 'GET',
 				headers: headers
 		}).then((response) => {
-			console.log(response);
+			// console.log(response);
 			return response.json()}
 		)
 				.then((responseJson) => {

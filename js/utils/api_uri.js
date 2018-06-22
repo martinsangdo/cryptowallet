@@ -18,6 +18,8 @@ export const API_URI = {
 				'Content-Type': 'multipart/form-data'
 		},
 		//Splash
-		GET_CURRENT_USER_INFO: setting.IP + 'user',
+		GET_CURRENT_USER_INFO: setting.WALLET_IP + 'user',
+		//Market
+		GET_CURRENT_PRICE: setting.PRICE_IP + 'ticker/?limit=20',
 
 };

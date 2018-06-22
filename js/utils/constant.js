@@ -33,7 +33,7 @@ export const C_Const = {
 	DATE_FORMAT: 'YYYY-MM-DD',   //birthday format
 	NOTIFICATION_DATE_FORMAT: 'YYYY-MM-DD HH:mm:ss',
 	COURSE_DATE_FORMAT: 'DD MMMM YYYY, dddd',
-	PAGE_LEN: 10, //default item number in one page, should large enough to load more item
+	PAGE_LEN: 20, //default item number in one page, should large enough to load more item
 	EMPTY_DATETIME: '0000-00-00 00:00:00',
 	EMPTY_DATE: '0000-00-00',
 	//message keys get from server API

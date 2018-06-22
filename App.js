@@ -25,10 +25,10 @@ import TabLabel from './js/plugin/tab_label'
 //define screens
 import BaseScreen from "./js/base/BaseScreen"
 import Splash from "./js/screen/splash";
-import Home from "./js/screen/home";
-import Setting from "./js/screen/setting";
+import Market from "./js/screen/market";
+import News from "./js/screen/market";
 import Wallet from "./js/screen/wallet";
-import News from "./js/screen/home";
+import Setting from "./js/screen/setting";
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
@@ -36,34 +36,36 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 const AppNavigator = StackNavigator({
 				BaseScreen: {screen: BaseScreen},
 				Splash: {screen: Splash},
-				Setting: {screen: Setting},
+				Market: {screen: Market},
 				Wallet: {screen: Wallet},
+				News: {screen: News},
+				Setting: {screen: Setting},
 				//define tab bar
 				Main: {
 					screen: TabNavigator({
-						Price: {   //tab 1
-								screen: Wallet,
+						Market: {   //tab 1
+								screen: Market,
 								navigationOptions: ({ navigation, screenProps }) => ({
 										tabBarIcon: ({ tintColor }) => (
 											<FontAwesome name="area-chart" style={{color:tintColor}}/>
 										),
 								})
 						},
-						Wallets: {   //tab 2
-								screen: Home,
-								navigationOptions: ({ navigation, screenProps }) => ({
-										tabBarIcon: ({ tintColor }) => (
-											<FontAwesome name="google-wallet" style={{color:tintColor}}/>
-										),
-								})
-						},
-						News: {   //tab 3
+						News: {   //tab 2
 							screen: News,
 							navigationOptions: ({ navigation, screenProps }) => ({
 									tabBarIcon: ({ tintColor }) => (
 										<FontAwesome name="newspaper-o" style={{color:tintColor}}/>
 									),
 							})
+						},
+						Wallet: {   //tab 3
+								screen: Wallet,
+								navigationOptions: ({ navigation, screenProps }) => ({
+										tabBarIcon: ({ tintColor }) => (
+											<FontAwesome name="google-wallet" style={{color:tintColor}}/>
+										),
+								})
 						},
 						Setting: {   //tab 4
 								screen: Setting,

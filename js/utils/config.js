@@ -4,7 +4,8 @@
  */
 
 export const setting = {
-  IP: 'https://api.coinbase.com/v2/',    //API IP
+  WALLET_IP: 'https://api.coinbase.com/v2/',    //API IP
+  PRICE_IP: 'http://api.coinmarketcap.com/v2/',
 };
 
 export const Coinbase = {

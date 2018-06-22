@@ -19,8 +19,10 @@ export default {
 		justifyContent: 'center', marginTop: 2, borderRadius:6, borderColor:'#eee'
 	},
 	search_cancel: {width:100, justifyContent: 'center'},
-	list_item: {marginBottom:20},
+	list_item: {margin:10},
+	tbl_header: {flexDirection: 'row', justifyContent: 'space-between', margin:10},
 	btn_row: {flex:1, flexDirection: 'row', justifyContent: 'space-between', marginLeft:20, marginRight:20},
 	thumb: {width: deviceWidth, height: 185},
-	btn_active: {backgroundColor: '#008da9'}
+	btn_active: {backgroundColor: '#008da9'},
+	td_item: {width:'25%'}
 };
