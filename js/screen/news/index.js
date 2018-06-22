@@ -17,59 +17,62 @@ import RequestData from '../../utils/https/RequestData';
 import Spinner from 'react-native-loading-spinner-overlay';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-class Market extends BaseScreen {
+class News extends BaseScreen {
 		constructor(props) {
 			super(props);
 			this.state = {
 				offset: 0,
 				data_list: [],
-				loading_indicator_state: true,
+				is_getting_data: true,
 				isShowMore: false,
 				jwt: '',
-				key_list: {}		//to make sure there is no duplicate coin in list
+				key_list: {}		//to make sure there is no duplicate item in list
 			};
 		}
 		//
 		componentDidMount() {
 			//get top chart
-			this._get_data();
+			this._get_data(0);
 		}
 		//
-		_keyExtractor = (item) => item.index;
+		_keyExtractor = (item) => item.id;
 		//render the list. MUST use "item" as param
 		_renderItem = ({item}) => (
-				<View style={[styles.list_item, common_styles.fetch_row]}>
-					<Text style={styles.td_item}>{item.name}</Text>
-					<Text style={styles.td_item}>{item.symbol}</Text>
-					<Text style={styles.td_item}>{item.price}</Text>
-					<Text style={styles.td_item}>{item.change}</Text>
-				</View>
+      <TouchableOpacity onPress={() => this._open_detail(item.id)}>
+        <View style={styles.item_row}>
+          <View>
+            <Image style={styles.thumb} source={{uri: Utils.isEmpty(item.img_src)?null:item.img_src}}/>
+          </View>
+          <View style={styles.text_label}>
+            <Text numberOfLines={3}>{item.title}</Text>
+            <Text style={styles.time_label}>{item.date}</Text>
+          </View>
+        </View>
+      </TouchableOpacity>
 		);
-		//get latest price
+		//get latest news
 		_get_data = () => {
-			this.setState({loading_indicator_state: true}, () => {
-				var url = API_URI.GET_CURRENT_PRICE + '&start=' + this.state.offset;
+			this.setState({is_getting_data: true}, () => {
+				var url = API_URI.GET_NEWS_LIST + '&page=' + (this.state.offset / C_Const.PAGE_LEN + 1);
 				// Utils.dlog(url);
 				RequestData.sentGetRequest(url,
-					(detail, error) => {
-					if (detail != null && detail.data != null){
-						var list = detail.data;
+					(list, error) => {
+					if (list != null){
+            // Utils.dlog(list);
 						var me = this;
-						var len = 0;
-						Object.keys(list).forEach(function(id) {
-							var coin_info = list[id];
-							if (!me.state.key_list[id] || me.state.key_list[id]==null){
-								me.state.data_list.push({
-									index: coin_info.id,
-									name: coin_info.name,
-									symbol: coin_info.symbol,
-									price: coin_info.quotes['USD']['price'],
-									change: coin_info.quotes['USD']['percent_change_1h']
-								});
-								me.state.key_list[id] = true;
-							}
-							len++;
-						});
+						var len = list.length;
+            for (var i=0; i<len; i++){
+              if (!me.state.key_list[list[i]['id']] || me.state.key_list[list[i]['id']]==null){
+                Utils.dlog(list[i]);
+                me.state.data_list.push({
+                    id: list[i]['id'],
+                    title: Utils.decodeHtml(list[i]['title']['rendered']),
+                    img_src: C_Const.ICON_URL,
+                    date: Utils.formatDatetime(list[i]['date'])
+                });
+                me.state.key_list[list[i]['id']] = true;
+              }
+            }
 						if (len < C_Const.PAGE_LEN){
 							//no more
 							this.setState({isShowMore: false});
@@ -80,7 +83,7 @@ class Market extends BaseScreen {
 							// Utils.xlog('error', error);
 							this.setState({isShowMore: false});
 					}
-					this.setState({loading_indicator_state: false});
+					this.setState({is_getting_data: false});
 				});
 			});
 		};
@@ -88,47 +91,32 @@ class Market extends BaseScreen {
 		_refresh_list = () => {
 
 		};
+    //
+    _open_detail = () => {
+
+    };
 		//
 		_load_more = () => {
-			if (!this.state.loading_indicator_state && this.state.isShowMore){
+			if (!this.state.is_getting_data && this.state.isShowMore){
 				this.setState({offset: this.state.offset + C_Const.PAGE_LEN}, () => {
 					this._get_data();
 				});
 			}
 		};
-		//
-		_open_search = () => {
-
-		};
 		//==========
 		render() {
-			{/* define how to render country list */}
-
 				return (
 						<Container padder>
 							<Header style={[common_styles.header, common_styles.whiteBg]}>
 								<Left style={[common_styles.headerLeft, {flex:0.15}]}>
 								</Left>
 								<Body style={styles.headerBody}>
-									<Text style={common_styles.bold}>Latest price</Text>
+									<Text style={common_styles.bold}>Latest news</Text>
 								</Body>
 								<Right style={[common_styles.headerRight, {flex:0.15}]}>
-									<Button
-										transparent
-										onPress={() => this._open_search()}
-									>
-										<Icon name="search" style={styles.header_icon}/>
-									</Button>
 								</Right>
 							</Header>
 							{/* END header */}
-							<Spinner visible={this.state.loading_indicator_state} textStyle={common_styles.whiteColor} />
-							<View style={[styles.tbl_header]}>
-								<Text style={styles.td_item}>Name</Text>
-								<Text style={styles.td_item}>Symbol</Text>
-								<Text style={styles.td_item}>Price (USD)</Text>
-								<Text style={styles.td_item}>Change 24h</Text>
-							</View>
 							<View style={{flex:1}}>
 								<FlatList
 											data={this.state.data_list}
@@ -146,4 +134,4 @@ class Market extends BaseScreen {
 		}
 }
 
-export default Market;
+export default News;

@@ -21,5 +21,6 @@ export const API_URI = {
 		GET_CURRENT_USER_INFO: setting.WALLET_IP + 'user',
 		//Market
 		GET_CURRENT_PRICE: setting.PRICE_IP + 'ticker/?limit=20',
-
+		//News
+		GET_NEWS_LIST: setting.NEWS_IP + 'posts?per_page=20'
 };

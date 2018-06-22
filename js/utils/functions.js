@@ -100,6 +100,15 @@ exports.formatDate = function(date){
   Moment.locale('en');
   return Moment(date).format(C_Const.DATE_FORMAT);
 };
+exports.formatDatetime = function(date){
+  Moment.locale('en');
+  return Moment(date).format(C_Const.NOTIFICATION_DATE_FORMAT);
+};
+exports.decodeHtml = function(str){
+  return str.replace(/&#(\d+);/g, function(match, dec) {
+    return String.fromCharCode(dec);
+  });
+};
 //https://momentjs.com/docs/#/customization/
 exports.formatCourseDate = function(lang_key, date){
   if (lang_key == C_Const.VI_LANG_KEY){

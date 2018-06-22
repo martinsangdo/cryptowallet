@@ -53,5 +53,6 @@ export const C_Const = {
 		USER_INFO: 'USER_INFO',   //include: user_id, jwt
 		FIREBASE_TOKEN: 'FIREBASE_TOKEN',
 	},
-	ACTIVE_COLOR: '#008da9'
+	ACTIVE_COLOR: '#008da9',
+	ICON_URL: 'https://blockbod.com/public/blockbod/img/logo.jpeg'
 };
