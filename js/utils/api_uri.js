@@ -18,10 +18,13 @@ export const API_URI = {
 				'Content-Type': 'multipart/form-data'
 		},
 		//Splash
-		GET_CURRENT_USER_INFO: setting.WALLET_IP + 'user',
 		//Market
 		GET_CURRENT_PRICE: setting.PRICE_IP + 'ticker/?limit=20',
 		//News
 		GET_NEWS_LIST: setting.NEWS_IP + 'posts?per_page=20',
-		GET_MEDIA_LIST: 'media'
+		GET_MEDIA_LIST: 'media',
+		//wallet
+		GET_CURRENT_USER_INFO: '/v2/user',
+		WALLET_ACCOUNTS: '/v2/accounts',
+
 };

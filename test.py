@@ -12,7 +12,10 @@ class CoinbaseWalletAuth(AuthBase):
         self.secret_key = secret_key
 
     def __call__(self, request):
-        timestamp = '1530168775'  #str(int(time.time()))
+        timestamp = str(int(time.time()))
+        print(request.method)
+        print(request.path_url)
+        print(request.body)
         message = timestamp + request.method + request.path_url + (request.body or '')
         signature = hmac.new(self.secret_key, message, hashlib.sha256).hexdigest()
         header = {
@@ -30,5 +33,5 @@ api_url = 'https://api.coinbase.com/v2/'
 auth = CoinbaseWalletAuth(API_KEY, API_SECRET)
 
 # Get current user
-r = requests.get(api_url + 'user', auth=auth)
+r = requests.post(api_url + 'accounts/d0ca887e-21dc-5425-b37e-c5505c22cbee/addresses',params={'name':'p1'}, auth=auth)
 print r.json()

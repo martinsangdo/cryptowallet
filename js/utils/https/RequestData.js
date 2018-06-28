@@ -41,12 +41,15 @@ exports.sentPostRequestWithHeader = function (urlString, headers, params, callba
 		if (Utils.isEmpty(headers)) {
 				headers = API_URI.DEFAULT_REQUEST_HEADER;
 		}
-		// console.log(headers);
-		fetch(urlString, {
+		var options = {
 				method: 'POST',
-				headers: headers,
-				body: JSON.stringify(params),
-		}).then((response) => {
+				headers: headers
+		};
+		if (!Utils.isEmpty(params)){
+			options['body'] = JSON.stringify(params);
+		}
+		// console.log(options);
+		fetch(urlString, options).then((response) => {
 			// console.log(response);
 			return response.json()}
 		)
@@ -69,7 +72,7 @@ exports.sentPutRequestWithHeader = function (urlString, headers, params, callbac
 		fetch(urlString, {
 				method: 'PUT',
 				headers: headers,
-				body: JSON.stringify(params),
+				body: JSON.stringify(params)
 		}).then((response) => {
 			// console.log(response);
 			return response.json()}

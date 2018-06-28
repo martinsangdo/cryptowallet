@@ -4,10 +4,11 @@
 */
 import Moment from 'moment';
 import {C_Const, C_MULTI_LANG} from './constant';
-import {setting} from "./config";
+import {setting, Coinbase} from "./config";
 import 'moment/locale/th';    //thailand
 import 'moment/locale/zh-cn';    //chinese
 import 'moment/locale/vi';    //vietnamese
+import CryptoJS from 'crypto-js';
 
 //
 exports.dlog = function(str){
@@ -208,4 +209,16 @@ exports.isSuccessResponse = function (response) {
 //
 exports.getHomepageLanguage = function (lang) {
     return lang==C_Const.EN_LANG_KEY?setting.HOME_PAGE:setting.HOME_PAGE+lang;
+};
+//create Coinbase header
+exports.createCoinbaseHeader = function (method, uri) {
+  //https://github.com/brix/crypto-js
+  var timestamp = Math.floor(Date.now() / 1000);
+  var message = timestamp + method + uri;
+  var rawHmac = CryptoJS.HmacSHA256(message, Coinbase.SECRET_KEY).toString();
+  var extra_headers = {
+    'CB-ACCESS-SIGN': rawHmac,
+    'CB-ACCESS-TIMESTAMP': timestamp
+  };
+  return extra_headers;
 };
