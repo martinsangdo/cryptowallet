@@ -33,8 +33,8 @@ class Wallet extends BaseScreen {
 		}
 		//
 		componentDidMount() {
-			// this._get_accounts();
-			this._create_wallet();
+			this._get_accounts();
+			// this._create_wallet();
 		}
 		//DB Firestore
 		_test2 = () => {
