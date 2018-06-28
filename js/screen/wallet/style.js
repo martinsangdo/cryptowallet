@@ -22,5 +22,8 @@ export default {
 	list_item: {marginBottom:20},
 	btn_row: {flex:1, flexDirection: 'row', justifyContent: 'space-between', marginLeft:20, marginRight:20},
 	thumb: {width: deviceWidth, height: 185},
-	btn_active: {backgroundColor: '#008da9'}
+	btn_active: {backgroundColor: '#008da9'},
+	home_avatar: {
+    width:100,height:100,marginBottom:10, borderRadius: 6
+  },
 };

@@ -30,6 +30,7 @@ import News from "./js/screen/news";
 import Wallet from "./js/screen/wallet";
 import Setting from "./js/screen/setting";
 import ArticleDetail from "./js/screen/news/detail";
+import CreateAccount from "./js/screen/wallet/create_account";
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
@@ -42,6 +43,7 @@ const AppNavigator = StackNavigator({
 				News: {screen: News},
 				Setting: {screen: Setting},
 				ArticleDetail: {screen: ArticleDetail},
+				CreateAccount: {screen: CreateAccount},
 				//define tab bar
 				Main: {
 					screen: TabNavigator({
@@ -105,7 +107,7 @@ const AppNavigator = StackNavigator({
 				}
 		},
 		{
-				initialRouteName: "Wallet",   //open this page first time
+				initialRouteName: "CreateAccount",   //open this page first time
 				headerMode: "none",
 				cardStyle: {
 					paddingTop: 0,

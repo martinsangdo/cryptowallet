@@ -19,6 +19,8 @@ import RequestData from '../../utils/https/RequestData';
 import Spinner from 'react-native-loading-spinner-overlay';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
+const avatar = require('../../../img/default_avatar.jpg');
+
 class Wallet extends BaseScreen {
 		constructor(props) {
 			super(props);
@@ -28,14 +30,28 @@ class Wallet extends BaseScreen {
 				data_list: [],
 				loading_indicator_state: true,
 				isShowMore: false,
-				jwt: ''
+				is_logined: false		//indicate user logined or not
 			};
 		}
 		//
 		componentDidMount() {
-			this._get_accounts();
+			this._check_logined_user();
+			// this._get_accounts();
 			// this._create_wallet();
 		}
+		//check whether user logined before
+		_check_logined_user = () => {
+			store.get(C_Const.STORE_KEY.USER_INFO)
+			.then(user_info => {
+					if (user_info!=null && !Utils.isEmpty(user_info[C_Const.STORE_KEY.USER_ID])){
+						//logined
+						this.setState({is_logined: true});
+					} else {
+						//not login yet
+						this.setState({is_logined: false});
+					}
+			});
+		};
 		//DB Firestore
 		_test2 = () => {
 			this.ref.get().then((documentSnapshot) => {
@@ -85,10 +101,12 @@ class Wallet extends BaseScreen {
 				}
 			});
 		};
+		//create new account
+		_begin_register = () => {
+			
+		};
 		//==========
 		render() {
-			{/* define how to render country list */}
-
 				return (
 						<Container padder>
 							<Header style={[common_styles.header, common_styles.whiteBg]}>
@@ -107,10 +125,21 @@ class Wallet extends BaseScreen {
 								</Right>
 							</Header>
 							{/* END header */}
-
-              <TouchableOpacity
-                onPress={()=>this._test()}><Text>Test</Text></TouchableOpacity>
-
+							<Content>
+								<View style={common_styles.margin_b_20} />
+								<View style={common_styles.view_align_center}>
+									<Image source={avatar} style={styles.home_avatar}/>
+								</View>
+								{!this.state.is_logined &&
+								<View style={common_styles.view_align_center}>
+									<Button transparent style={common_styles.default_button}
+										onPress={this._begin_register()}
+									>
+										<Text style={[common_styles.whiteColor, common_styles.float_center]}>Create new wallet</Text>
+									</Button>
+								</View>
+								}
+							</Content>
 						</Container>
 				);
 		}

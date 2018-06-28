@@ -50,8 +50,11 @@ export const C_Const = {
 	JSON_WEB_TOKEN: 'jwt',    //to verify request from this app
 	//store/Preference keys
 	STORE_KEY: {
-		USER_INFO: 'USER_INFO',   //include: user_id, jwt
+		USER_INFO: 'USER_INFO',   //include: user_id, name, email
 		FIREBASE_TOKEN: 'FIREBASE_TOKEN',
+		USER_ID: 'user_id',
+		USERNAME: 'username',
+		EMAIL: 'email'
 	},
 	ACTIVE_COLOR: '#008da9',
 	ICON_URL: 'https://blockbod.com/public/blockbod/img/logo.jpeg'

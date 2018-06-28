@@ -1,8 +1,7 @@
 import React, {Component} from "react";
-import {Image, View, TouchableOpacity, Share, Dimensions, Platform} from "react-native";
+import {View, TouchableOpacity, Share, Dimensions, Platform} from "react-native";
 
-import {Container, Content, Button, Text, Header, Title, Body, Left, Right, Icon} from "native-base";
-import {NavigationActions} from "react-navigation";
+import {Container, Content, Button, Text, Header, Body, Left, Right, Icon} from "native-base";
 
 import BaseScreen from "../../base/BaseScreen.js";
 import common_styles from "../../../css/common";
@@ -13,7 +12,6 @@ import AutoHTML from 'react-native-autoheight-webview';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-import store from 'react-native-simple-store';
 import RequestData from '../../utils/https/RequestData';
 import {API_URI} from '../../utils/api_uri';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -66,7 +64,7 @@ class ArticleDetail extends BaseScreen {
 												<Icon name="ios-arrow-back-outline" style={common_styles.default_font_color}/>
 											</View>
 											<View style={[common_styles.margin_l_10, common_styles.float_center]}>
-												<Text uppercase={false} style={[common_styles.default_font_color]}>{this.props.navigation.state.params.category_label}</Text>
+												<Text uppercase={false} style={[common_styles.default_font_color]}>Article</Text>
 											</View>
 										</View>
 									</TouchableOpacity>

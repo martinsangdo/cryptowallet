@@ -162,8 +162,8 @@ export default {
 		default_button: {
 				justifyContent: "center",
 				alignItems: 'center',
-				paddingHorizontal: 20,
-				width: 150,
+				paddingHorizontal: 5,
+				width: 200,
 				backgroundColor: '#0097de'
 		},
 		//
