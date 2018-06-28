@@ -105,7 +105,7 @@ const AppNavigator = StackNavigator({
 				}
 		},
 		{
-				initialRouteName: "Splash",   //open this page first time
+				initialRouteName: "Wallet",   //open this page first time
 				headerMode: "none",
 				cardStyle: {
 					paddingTop: 0,

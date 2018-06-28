@@ -12,7 +12,7 @@ class CoinbaseWalletAuth(AuthBase):
         self.secret_key = secret_key
 
     def __call__(self, request):
-        timestamp = str(int(time.time()))
+        timestamp = '1530168775'  #str(int(time.time()))
         message = timestamp + request.method + request.path_url + (request.body or '')
         signature = hmac.new(self.secret_key, message, hashlib.sha256).hexdigest()
         header = {

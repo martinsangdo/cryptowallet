@@ -10,6 +10,6 @@ export const setting = {
 };
 
 export const Coinbase = {
-  API_KEY: 'WmZCHPk3xoNvU9yO',
-  SECRET_KEY: '8wWDiLUgls6aUHLg4AfyP35wMDuweIfL'
+  API_KEY: '0zGLoccZQkdc8ViE',
+  SECRET_KEY: 'xOzMvwhjmhVxq9UAdhCnMq29vUsf8FvC'
 };

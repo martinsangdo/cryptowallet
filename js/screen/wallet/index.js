@@ -34,8 +34,8 @@ class Wallet extends BaseScreen {
 		}
 		//
 		componentDidMount() {
-			// this._test();
-			this._test2();
+			this._test();
+			// this._test2();
 		}
 		//DB
 		_test2 = () => {
@@ -52,18 +52,15 @@ class Wallet extends BaseScreen {
 			var timestamp = Math.floor(Date.now() / 1000);
 			var message = timestamp + 'GET' + '/v2/user';
 			var rawHmac = CryptoJS.HmacSHA256(message, Coinbase.SECRET_KEY).toString();
-			var e64 = CryptoJS.enc.Base64.parse(rawHmac);
-			var eHex = e64.toString(CryptoJS.enc.Hex);
-
 			var extra_headers = {
-				'CB-ACCESS-SIGN': eHex,
+				'CB-ACCESS-SIGN': rawHmac,
 				'CB-ACCESS-TIMESTAMP': timestamp
 			};
-			// Utils.xlog('extra header', extra_headers);
-			RequestData.sentGetRequestWithExtraHeaders(API_URI.GET_CURRENT_USER_INFO, extra_headers, {},
+			Utils.xlog('extra header', extra_headers);
+			RequestData.sentGetRequestWithExtraHeaders(API_URI.GET_CURRENT_USER_INFO, extra_headers,
 				(detail, error) => {
-				if (detail != null){
-						Utils.xlog('detail', detail);
+				if (detail != null && detail.data != null){
+						Utils.xlog('detail', detail.data);
 				} else {
 						Utils.xlog('error', error);
 				}
