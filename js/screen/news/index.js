@@ -47,11 +47,15 @@ class News extends BaseScreen {
             <Text numberOfLines={3}>{item.title}</Text>
             <Text style={styles.time_label}>{item.date}</Text>
           </View>
+					<View style={styles.forward_ico}>
+						<Icon name="ios-arrow-forward-outline" style={common_styles.darkGrayColor}/>
+					</View>
         </View>
       </TouchableOpacity>
 		);
 		//get latest news
 		_get_data = () => {
+			Utils.dlog('----- begin get news');
 			this.setState({is_getting_data: true}, () => {
 				var url = API_URI.GET_NEWS_LIST + '&page=' + (this.state.offset / C_Const.PAGE_LEN + 1);
 				// Utils.dlog(url);
@@ -70,6 +74,7 @@ class News extends BaseScreen {
                     title: Utils.decodeHtml(list[i]['title']['rendered']),
                     img_src: C_Const.ICON_URL,
                     date: Utils.formatDatetime(list[i]['date']),
+										link: list[i]['link'],
                     content: list[i]['content']['rendered']
                 });
                 me.state.key_list[list[i]['id']] = true;

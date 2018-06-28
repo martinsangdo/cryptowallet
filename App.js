@@ -119,7 +119,6 @@ export default class App extends Component{
 	}
 
 	componentDidMount() {
-		console.log('App.js componentDidMount');
 		console.ignoredYellowBox = ['Remote debugger'];   //don't show warning in app when debugging
 	}
 	//

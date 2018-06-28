@@ -15,13 +15,15 @@ class CoinbaseWalletAuth(AuthBase):
         timestamp = str(int(time.time()))
         message = timestamp + request.method + request.path_url + (request.body or '')
         signature = hmac.new(self.secret_key, message, hashlib.sha256).hexdigest()
-
-        request.headers.update({
+        header = {
             'CB-ACCESS-SIGN': signature,
             'CB-ACCESS-TIMESTAMP': timestamp,
             'CB-ACCESS-KEY': self.api_key,
             'CB-VERSION': '2018-06-02'
-        })
+        }
+        print header
+        request.headers.update(header)
+
         return request
 
 api_url = 'https://api.coinbase.com/v2/'

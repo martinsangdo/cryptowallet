@@ -25,6 +25,7 @@ class ArticleDetail extends BaseScreen {
 			this.state = {
 				title: '',
 				content: '',
+				link: ''
 			};
 		}
 		//
@@ -32,6 +33,7 @@ class ArticleDetail extends BaseScreen {
       var content = this.props.navigation.state.params.detail.content;
       content = content.replace('\r\n', '<br/>').replace('\n', '<br/>').replace('\r', '<br/>');
 			this.setState({
+				link: this.props.navigation.state.params.detail.link,
 				title: this.props.navigation.state.params.detail.title,
         content: content
 			});
@@ -40,6 +42,18 @@ class ArticleDetail extends BaseScreen {
 		_on_go_back = () => {
 			this.props.navigation.goBack();
 		}
+		//==========
+		_share_link = () => {
+				Share.share({
+					title: this.state.title,
+					message: this.state.link,
+					// url: link,   //not work in FB app
+					subject: 'Share Link' //  for email
+				}, {
+					// Android only:
+					dialogTitle: 'Choose app'
+			});
+		};
 	 //==========
 		render() {
 				return (
@@ -58,7 +72,12 @@ class ArticleDetail extends BaseScreen {
 									</TouchableOpacity>
 								</Left>
 								<Right style={[common_styles.headerRight]}>
-
+									<TouchableOpacity style={common_styles.margin_r_10} onPress={() => this._share_link()} style={{marginRight:10, justifyContent: 'flex-start', marginBottom:3}}>
+										<SimpleLineIcons name="share" style={[common_styles.default_font_color, {fontSize:21}]}/>
+									</TouchableOpacity>
+									<TouchableOpacity onPress={() => this._toggle_bookmark()}>
+										<MaterialIcons name={this.state.bookmark_id > 0?'star':'star-border'} style={[common_styles.default_font_color, {fontSize:27}]}/>
+									</TouchableOpacity>
 								</Right>
 							</Header>
 							{/* END header */}
