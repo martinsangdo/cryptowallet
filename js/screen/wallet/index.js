@@ -24,7 +24,7 @@ const avatar = require('../../../img/default_avatar.jpg');
 class Wallet extends BaseScreen {
 		constructor(props) {
 			super(props);
-			this.ref = firebase.firestore().collection('users');
+			this.ref = firebase.firestore().collection(C_Const.COLLECTION_NAME.ADDRESS);
 			this.state = {
 				offset: 0,
 				data_list: [],
@@ -36,7 +36,7 @@ class Wallet extends BaseScreen {
 		//
 		componentDidMount() {
 			this._check_logined_user();
-			// this._get_accounts();
+			this._get_accounts();
 			// this._create_wallet();
 		}
 		//check whether user logined before
@@ -46,11 +46,26 @@ class Wallet extends BaseScreen {
 					if (user_info!=null && !Utils.isEmpty(user_info[C_Const.STORE_KEY.USER_ID]) && !Utils.isEmpty(user_info[C_Const.STORE_KEY.EMAIL])){
 						//logined
 						this.setState({is_logined: true});
+						//get list of wallets (address)
+						this._get_addresses_by_user(user_info[C_Const.STORE_KEY.USER_ID]);
 					} else {
 						//not login yet
 						this.setState({is_logined: false});
 					}
 			});
+		};
+		//get wallets of user
+		_get_addresses_by_user = (user_id) => {
+			this.ref.where('user_id', '==', user_id)
+	    .get().then(function(querySnapshot) {
+					if (querySnapshot.size == 0){
+						//there is no wallets
+						Utils.dlog('There is no wallet');
+					} else {
+						//there is wallet
+						Utils.xlog('wallets', querySnapshot);
+					}
+				});
 		};
 		//DB Firestore
 		_test2 = () => {
@@ -89,21 +104,9 @@ class Wallet extends BaseScreen {
 					}
 			});
 		};
-		//Create new wallet
-		_create_wallet = () => {
-      var extra_headers = Utils.createCoinbaseHeader('POST', '/v2/accounts/91735a18-d8ef-5c40-bb4f-8ce64acf8bba/addresses?name=app3');
-			RequestData.sentPostRequestWithExtraHeaders(setting.WALLET_IP + '/v2/accounts/91735a18-d8ef-5c40-bb4f-8ce64acf8bba/addresses?name=app3',
-				extra_headers, null, (detail, error) => {
-				if (detail){
-					Utils.xlog('detail create addr', detail);
-				} else if (error){
-					Utils.xlog('error', error);
-				}
-			});
-		};
 		//create new account
 		_begin_register = () => {
-
+			this.props.navigation.navigate('Signup');
 		};
 		//
 		_open_qr_scanner = () => {
@@ -139,10 +142,17 @@ class Wallet extends BaseScreen {
 									<Button transparent style={common_styles.default_button}
 										onPress={this._begin_register.bind(this)}
 									>
-										<Text style={[common_styles.whiteColor, common_styles.float_center]}>Create new wallet</Text>
+										<Text style={[common_styles.whiteColor, common_styles.float_center]}>Signup</Text>
 									</Button>
 								</View>
 								}
+								<View style={common_styles.view_align_center}>
+									<Button transparent style={common_styles.default_button}
+										onPress={this._create_wallet.bind(this)}
+									>
+										<Text style={[common_styles.whiteColor, common_styles.float_center]}>Create new wallet</Text>
+									</Button>
+								</View>
 							</Content>
 						</Container>
 				);

@@ -11,29 +11,21 @@ import {C_Const, C_MULTI_LANG} from '../../utils/constant';
 import AutoHTML from 'react-native-autoheight-webview';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import store from 'react-native-simple-store';
 import firebase from 'react-native-firebase';
-import DeviceInfo from 'react-native-device-info';
+import store from 'react-native-simple-store';
 
-import RequestData from '../../utils/https/RequestData';
 import {API_URI} from '../../utils/api_uri';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {setting} from "../../utils/config";
-
-class Signup extends BaseScreen {
+//https://github.com/moschan/react-native-simple-radio-button
+class CreateWallet extends BaseScreen {
 		constructor(props) {
 			super(props);
-			this.ref = firebase.firestore().collection(C_Const.COLLECTION_NAME.USER);
+			this.ref = firebase.firestore().collection(C_Const.COLLECTION_NAME.ADDRESS);
 			this.state = {
-				title: '',
-				content: '',
-				link: '',
-        fields: {		//values in form
-  				email: '',
-  				password: '',
-					confirm_password: '',
-					mnemonic: ''
-  			},
+        name: '',   //name of wallet
+        code: '',   //coin code, ex: BTC, ETH, ...
+        user_id: '',
 				isSubmitting: false,
 				err_mess: '',
 				loading_indicator_state: false
@@ -41,43 +33,38 @@ class Signup extends BaseScreen {
 		}
 		//
 		componentDidMount() {
-			// this._test();
-
+      //get user id from store
+      store.get(C_Const.STORE_KEY.USER_INFO)
+      .then(res => {
+        if (res!=null && !Utils.isEmpty(res[C_Const.STORE_KEY.USER_ID]) && !Utils.isEmpty(res[C_Const.STORE_KEY.EMAIL])){
+          this.setState({user_id: res[C_Const.STORE_KEY.USER_ID]});
+        } else {
+          //error
+        }
+      });
 		}
-		//
-		_test = () => {
-
-		};
 		//
 		_on_go_back = () => {
 			this.props.navigation.goBack();
 		};
 		//check if all input values are valid
-		_is_valid_input(values){
+		_is_valid_input(){
 			var all_valid = false;
-			if (Utils.trim(values.email) == ''){
-				this.setState({err_mess: C_Const.TEXT.ERR_EMPTY_EMAIL});
-			} else if (!Utils.validateEmail(values.email)){
-				this.setState({err_mess: C_Const.TEXT.ERR_WRONG_EMAIL});
-			} else if (Utils.trim(values.password) == ''){
-				this.setState({err_mess: C_Const.TEXT.ERR_INVALID_PASSWORD});
-			} else if (Utils.trim(values.password).length < 8){
-				this.setState({err_mess: C_Const.TEXT.ERR_SHORT_PASS_LEN});
-			} else if (Utils.trim(values.confirm_password) == ''){
-				this.setState({err_mess: C_Const.TEXT.ERR_EMPTY_CONFIRM_PASS});
-			} else if (Utils.trim(values.password) != Utils.trim(values.confirm_password)){
-				this.setState({err_mess: C_Const.TEXT.ERR_WRONG_CONFIRM_PASS});
+			if (Utils.trim(this.state.name) == ''){
+				this.setState({err_mess: C_Const.TEXT.ERR_EMPTY_NAME});
+			} else if (Utils.trim(this.state.user_id) == ''){
+				this.setState({err_mess: C_Const.TEXT.ERR_SERVER});
 			} else {
-				all_valid = true;
-			}
+        all_valid = true;
+      }
 			return all_valid;
 		};
-		//user clicks Register
-		_signup = () => {
+		//user clicks Create
+		_create_wallet = () => {
 			if (this.state.isSubmitting){
 				return;
 			}
-			if (!this._is_valid_input(this.state.fields)){
+			if (!this._is_valid_input()){
 				return;
 			}
 			//clear messages
@@ -87,7 +74,21 @@ class Signup extends BaseScreen {
 				loading_indicator_state: true
 			});
 			var me = this;
-			//check if email existed
+      //create wallet (address) in Coinbase
+      var extra_headers = Utils.createCoinbaseHeader('POST', '/v2/accounts/91735a18-d8ef-5c40-bb4f-8ce64acf8bba/addresses?name=app3');
+			RequestData.sentPostRequestWithExtraHeaders(setting.WALLET_IP + '/v2/accounts/91735a18-d8ef-5c40-bb4f-8ce64acf8bba/addresses?name=app3',
+				extra_headers, null, (detail, error) => {
+				if (detail){
+					Utils.xlog('detail create addr', detail);
+				} else if (error){
+					Utils.xlog('error', error);
+				}
+			});
+
+
+
+
+
 			this.ref.where('email', '==', this.state.fields.email)
 	    .get().then(function(querySnapshot) {
 					if (querySnapshot.size == 0){
@@ -172,53 +173,20 @@ class Signup extends BaseScreen {
                 <Form ref="register_form">
 									<View style={common_styles.margin_t_5_ios_border} />
 									<View style={common_styles.txt_item_center}>
-										<Text style={[common_styles.blueColor, common_styles.float_left, styles.txt_label]}>Email (*)</Text>
+										<Text style={[common_styles.blueColor, common_styles.float_left, styles.txt_label]}>Wallet name</Text>
 									</View>
 									<View style={common_styles.txt_item_center_row}>
-											<Body style={common_styles.flex_100p}><TextInput ref='email' returnKeyType = {"next"} style={[common_styles.text_input]}
-											onSubmitEditing={() => this.focusTextInput('password')}
-											 placeholder={'Email'} autoCapitalize="none" onChange={(event) => this.setState({fields: {...this.state.fields, email : event.nativeEvent.text}})}/></Body>
+											<Body style={common_styles.flex_100p}><TextInput ref='name' returnKeyType = {"next"} style={[common_styles.text_input]}
+											 placeholder={'Wallet name'} autoCapitalize="none" onChange={(event) => this.setState({name: event.nativeEvent.text})}/></Body>
 									</View>
-                  <View style={common_styles.margin_t_5_ios_border} />
-                  <View style={common_styles.txt_item_center}>
-                    <Text style={[common_styles.blueColor, common_styles.float_left, styles.txt_label]}>Password (*)</Text>
-                  </View>
-                  <View style={common_styles.margin_b_5_ios} />
-                  <View style={common_styles.txt_item_center_row}>
-                      <Body style={common_styles.flex_100p}><TextInput ref='password' returnKeyType = {"next"} style={common_styles.text_input}
-                      onSubmitEditing={() => this.focusTextInput('confirm_password')}
-                       placeholder={'Password'} autoCapitalize="none" secureTextEntry={true} onChange={(event) => this.setState({fields: {...this.state.fields, password : event.nativeEvent.text}})}/></Body>
-                  </View>
-									<View style={common_styles.margin_t_5_ios_border} />
-                  <View style={common_styles.txt_item_center}>
-                    <Text style={[common_styles.blueColor, common_styles.float_left, styles.txt_label]}>Password (*)</Text>
-                  </View>
-                  <View style={common_styles.margin_b_5_ios} />
-                  <View style={common_styles.txt_item_center_row}>
-                      <Body style={common_styles.flex_100p}><TextInput ref='confirm_password' returnKeyType = {"next"} style={common_styles.text_input}
-                      onSubmitEditing={() => this.focusTextInput('mnemonic')}
-                       placeholder={'Confirm Password'} autoCapitalize="none" secureTextEntry={true} onChange={(event) => this.setState({fields: {...this.state.fields, confirm_password : event.nativeEvent.text}})}/></Body>
-                  </View>
-                  <View style={common_styles.margin_t_5_ios_border} />
-                  <View style={common_styles.txt_item_center}>
-                    <Text style={[common_styles.blueColor, common_styles.float_left, styles.txt_label]}>Mnemonic</Text>
-                  </View>
-                  <View style={common_styles.txt_item_center_row}>
-                      <Body style={common_styles.flex_100p}><TextInput ref='mnemonic' returnKeyType = {"done"} style={[common_styles.text_input]}
-                       placeholder={'Mnemonic'} autoCapitalize="none" onChange={(event) => this.setState({fields: {...this.state.fields, mnemonic : event.nativeEvent.text}})}/></Body>
-                  </View>
+
                 </Form>
 
 								<View style={common_styles.view_align_center}>
-									<TouchableOpacity onPress={this._open_terms()}>
-										<Text>I read & accepted <Text style={common_styles.a_href}>Terms & Conditions</Text></Text>
-									</TouchableOpacity>
-								</View>
-								<View style={common_styles.view_align_center}>
 									<Button transparent style={common_styles.default_button}
-											onPress={this._signup.bind(this)}
+											onPress={this._create_wallet.bind(this)}
 									>
-										<Text style={[common_styles.whiteColor, common_styles.float_center]}>Register</Text>
+										<Text style={[common_styles.whiteColor, common_styles.float_center]}>Create</Text>
 									</Button>
 								</View>
 								<View style={common_styles.view_align_center}>
@@ -230,4 +198,4 @@ class Signup extends BaseScreen {
 		}
 }
 
-export default Signup;
+export default CreateWallet;

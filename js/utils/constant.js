@@ -12,6 +12,7 @@ export const C_Const = {
 		SERVER_ERROR: 500,
 	},
 	TEXT: {
+		ERR_EMPTY_NAME: 'Please input a name',
 		ERR_INVALID_PASSWORD: 'Please input valid password (0-9a-zA-Z)',
 		ERR_SHORT_PASS_LEN: 'Password must have 8 characters at least',
 		ERR_EMPTY_CONFIRM_PASS: 'Please input valid confirm password',
@@ -23,6 +24,11 @@ export const C_Const = {
 		ERR_NET_REQUEST_FAIL: 'Network request failed',   //cannot connect to server
 		//message
 		MESS_SIGNUP_OK: 'Registered successfully, please wait...'
+	},
+	COLLECTION_NAME: {
+		USER: 'user',
+		ACCOUNT: 'account',
+		ADDRESS: 'address'
 	},
 	SALT_PASS: '6653bf66-82f6-4e2f-b341-4a8f49224575',	//to encrypt password
 	ARTICLE_TYPE: 'blog',
