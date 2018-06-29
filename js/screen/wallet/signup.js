@@ -102,7 +102,7 @@ class Signup extends BaseScreen {
 								 app_version: DeviceInfo.getVersion(),
 								 device_id: DeviceInfo.getUniqueID(),
 								 device_name: DeviceInfo.getDeviceId(),
-								 device_version: Platform.OS + ' ' + DeviceInfo.getSystemVersion(),
+								 device_version: Platform.OS + ' ' + DeviceInfo.getSystemVersion()
 						})
 						.then(function(docRef) {
 								//save info to Preference/Store
@@ -191,7 +191,7 @@ class Signup extends BaseScreen {
                   </View>
 									<View style={common_styles.margin_t_5_ios_border} />
                   <View style={common_styles.txt_item_center}>
-                    <Text style={[common_styles.blueColor, common_styles.float_left, styles.txt_label]}>Password (*)</Text>
+                    <Text style={[common_styles.blueColor, common_styles.float_left, styles.txt_label]}>Confirm Password (*)</Text>
                   </View>
                   <View style={common_styles.margin_b_5_ios} />
                   <View style={common_styles.txt_item_center_row}>

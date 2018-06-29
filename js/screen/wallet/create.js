@@ -14,17 +14,20 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import firebase from 'react-native-firebase';
 import store from 'react-native-simple-store';
 
+import RequestData from '../../utils/https/RequestData';
 import {API_URI} from '../../utils/api_uri';
 import Spinner from 'react-native-loading-spinner-overlay';
-import {setting} from "../../utils/config";
+import {setting, Coinbase} from "../../utils/config";
 //https://github.com/moschan/react-native-simple-radio-button
+import {RadioGroup, RadioButton} from 'react-native-flexi-radio-button'
+
 class CreateWallet extends BaseScreen {
 		constructor(props) {
 			super(props);
 			this.ref = firebase.firestore().collection(C_Const.COLLECTION_NAME.ADDRESS);
 			this.state = {
         name: '',   //name of wallet
-        code: '',   //coin code, ex: BTC, ETH, ...
+				coin_index: 0,
         user_id: '',
 				isSubmitting: false,
 				err_mess: '',
@@ -53,7 +56,7 @@ class CreateWallet extends BaseScreen {
 			if (Utils.trim(this.state.name) == ''){
 				this.setState({err_mess: C_Const.TEXT.ERR_EMPTY_NAME});
 			} else if (Utils.trim(this.state.user_id) == ''){
-				this.setState({err_mess: C_Const.TEXT.ERR_SERVER});
+				this.setState({err_mess: C_Const.TEXT.ERR_NOT_LOGIN});
 			} else {
         all_valid = true;
       }
@@ -75,74 +78,46 @@ class CreateWallet extends BaseScreen {
 			});
 			var me = this;
       //create wallet (address) in Coinbase
-      var extra_headers = Utils.createCoinbaseHeader('POST', '/v2/accounts/91735a18-d8ef-5c40-bb4f-8ce64acf8bba/addresses?name=app3');
-			RequestData.sentPostRequestWithExtraHeaders(setting.WALLET_IP + '/v2/accounts/91735a18-d8ef-5c40-bb4f-8ce64acf8bba/addresses?name=app3',
+			var uri = '/v2/accounts/'+Coinbase.COIN_LIST[me.state.coin_index].id+'/addresses?name='+this.state.name;
+      var extra_headers = Utils.createCoinbaseHeader('POST', uri);
+			RequestData.sentPostRequestWithExtraHeaders(setting.WALLET_IP + uri,
 				extra_headers, null, (detail, error) => {
-				if (detail){
+				if (detail && !Utils.isEmpty(detail.data)){
 					Utils.xlog('detail create addr', detail);
+					//save into our DB
+					me.ref.add({
+							user_id: me.state.user_id,
+							name: me.state.name,
+							coinbase_addr_id: detail.data.id,
+							address: detail.data.address,
+							code: Coinbase.COIN_LIST[me.state.coin_index].code
+					})
+					.then(function(docRef) {
+							if (docRef.id){
+								me.setState({err_mess: C_Const.TEXT.MESS_CREATE_WALLET_OK, isSubmitting: false, loading_indicator_state: false});
+							} else {
+								me.setState({err_mess: C_Const.TEXT.ERR_SERVER, isSubmitting: false, loading_indicator_state: false});
+							}
+					})
+					.catch(function(error) {
+							me.setState({err_mess: C_Const.TEXT.ERR_SERVER, isSubmitting: false, loading_indicator_state: false});
+					});
 				} else if (error){
-					Utils.xlog('error', error);
+					//create address failed
+					this.setState({err_mess: C_Const.TEXT.ERR_SERVER, isSubmitting: false, loading_indicator_state: false});
 				}
 			});
-
-
-
-
-
-			this.ref.where('email', '==', this.state.fields.email)
-	    .get().then(function(querySnapshot) {
-					if (querySnapshot.size == 0){
-						//email not existed, create a record in DB
-						me.ref.add({
-								email: Utils.trim(me.state.fields.email),
-								password: Utils.encrypt_text(me.state.fields.password),
-								mnemonic: Utils.trim(me.state.fields.email),
-								create_time: Utils.formatDatetime(Date.now()),
-								app_id: DeviceInfo.getBundleId(),
-								 app_name: DeviceInfo.getApplicationName(),
-								 app_version: DeviceInfo.getVersion(),
-								 device_id: DeviceInfo.getUniqueID(),
-								 device_name: DeviceInfo.getDeviceId(),
-								 device_version: Platform.OS + ' ' + DeviceInfo.getSystemVersion(),
-						})
-						.then(function(docRef) {
-								//save info to Preference/Store
-								store.update(C_Const.STORE_KEY.USER_INFO, {
-										user_id: docRef.id,
-										email: me.state.fields.email
-								});
-								//verify it's saved into Store
-								setTimeout( () => {		//to make sure it's saved
-									store.get(C_Const.STORE_KEY.USER_INFO)
-									.then(res => {
-										if (res!=null && !Utils.isEmpty(res[C_Const.STORE_KEY.USER_ID]) && !Utils.isEmpty(res[C_Const.STORE_KEY.EMAIL])){
-											//saved
-											//todo: trigger previous page
-											// this.props.navigation.goBack();
-										} else {
-											//not saved, don't know why
-
-										}
-									});
-									me.setState({err_mess: C_Const.TEXT.MESS_SIGNUP_OK, isSubmitting: false, loading_indicator_state: false});
-								}, 100);
-						})
-						.catch(function(error) {
-								me.setState({err_mess: C_Const.TEXT.ERR_SERVER, isSubmitting: false, loading_indicator_state: false});
-						});
-					} else {
-						//email existed, show error
-						me.setState({err_mess: C_Const.TEXT.ERR_EXISTED_EMAIL, isSubmitting: false, loading_indicator_state: false});
-					}
-	    })
-	    .catch(function(error) {
-					me.setState({err_mess: C_Const.TEXT.ERR_SERVER, isSubmitting: false, loading_indicator_state: false});
-	    });
 		};
 		//
 		_open_terms = () => {
 
 		};
+		//
+		onSelect(index, value){
+		  this.setState({
+		    coin_index: index
+		  });
+		}
 	 //==========
 		render() {
 				return (
@@ -179,7 +154,20 @@ class CreateWallet extends BaseScreen {
 											<Body style={common_styles.flex_100p}><TextInput ref='name' returnKeyType = {"next"} style={[common_styles.text_input]}
 											 placeholder={'Wallet name'} autoCapitalize="none" onChange={(event) => this.setState({name: event.nativeEvent.text})}/></Body>
 									</View>
-
+									<RadioGroup onSelect = {(index, value) => this.onSelect(index, value)} selectedIndex={0} >
+						        <RadioButton value={Coinbase.COIN_LIST[0].id} >
+						          <Text>{Coinbase.COIN_LIST[0].name}</Text>
+						        </RadioButton>
+						        <RadioButton value={Coinbase.COIN_LIST[1].id}>
+						          <Text>{Coinbase.COIN_LIST[1].name}</Text>
+						        </RadioButton>
+						        <RadioButton value={Coinbase.COIN_LIST[2].id}>
+						          <Text>{Coinbase.COIN_LIST[2].name}</Text>
+						        </RadioButton>
+										<RadioButton value={Coinbase.COIN_LIST[3].id}>
+						          <Text>{Coinbase.COIN_LIST[3].name}</Text>
+						        </RadioButton>
+						      </RadioGroup>
                 </Form>
 
 								<View style={common_styles.view_align_center}>

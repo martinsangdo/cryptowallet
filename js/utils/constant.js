@@ -12,6 +12,7 @@ export const C_Const = {
 		SERVER_ERROR: 500,
 	},
 	TEXT: {
+		ERR_NOT_LOGIN: 'User is not logined',
 		ERR_EMPTY_NAME: 'Please input a name',
 		ERR_INVALID_PASSWORD: 'Please input valid password (0-9a-zA-Z)',
 		ERR_SHORT_PASS_LEN: 'Password must have 8 characters at least',
@@ -23,7 +24,8 @@ export const C_Const = {
 		ERR_SERVER: 'Please try it later',
 		ERR_NET_REQUEST_FAIL: 'Network request failed',   //cannot connect to server
 		//message
-		MESS_SIGNUP_OK: 'Registered successfully, please wait...'
+		MESS_SIGNUP_OK: 'Registered successfully, please wait...',
+		MESS_CREATE_WALLET_OK: 'Wallet is created successfully'
 	},
 	COLLECTION_NAME: {
 		USER: 'user',
