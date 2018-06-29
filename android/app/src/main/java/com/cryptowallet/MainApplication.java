@@ -6,7 +6,6 @@ import com.facebook.react.ReactApplication;
 import com.tradle.react.UdpSocketsModule;
 import com.peel.react.TcpSocketsModule;
 import com.peel.react.rnos.RNOSModule;
-import com.bitgo.randombytes.RandomBytesPackage;
 import io.invertase.firebase.RNFirebasePackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.evollu.react.fcm.FIRMessagingPackage;
@@ -36,7 +35,6 @@ public class MainApplication extends Application implements ReactApplication {
             new UdpSocketsModule(),
             new TcpSocketsModule(),
             new RNOSModule(),
-            new RandomBytesPackage(),
             new RNFirebasePackage(),
             new VectorIconsPackage(),
             new FIRMessagingPackage(),

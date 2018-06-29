@@ -115,7 +115,7 @@ class Market extends BaseScreen {
 								<Right style={[common_styles.headerRight, {flex:0.15}]}>
 									<Button
 										transparent
-										onPress={() => this._open_search()}
+										onPress={this._open_search.bind(this)}
 									>
 										<Icon name="search" style={styles.header_icon}/>
 									</Button>

@@ -43,7 +43,7 @@ class Wallet extends BaseScreen {
 		_check_logined_user = () => {
 			store.get(C_Const.STORE_KEY.USER_INFO)
 			.then(user_info => {
-					if (user_info!=null && !Utils.isEmpty(user_info[C_Const.STORE_KEY.USER_ID])){
+					if (user_info!=null && !Utils.isEmpty(user_info[C_Const.STORE_KEY.USER_ID]) && !Utils.isEmpty(user_info[C_Const.STORE_KEY.EMAIL])){
 						//logined
 						this.setState({is_logined: true});
 					} else {
@@ -103,7 +103,11 @@ class Wallet extends BaseScreen {
 		};
 		//create new account
 		_begin_register = () => {
-			
+
+		};
+		//
+		_open_qr_scanner = () => {
+
 		};
 		//==========
 		render() {
@@ -118,7 +122,7 @@ class Wallet extends BaseScreen {
 								<Right style={[common_styles.headerRight, {flex:0.15}]}>
 									<Button
 										transparent
-										onPress={() => this._open_qr_scanner()}
+										onPress={this._open_qr_scanner.bind(this)}
 									>
 										<FontAwesome name="qrcode" style={styles.header_icon}/>
 									</Button>
@@ -133,7 +137,7 @@ class Wallet extends BaseScreen {
 								{!this.state.is_logined &&
 								<View style={common_styles.view_align_center}>
 									<Button transparent style={common_styles.default_button}
-										onPress={this._begin_register()}
+										onPress={this._begin_register.bind(this)}
 									>
 										<Text style={[common_styles.whiteColor, common_styles.float_center]}>Create new wallet</Text>
 									</Button>

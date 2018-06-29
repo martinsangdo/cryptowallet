@@ -121,6 +121,11 @@ exports.formatCourseDate = function(lang_key, date){
   }
   return Moment(date).format(C_Const.COURSE_DATE_FORMAT);
 };
+//
+exports.validateEmail = function(email){
+  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+};
 //trim a text
 exports.trim = function(str){
   return String.prototype.trim.call(str);
@@ -209,6 +214,10 @@ exports.isSuccessResponse = function (response) {
 //
 exports.getHomepageLanguage = function (lang) {
     return lang==C_Const.EN_LANG_KEY?setting.HOME_PAGE:setting.HOME_PAGE+lang;
+};
+//
+exports.encrypt_text = function (text) {
+    return CryptoJS.HmacSHA256(text, C_Const.SALT_PASS).toString();
 };
 //create Coinbase header
 exports.createCoinbaseHeader = function (method, uri) {

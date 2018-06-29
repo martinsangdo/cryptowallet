@@ -11,20 +11,26 @@ export const C_Const = {
 		BAD_REQUEST: 502,
 		SERVER_ERROR: 500,
 	},
-	ERR_SERVER_MESS: 'Please try it later',
+	TEXT: {
+		ERR_INVALID_PASSWORD: 'Please input valid password (0-9a-zA-Z)',
+		ERR_SHORT_PASS_LEN: 'Password must have 8 characters at least',
+		ERR_EMPTY_CONFIRM_PASS: 'Please input valid confirm password',
+		ERR_WRONG_CONFIRM_PASS: 'Confirm password is not match',
+		ERR_EMPTY_EMAIL: 'Please input valid email',
+		ERR_WRONG_EMAIL: 'Email is wrong format',
+		ERR_EXISTED_EMAIL: 'This email is existed',
+		ERR_SERVER: 'Please try it later',
+		ERR_NET_REQUEST_FAIL: 'Network request failed',   //cannot connect to server
+		//message
+		MESS_SIGNUP_OK: 'Registered successfully, please wait...'
+	},
+	SALT_PASS: '6653bf66-82f6-4e2f-b341-4a8f49224575',	//to encrypt password
 	ARTICLE_TYPE: 'blog',
 	COURSE_TYPE: 'event',
-	NET_REQUEST_FAIL: 'Network request failed',   //cannot connect to server
 	EN_LANG_KEY: 'en',    //english
 	VI_LANG_KEY: 'vn',    //Vietnamese
 	CN_LANG_KEY: 'cn',    //chinese
 	THAI_LANG_KEY: 'th',  //thailand
-	EMIT_KEY: {
-		CHANGE_NOTIF_NUM: 'change_notif_num', //change notification number
-		CHANGE_LANGUAGE: 'change_language',    //change language of apps
-		CHANGE_NOTIF_NUM_FROM_PUSH: 'change_notif_num_from_push',  //get trigger when app receives Push
-		CHANGE_BOOKMARK_FLAG: 'change_bookmark_flag'    //when user bookmark/unbookmark from detail called from bookmark list
-	},
 	AUTHORIZATION_PREFIX_HEADER: 'Bearer ', //used in header of Authorization
 	ANDROID: 'ANDROID',
 	IOS: 'IOS',
@@ -53,7 +59,6 @@ export const C_Const = {
 		USER_INFO: 'USER_INFO',   //include: user_id, name, email
 		FIREBASE_TOKEN: 'FIREBASE_TOKEN',
 		USER_ID: 'user_id',
-		USERNAME: 'username',
 		EMAIL: 'email'
 	},
 	ACTIVE_COLOR: '#008da9',
