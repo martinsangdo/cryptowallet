@@ -24,6 +24,7 @@ class News extends BaseScreen {
 				offset: 0,
 				data_list: [],
 				is_getting_data: true,
+				loading_indicator_state: false,
 				isShowMore: false,
 				jwt: '',
 				key_list: {}		//to make sure there is no duplicate item in list
@@ -55,8 +56,8 @@ class News extends BaseScreen {
 		);
 		//get latest news
 		_get_data = () => {
-			Utils.dlog('----- begin get news');
-			this.setState({is_getting_data: true}, () => {
+			// Utils.dlog('----- begin get news');
+			this.setState({is_getting_data: true, loading_indicator_state: true}, () => {
 				var url = API_URI.GET_NEWS_LIST + '&page=' + (this.state.offset / C_Const.PAGE_LEN + 1);
 				// Utils.dlog(url);
 				RequestData.sentGetRequest(url,
@@ -83,15 +84,15 @@ class News extends BaseScreen {
             }
 						if (len < C_Const.PAGE_LEN){
 							//no more
-							this.setState({isShowMore: false});
+							this.setState({isShowMore: false, loading_indicator_state: false});
 						} else {
-							this.setState({isShowMore: true});  //maybe have more
+							this.setState({isShowMore: true, loading_indicator_state: false});  //maybe have more
 						}
 					} else {
 							// Utils.xlog('error', error);
-							this.setState({isShowMore: false});
+							this.setState({isShowMore: false, loading_indicator_state: false});
 					}
-					this.setState({is_getting_data: false});
+					this.setState({is_getting_data: false, loading_indicator_state: false});
 				});
 			});
 		};
@@ -139,6 +140,8 @@ class News extends BaseScreen {
 								</Right>
 							</Header>
 							{/* END header */}
+							<Spinner visible={this.state.loading_indicator_state} textStyle={common_styles.whiteColor} />
+
 							<View style={{flex:1}}>
 								<FlatList
 											data={this.state.data_list}

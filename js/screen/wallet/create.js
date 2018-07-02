@@ -83,7 +83,7 @@ class CreateWallet extends BaseScreen {
 			RequestData.sentPostRequestWithExtraHeaders(setting.WALLET_IP + uri,
 				extra_headers, null, (detail, error) => {
 				if (detail && !Utils.isEmpty(detail.data)){
-					Utils.xlog('detail create addr', detail);
+					// Utils.xlog('detail create addr', detail);
 					//save into our DB
 					me.ref.add({
 							user_id: me.state.user_id,

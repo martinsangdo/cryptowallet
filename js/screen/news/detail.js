@@ -7,23 +7,28 @@ import BaseScreen from "../../base/BaseScreen.js";
 import common_styles from "../../../css/common";
 import styles from "./style";    //CSS defined here
 import Utils from "../../utils/functions";
-import {C_Const, C_MULTI_LANG} from '../../utils/constant';
+import {C_Const} from '../../utils/constant';
 import AutoHTML from 'react-native-autoheight-webview';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import firebase from 'react-native-firebase';
 
 import RequestData from '../../utils/https/RequestData';
 import {API_URI} from '../../utils/api_uri';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {setting} from "../../utils/config";
+import DeviceInfo from 'react-native-device-info';
 
 class ArticleDetail extends BaseScreen {
 		constructor(props) {
 			super(props);
+			this.ref = firebase.firestore().collection(C_Const.COLLECTION_NAME.BOOKMARK);
 			this.state = {
 				title: '',
 				content: '',
-				link: ''
+				link: '',
+				is_bookmarked: false,
+				loading_indicator_state: false
 			};
 		}
 		//
@@ -45,12 +50,33 @@ class ArticleDetail extends BaseScreen {
 				Share.share({
 					title: this.state.title,
 					message: this.state.link,
-					// url: link,   //not work in FB app
 					subject: 'Share Link' //  for email
 				}, {
 					// Android only:
 					dialogTitle: 'Choose app'
 			});
+		};
+		//bookmark / unbookmark article
+		_toggle_bookmark = () => {
+			/*
+			this.ref.add({
+					device_id: me.state.user_id,
+					link: this.state.link,
+					coinbase_addr_id: detail.data.id,
+					address: detail.data.address,
+					code: Coinbase.COIN_LIST[me.state.coin_index].code
+			})
+			.then(function(docRef) {
+					if (docRef.id){
+						me.setState({err_mess: C_Const.TEXT.MESS_CREATE_WALLET_OK, isSubmitting: false, loading_indicator_state: false});
+					} else {
+						me.setState({err_mess: C_Const.TEXT.ERR_SERVER, isSubmitting: false, loading_indicator_state: false});
+					}
+			})
+			.catch(function(error) {
+					me.setState({err_mess: C_Const.TEXT.ERR_SERVER, isSubmitting: false, loading_indicator_state: false});
+			});
+			*/
 		};
 	 //==========
 		render() {
@@ -64,7 +90,7 @@ class ArticleDetail extends BaseScreen {
 												<Icon name="ios-arrow-back-outline" style={common_styles.default_font_color}/>
 											</View>
 											<View style={[common_styles.margin_l_10, common_styles.float_center]}>
-												<Text uppercase={false} style={[common_styles.default_font_color]}>Article</Text>
+												<Text uppercase={false} style={[common_styles.default_font_color]}>Back</Text>
 											</View>
 										</View>
 									</TouchableOpacity>
@@ -73,13 +99,11 @@ class ArticleDetail extends BaseScreen {
 									<TouchableOpacity style={common_styles.margin_r_10} onPress={() => this._share_link()} style={{marginRight:10, justifyContent: 'flex-start', marginBottom:3}}>
 										<SimpleLineIcons name="share" style={[common_styles.default_font_color, {fontSize:21}]}/>
 									</TouchableOpacity>
-									<TouchableOpacity onPress={() => this._toggle_bookmark()}>
-										<MaterialIcons name={this.state.bookmark_id > 0?'star':'star-border'} style={[common_styles.default_font_color, {fontSize:27}]}/>
-									</TouchableOpacity>
 								</Right>
 							</Header>
 							{/* END header */}
 							<Content>
+								<Spinner visible={this.state.loading_indicator_state} textStyle={common_styles.whiteColor} />
 								{/* fake webview to auto calculate height */}
 								<View>
 										<AutoHTML

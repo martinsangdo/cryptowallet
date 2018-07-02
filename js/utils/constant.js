@@ -27,18 +27,14 @@ export const C_Const = {
 		MESS_SIGNUP_OK: 'Registered successfully, please wait...',
 		MESS_CREATE_WALLET_OK: 'Wallet is created successfully'
 	},
-	COLLECTION_NAME: {
+	COLLECTION_NAME: {		//in Firestore
 		USER: 'user',
 		ACCOUNT: 'account',
-		ADDRESS: 'address'
+		ADDRESS: 'address',
+		BOOKMARK: 'bookmark'
 	},
 	SALT_PASS: '6653bf66-82f6-4e2f-b341-4a8f49224575',	//to encrypt password
-	ARTICLE_TYPE: 'blog',
 	COURSE_TYPE: 'event',
-	EN_LANG_KEY: 'en',    //english
-	VI_LANG_KEY: 'vn',    //Vietnamese
-	CN_LANG_KEY: 'cn',    //chinese
-	THAI_LANG_KEY: 'th',  //thailand
 	AUTHORIZATION_PREFIX_HEADER: 'Bearer ', //used in header of Authorization
 	ANDROID: 'ANDROID',
 	IOS: 'IOS',
@@ -55,11 +51,6 @@ export const C_Const = {
 		LOGIN_SUCCESS: 'LOGIN_SUCCESS',
 		SUCCESS: 'SUCCESS',
 		NO_DATA: 'NO_DATA'
-	},
-	LOGIN_TYPE: {   //login by normal acccount or social accounts
-		GOOGLE: 'google',
-		FACEBOOK: 'facebook',
-		NORMAL: 'normal'
 	},
 	JSON_WEB_TOKEN: 'jwt',    //to verify request from this app
 	//store/Preference keys

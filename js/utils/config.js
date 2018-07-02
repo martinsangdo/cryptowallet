@@ -12,6 +12,7 @@ export const setting = {
 export const Coinbase = {
   API_KEY: '0zGLoccZQkdc8ViE',
   SECRET_KEY: 'xOzMvwhjmhVxq9UAdhCnMq29vUsf8FvC',
+  //account ID
   COIN_LIST: [
     {
       id: 'd0ca887e-21dc-5425-b37e-c5505c22cbee',
