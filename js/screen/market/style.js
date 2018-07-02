@@ -19,7 +19,7 @@ export default {
 		justifyContent: 'center', marginTop: 2, borderRadius:6, borderColor:'#eee'
 	},
 	search_cancel: {width:100, justifyContent: 'center'},
-	list_item: {padding:10, borderTopWidth:1, borderTopColor: '#fff'},
+	list_item: {padding:10, borderTopWidth:1, borderTopColor: '#ddd'},
 	tbl_header: {flexDirection: 'row', justifyContent: 'space-between', padding:10},
 	btn_row: {flex:1, flexDirection: 'row', justifyContent: 'space-between', marginLeft:20, marginRight:20},
 	thumb: {width: deviceWidth, height: 185},

@@ -111,20 +111,14 @@ class Market extends BaseScreen {
 									<Text style={common_styles.bold}>Market</Text>
 								</Body>
 								<Right style={[common_styles.headerRight, {flex:0.15}]}>
-									<Button
-										transparent
-										onPress={this._open_search.bind(this)}
-									>
-										<Icon name="search" style={styles.header_icon}/>
-									</Button>
 								</Right>
 							</Header>
 							{/* END header */}
 							<Spinner visible={this.state.loading_indicator_state} textStyle={common_styles.whiteColor} />
 							<View style={[styles.tbl_header, common_styles.mainColorBg]}>
-								<Text style={[styles.td_item_name]}>Name</Text>
-								<Text style={styles.td_item}>Price ($)</Text>
-								<Text style={[styles.td_item, common_styles.justifyCenter]}>Change</Text>
+								<Text style={[styles.td_item_name, common_styles.bold]}>Name</Text>
+								<Text style={[styles.td_item, common_styles.bold]}>Price ($)</Text>
+								<Text style={[styles.td_item, common_styles.justifyCenter, common_styles.bold]}>Change</Text>
 							</View>
 							<View style={{flex:1}}>
 								<FlatList
