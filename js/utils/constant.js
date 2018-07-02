@@ -29,7 +29,7 @@ export const C_Const = {
 	},
 	COLLECTION_NAME: {		//in Firestore
 		USER: 'user',
-		ACCOUNT: 'account',
+		ACCOUNT: 'account',	//account of coinbase
 		ADDRESS: 'address',
 		BOOKMARK: 'bookmark'
 	},

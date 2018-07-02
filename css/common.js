@@ -79,6 +79,9 @@ export default {
 		font_20: {
 				fontSize: 20
 		},
+		font_15: {
+				fontSize: 15
+		},
 		font_25: {
 				fontSize: 25
 		},
@@ -164,8 +167,9 @@ export default {
 				justifyContent: "center",
 				alignItems: 'center',
 				paddingHorizontal: 5,
-				width: 200,
-				backgroundColor: '#0097de'
+				width: 150,
+				backgroundColor: '#0097de',
+				margin:10
 		},
 		//
 		border_b: {

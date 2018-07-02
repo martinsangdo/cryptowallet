@@ -1,7 +1,9 @@
 import React, {Component} from "react";
 import {View, TouchableOpacity, Share, Dimensions, Platform, TextInput} from "react-native";
 
-import {Container, Content, Button, Text, Header, Body, Left, Right, Icon, Form,Item,Input} from "native-base";
+import {Container, Content, Button, Text, Header, Body, Left, Right, Icon, Form,Item,
+  Label,
+  Input} from "native-base";
 
 import BaseScreen from "../../base/BaseScreen.js";
 import common_styles from "../../../css/common";
@@ -20,7 +22,7 @@ import {API_URI} from '../../utils/api_uri';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {setting} from "../../utils/config";
 
-class Signup extends BaseScreen {
+class Login extends BaseScreen {
 		constructor(props) {
 			super(props);
 			this.ref = firebase.firestore().collection(C_Const.COLLECTION_NAME.USER);
@@ -120,6 +122,7 @@ class Signup extends BaseScreen {
 											// this.props.navigation.goBack();
 										} else {
 											//not saved, don't know why
+
 										}
 									});
 									me.setState({err_mess: C_Const.TEXT.MESS_SIGNUP_OK, isSubmitting: false, loading_indicator_state: false});
@@ -137,7 +140,7 @@ class Signup extends BaseScreen {
 					me.setState({err_mess: C_Const.TEXT.ERR_SERVER, isSubmitting: false, loading_indicator_state: false});
 	    });
 		};
-		//open terms page
+		//
 		_open_terms = () => {
 
 		};
@@ -157,7 +160,7 @@ class Signup extends BaseScreen {
 								</Left>
 								<Body style={styles.headerBody}>
 									<View style={[common_styles.margin_l_10, common_styles.float_center]}>
-										<Text uppercase={false} style={[common_styles.default_font_color]}>Sign Up</Text>
+										<Text uppercase={false} style={[common_styles.default_font_color]}>Create new wallet</Text>
 									</View>
 								</Body>
 								<Right style={[common_styles.headerRight]}>
@@ -169,31 +172,60 @@ class Signup extends BaseScreen {
 								<Spinner visible={this.state.loading_indicator_state} textStyle={common_styles.whiteColor} />
 
                 <Form ref="register_form">
-									<Item>
-										<Input placeholder="Email" autoCapitalize="none" onChange={(event) => this.setState({fields: {...this.state.fields, email : event.nativeEvent.text}})}/>
-									</Item>
-									<Item>
-										<Input placeholder="Password" secureTextEntry={true} autoCapitalize="none" onChange={(event) => this.setState({fields: {...this.state.fields, password : event.nativeEvent.text}})}/>
-									</Item>
-									<Item>
-										<Input placeholder="Confirm Password" secureTextEntry={true} keyboardType={'email-address'} autoCapitalize="none" onChange={(event) => this.setState({fields: {...this.state.fields, confirm_password : event.nativeEvent.text}})}/>
-									</Item>
-									<Item>
-										<Input placeholder="Mnemonic" autoCapitalize="none" onChange={(event) => this.setState({fields: {...this.state.fields, mnemonic : event.nativeEvent.text}})}/>
+									<Item floatingLabel>
+										<Label>Email</Label>
+										<Input />
 									</Item>
 
+									<View style={common_styles.margin_t_5_ios_border} />
+									<View style={common_styles.txt_item_center}>
+										<Text style={[common_styles.blueColor, common_styles.float_left, styles.txt_label]}>Email (*)</Text>
+									</View>
+									<View style={common_styles.txt_item_center_row}>
+											<Body style={common_styles.flex_100p}><TextInput ref='email' returnKeyType = {"next"} style={[common_styles.text_input]}
+											onSubmitEditing={() => this.focusTextInput('password')}
+											 placeholder={'Email'} autoCapitalize="none" onChange={(event) => this.setState({fields: {...this.state.fields, email : event.nativeEvent.text}})}/></Body>
+									</View>
+                  <View style={common_styles.margin_t_5_ios_border} />
+                  <View style={common_styles.txt_item_center}>
+                    <Text style={[common_styles.blueColor, common_styles.float_left, styles.txt_label]}>Password (*)</Text>
+                  </View>
+                  <View style={common_styles.margin_b_5_ios} />
+                  <View style={common_styles.txt_item_center_row}>
+                      <Body style={common_styles.flex_100p}><TextInput ref='password' returnKeyType = {"next"} style={common_styles.text_input}
+                      onSubmitEditing={() => this.focusTextInput('confirm_password')}
+                       placeholder={'Password'} autoCapitalize="none" secureTextEntry={true} onChange={(event) => this.setState({fields: {...this.state.fields, password : event.nativeEvent.text}})}/></Body>
+                  </View>
+									<View style={common_styles.margin_t_5_ios_border} />
+                  <View style={common_styles.txt_item_center}>
+                    <Text style={[common_styles.blueColor, common_styles.float_left, styles.txt_label]}>Confirm Password (*)</Text>
+                  </View>
+                  <View style={common_styles.margin_b_5_ios} />
+                  <View style={common_styles.txt_item_center_row}>
+                      <Body style={common_styles.flex_100p}><TextInput ref='confirm_password' returnKeyType = {"next"} style={common_styles.text_input}
+                      onSubmitEditing={() => this.focusTextInput('mnemonic')}
+                       placeholder={'Confirm Password'} autoCapitalize="none" secureTextEntry={true} onChange={(event) => this.setState({fields: {...this.state.fields, confirm_password : event.nativeEvent.text}})}/></Body>
+                  </View>
+                  <View style={common_styles.margin_t_5_ios_border} />
+                  <View style={common_styles.txt_item_center}>
+                    <Text style={[common_styles.blueColor, common_styles.float_left, styles.txt_label]}>Mnemonic</Text>
+                  </View>
+                  <View style={common_styles.txt_item_center_row}>
+                      <Body style={common_styles.flex_100p}><TextInput ref='mnemonic' returnKeyType = {"done"} style={[common_styles.text_input]}
+                       placeholder={'Mnemonic'} autoCapitalize="none" onChange={(event) => this.setState({fields: {...this.state.fields, mnemonic : event.nativeEvent.text}})}/></Body>
+                  </View>
                 </Form>
 
-								<View style={[common_styles.view_align_center, common_styles.margin_t_20, common_styles.margin_b_20]}>
+								<View style={common_styles.view_align_center}>
 									<TouchableOpacity onPress={this._open_terms()}>
-										<Text>By clicking Sign Up, you agreed to our <Text style={styles.a_href}>Terms</Text></Text>
+										<Text>I read & accepted <Text style={common_styles.a_href}>Terms & Conditions</Text></Text>
 									</TouchableOpacity>
 								</View>
-								<View style={[common_styles.view_align_center]}>
+								<View style={common_styles.view_align_center}>
 									<Button transparent style={common_styles.default_button}
 											onPress={this._signup.bind(this)}
 									>
-										<Text style={[common_styles.whiteColor, common_styles.float_center]}>Sign Up</Text>
+										<Text style={[common_styles.whiteColor, common_styles.float_center]}>Register</Text>
 									</Button>
 								</View>
 								<View style={common_styles.view_align_center}>
@@ -205,4 +237,4 @@ class Signup extends BaseScreen {
 		}
 }
 
-export default Signup;
+export default Login;

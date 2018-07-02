@@ -12,7 +12,6 @@ export default {
 	headerBody: {
 		flex: 0.7, justifyContent: "center", flexDirection: "row", alignItems: 'center'
 	},
-	header_icon: {color: '#008da9'},
 	left_row: {flex:1, flexDirection: 'row'},
 	search_bar: {
 		width: deviceWidth - 120, height: Platform.OS==='ios'?35:40, backgroundColor: '#eee',
@@ -26,4 +25,5 @@ export default {
 	home_avatar: {
     width:100,height:100,marginBottom:10, borderRadius: 6
   },
+	a_href: {color:'#00f', fontWeight: 'bold'}
 };

@@ -32,6 +32,7 @@ import Setting from "./js/screen/setting";
 import ArticleDetail from "./js/screen/news/detail";
 import Signup from "./js/screen/wallet/signup";
 import CreateWallet from "./js/screen/wallet/create";
+import Login from "./js/screen/wallet/login";
 
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -45,6 +46,7 @@ const AppNavigator = StackNavigator({
 				News: {screen: News},
 				Setting: {screen: Setting},
 				ArticleDetail: {screen: ArticleDetail},
+				Login: {screen: Login},
 				Signup: {screen: Signup},
 				CreateWallet: {screen: CreateWallet},
 				//define tab bar
@@ -110,7 +112,7 @@ const AppNavigator = StackNavigator({
 				}
 		},
 		{
-				initialRouteName: "News",   //open this page first time
+				initialRouteName: "Wallet",   //open this page first time
 				headerMode: "none",
 				cardStyle: {
 					paddingTop: 0,
