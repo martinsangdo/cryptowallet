@@ -20,7 +20,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import {setting, Coinbase} from "../../utils/config";
 //https://github.com/moschan/react-native-simple-radio-button
 import {RadioGroup, RadioButton} from 'react-native-flexi-radio-button'
-
+https://github.com/cssivision/react-native-qrcode
 class CreateWallet extends BaseScreen {
 		constructor(props) {
 			super(props);

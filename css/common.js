@@ -9,8 +9,9 @@ const deviceWidth = Dimensions.get("window").width;
 const deviceHeight = Dimensions.get("window").height;
 
 export default {
-		mainGreenBg: {
-			backgroundColor: "#f9e26b"    //main background of the app
+		mainColorBg: {
+			backgroundColor: "#41BBD9"    //main background of the app
+			//orange: D84727, light orange: EF7B45, dark blue: 042A2B, light blue: CDEDF6
 		},
 		default_font_color: {color: '#008da9'},
 		mainTitle: {

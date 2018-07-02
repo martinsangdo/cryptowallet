@@ -1,21 +1,17 @@
 import React, {Component} from "react";
-import {Image, View, Platform, TouchableOpacity, FlatList, ScrollView, Share, Alert} from "react-native";
+import {Image, View, TouchableOpacity, FlatList} from "react-native";
 
 import {Container, Content, Button, Text, Header, Title, Body, Left, Right, Icon} from "native-base";
-import {NavigationActions} from "react-navigation";
 
 import BaseScreen from "../../base/BaseScreen.js";
 import common_styles from "../../../css/common";
 import styles from "./style";    //CSS defined here
 import {API_URI} from '../../utils/api_uri';
-import store from 'react-native-simple-store';
-import RNExitApp from 'react-native-exit-app';
 
 import Utils from "../../utils/functions";
-import {C_Const, C_MULTI_LANG} from '../../utils/constant';
+import {C_Const} from '../../utils/constant';
 import RequestData from '../../utils/https/RequestData';
 import Spinner from 'react-native-loading-spinner-overlay';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 class Market extends BaseScreen {
 		constructor(props) {
@@ -39,10 +35,12 @@ class Market extends BaseScreen {
 		//render the list. MUST use "item" as param
 		_renderItem = ({item}) => (
 				<View style={[styles.list_item, common_styles.fetch_row]}>
-					<Text style={styles.td_item}>{item.name}</Text>
-					<Text style={styles.td_item}>{item.symbol}</Text>
+					<View style={styles.td_item_name}>
+						<Text style={styles.coin_name}>{item.name}</Text>
+						<Text>{item.symbol}</Text>
+					</View>
 					<Text style={styles.td_item}>{item.price}</Text>
-					<Text style={styles.td_item}>{item.change}</Text>
+					<Text style={[styles.td_item, common_styles.justifyCenter, styles.percent_change_down, (item.change >= 0) && styles.percent_change_up]}>{item.change} %</Text>
 				</View>
 		);
 		//get latest price
@@ -110,7 +108,7 @@ class Market extends BaseScreen {
 								<Left style={[common_styles.headerLeft, {flex:0.15}]}>
 								</Left>
 								<Body style={styles.headerBody}>
-									<Text style={common_styles.bold}>Latest price</Text>
+									<Text style={common_styles.bold}>Market</Text>
 								</Body>
 								<Right style={[common_styles.headerRight, {flex:0.15}]}>
 									<Button
@@ -123,11 +121,10 @@ class Market extends BaseScreen {
 							</Header>
 							{/* END header */}
 							<Spinner visible={this.state.loading_indicator_state} textStyle={common_styles.whiteColor} />
-							<View style={[styles.tbl_header]}>
-								<Text style={styles.td_item}>Name</Text>
-								<Text style={styles.td_item}>Symbol</Text>
-								<Text style={styles.td_item}>Price (USD)</Text>
-								<Text style={styles.td_item}>Change 24h</Text>
+							<View style={[styles.tbl_header, common_styles.mainColorBg]}>
+								<Text style={[styles.td_item_name]}>Name</Text>
+								<Text style={styles.td_item}>Price ($)</Text>
+								<Text style={[styles.td_item, common_styles.justifyCenter]}>Change</Text>
 							</View>
 							<View style={{flex:1}}>
 								<FlatList

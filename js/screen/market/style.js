@@ -19,10 +19,14 @@ export default {
 		justifyContent: 'center', marginTop: 2, borderRadius:6, borderColor:'#eee'
 	},
 	search_cancel: {width:100, justifyContent: 'center'},
-	list_item: {margin:10},
-	tbl_header: {flexDirection: 'row', justifyContent: 'space-between', margin:10},
+	list_item: {padding:10, borderTopWidth:1, borderTopColor: '#fff'},
+	tbl_header: {flexDirection: 'row', justifyContent: 'space-between', padding:10},
 	btn_row: {flex:1, flexDirection: 'row', justifyContent: 'space-between', marginLeft:20, marginRight:20},
 	thumb: {width: deviceWidth, height: 185},
 	btn_active: {backgroundColor: '#008da9'},
-	td_item: {width:'25%'}
+	td_item_name: {width:'40%'},
+	td_item: {width:'30%'},
+	percent_change_up: {color: '#0f0', fontWeight:'bold'},
+	percent_change_down: {color: '#f00', fontWeight:'bold'},
+	coin_name: {color:'#777', fontSize:15}
 };
