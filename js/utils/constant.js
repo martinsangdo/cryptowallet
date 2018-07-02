@@ -12,6 +12,7 @@ export const C_Const = {
 		SERVER_ERROR: 500,
 	},
 	TEXT: {
+		ERR_OFFLINE: 'Device is offline, app will be closed',
 		ERR_NOT_LOGIN: 'User is not logined',
 		ERR_EMPTY_NAME: 'Please input a name',
 		ERR_INVALID_PASSWORD: 'Please input valid password (0-9a-zA-Z)',
@@ -58,7 +59,8 @@ export const C_Const = {
 		USER_INFO: 'USER_INFO',   //include: user_id, name, email
 		FIREBASE_TOKEN: 'FIREBASE_TOKEN',
 		USER_ID: 'user_id',
-		EMAIL: 'email'
+		EMAIL: 'email',
+		COIN_LIST: 'COIN_LIST'
 	},
 	ACTIVE_COLOR: '#008da9',
 	ICON_URL: 'https://blockbod.com/public/blockbod/img/logo.jpeg'

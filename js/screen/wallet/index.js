@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Image, View, Platform, TouchableOpacity, FlatList, ScrollView, Share, Alert} from "react-native";
+import {Image, View, Platform, TouchableOpacity, FlatList, Alert} from "react-native";
 
 import {Container, Content, Button, Text, Header, Title, Body, Left, Right, Icon} from "native-base";
 import {NavigationActions} from "react-navigation";
@@ -31,32 +31,30 @@ class Wallet extends BaseScreen {
 				loading_indicator_state: true,
 				isShowMore: false,
 				is_logined: false,		//indicate user logined or not
-				activating_coin_num: 0,	//number of coins allowed to create wallet
-
 			};
 		}
 		//
 		componentDidMount() {
-			this._get_active_coin_list();
-			// this._check_logined_user();
-			// this._get_accounts();
-			// this._create_wallet();
+			this._get_saved_coins();
 		}
-		//get list of activating coins from DB
-		_get_active_coin_list = () => {
-			var col_account = this.ref.collection(C_Const.COLLECTION_NAME.ACCOUNT);
-			var me = this;
-			col_account.where('is_active', '==', true).get().then(function(querySnapshot) {
-					if (querySnapshot.size == 0){
-						//there is no any coin
-						Utils.dlog('There is no coin');
-					} else {
-						//there is coin
-						me.setState({activating_coin_num: querySnapshot.size}, () => {
-							me._check_logined_user();
-						});
-					}
-				});
+		//get list of activating coins from store
+		_get_saved_coins = () => {
+			store.get(C_Const.STORE_KEY.COIN_LIST)
+			.then(res => {
+				if (res!=null){
+					this._check_logined_user();
+				} else {
+					//don't have any coin, don't know why
+					Alert.alert(
+						'Alert',
+						C_Const.TEXT.ERR_SERVER,
+						[
+							{text: 'OK', onPress: () => RNExitApp.exitApp()},
+						],
+						{ cancelable: false }
+					);
+				}
+			});
 		};
 		//check whether user logined before
 		_check_logined_user = () => {
@@ -149,14 +147,6 @@ class Wallet extends BaseScreen {
 									<Text style={common_styles.bold}>My wallets</Text>
 								</Body>
 								<Right style={[common_styles.headerRight, {flex:0.15}]}>
-								{this.state.activating_coin_num > this.state.data_list.length && this.state.is_logined &&
-									<Button
-										transparent
-										onPress={this._open_create_wallet.bind(this)}
-									>
-										<FontAwesome name="plus" style={[common_styles.font_15, common_styles.default_font_color]}/>
-									</Button>
-								}
 								</Right>
 							</Header>
 							{/* END header */}
@@ -179,15 +169,7 @@ class Wallet extends BaseScreen {
 										</Button>
 									</View>
 								}
-								{this.state.activating_coin_num > 0 && this.state.is_logined &&
-									<View style={common_styles.view_align_center}>
-										<Button transparent style={common_styles.default_button}
-											onPress={this._begin_register.bind(this)}
-										>
-											<Text style={[common_styles.whiteColor, common_styles.float_center]}>Create new wallet</Text>
-										</Button>
-									</View>
-								}
+
 							</Content>
 						</Container>
 				);

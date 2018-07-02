@@ -112,7 +112,7 @@ const AppNavigator = StackNavigator({
 				}
 		},
 		{
-				initialRouteName: "Wallet",   //open this page first time
+				initialRouteName: "Splash",   //open this page first time
 				headerMode: "none",
 				cardStyle: {
 					paddingTop: 0,

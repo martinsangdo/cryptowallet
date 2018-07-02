@@ -15,6 +15,6 @@ export default {
     height: '100%'
   },
   logo: {
-    width: 300, height: 80, resizeMode: 'contain'
+    width: 200, height: 200, resizeMode: 'contain'
   }
 };

@@ -28,5 +28,6 @@ export default {
 	td_item: {width:'30%'},
 	percent_change_up: {color: '#0f0', fontWeight:'bold'},
 	percent_change_down: {color: '#f00', fontWeight:'bold'},
-	coin_name: {color:'#777', fontSize:15}
+	coin_name: {color:'#777', fontSize:15},
+	odd_item: {backgroundColor: '#CDEDF6'}
 };

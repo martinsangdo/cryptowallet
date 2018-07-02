@@ -41,8 +41,7 @@ class Signup extends BaseScreen {
 		}
 		//
 		componentDidMount() {
-			// this._test();
-
+			
 		}
 		//
 		_test = () => {
@@ -105,6 +104,11 @@ class Signup extends BaseScreen {
 								 device_version: Platform.OS + ' ' + DeviceInfo.getSystemVersion()
 						})
 						.then(function(docRef) {
+							//saved user info into DB, now create wallets (addresses)
+
+
+
+
 								//save info to Preference/Store
 								store.update(C_Const.STORE_KEY.USER_INFO, {
 										user_id: docRef.id,
@@ -118,6 +122,7 @@ class Signup extends BaseScreen {
 											//saved
 											//todo: trigger previous page
 											// this.props.navigation.goBack();
+											//
 										} else {
 											//not saved, don't know why
 										}

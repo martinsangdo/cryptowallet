@@ -34,7 +34,7 @@ class Market extends BaseScreen {
 		_keyExtractor = (item) => item.index;
 		//render the list. MUST use "item" as param
 		_renderItem = ({item}) => (
-				<View style={[styles.list_item, common_styles.fetch_row]}>
+				<View style={[styles.list_item, common_styles.fetch_row, item.idx%2==0 && styles.odd_item]}>
 					<View style={styles.td_item_name}>
 						<Text style={styles.coin_name}>{item.name}</Text>
 						<Text>{item.symbol}</Text>
@@ -58,6 +58,7 @@ class Market extends BaseScreen {
 							var coin_info = list[id];
 							if (!me.state.key_list[id] || me.state.key_list[id]==null){
 								me.state.data_list.push({
+									idx: me.state.data_list.length,
 									index: coin_info.id,
 									name: coin_info.name,
 									symbol: coin_info.symbol,
