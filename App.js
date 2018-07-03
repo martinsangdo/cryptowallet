@@ -33,7 +33,7 @@ import ArticleDetail from "./js/screen/news/detail";
 import Signup from "./js/screen/wallet/signup";
 import SendCoin from "./js/screen/wallet/send_coin";
 import Login from "./js/screen/wallet/login";
-
+import QRCode from "./js/screen/wallet/qr_code";
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
@@ -49,6 +49,7 @@ const AppNavigator = StackNavigator({
 				Login: {screen: Login},
 				Signup: {screen: Signup},
 				SendCoin: {screen: SendCoin},
+				QRCode: {screen: QRCode},
 				//define tab bar
 				Main: {
 					screen: TabNavigator({
@@ -56,7 +57,7 @@ const AppNavigator = StackNavigator({
 								screen: Market,
 								navigationOptions: ({ navigation, screenProps }) => ({
 										tabBarIcon: ({ tintColor }) => (
-											<FontAwesome name="area-chart" style={{color:tintColor}}/>
+											<FontAwesome name="area-chart" style={{color:tintColor, fontSize:18}}/>
 										),
 								})
 						},
@@ -64,7 +65,7 @@ const AppNavigator = StackNavigator({
 							screen: News,
 							navigationOptions: ({ navigation, screenProps }) => ({
 									tabBarIcon: ({ tintColor }) => (
-										<FontAwesome name="newspaper-o" style={{color:tintColor}}/>
+										<FontAwesome name="newspaper-o" style={{color:tintColor, fontSize:18}}/>
 									),
 							})
 						},
@@ -72,7 +73,7 @@ const AppNavigator = StackNavigator({
 								screen: Wallet,
 								navigationOptions: ({ navigation, screenProps }) => ({
 										tabBarIcon: ({ tintColor }) => (
-											<FontAwesome name="google-wallet" style={{color:tintColor}}/>
+											<FontAwesome name="google-wallet" style={{color:tintColor, fontSize:18}}/>
 										),
 								})
 						},
@@ -80,7 +81,7 @@ const AppNavigator = StackNavigator({
 								screen: Setting,
 								navigationOptions: ({ navigation, screenProps }) => ({
 										tabBarIcon: ({ tintColor }) => (
-											<Icon name="ios-settings" style={{color:tintColor, fontSize:16}}/>
+											<Icon name="ios-settings" style={{color:tintColor, fontSize:18}}/>
 										),
 								})
 						}
@@ -104,7 +105,7 @@ const AppNavigator = StackNavigator({
 											height:50, paddingBottom: Platform.OS==='ios'?10:0
 									},
 									// navigation: this.props.navigation,
-									labelStyle: {fontSize: 9, marginTop: 2},
+									labelStyle: {fontSize: 10, marginTop: 2},
 									lazy: false   // IMPORTANT: if lazy: true -> setParam will only apply to selected tab (since only this one is rendered)
 							}
 					}

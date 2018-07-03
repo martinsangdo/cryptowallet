@@ -31,7 +31,8 @@ class Wallet extends BaseScreen {
 				loading_indicator_state: true,
 				isShowMore: false,
 				coin_list: {},		//activating coins
-				is_logined: false		//indicate user logined or not
+				is_logined: false,		//indicate user logined or not
+				address_list: {}		//addresses saved in DB
 			};
 		}
 		//
@@ -66,21 +67,23 @@ class Wallet extends BaseScreen {
 				<View style={[styles.wallet_item, common_styles.fetch_row]}>
 					<Text style={styles.coin_name}>{item.code}</Text>
 					<Text style={styles.td_item}>{item.total}</Text>
-					<TouchableOpacity onPress={()=>this._send_amount()} style={[styles.icon_send]}>
+					<TouchableOpacity onPress={()=>this._send_amount(item.address)} style={[styles.icon_send]}>
 						<FontAwesome name="send" style={[styles.icon, common_styles.default_font_color]}/>
 					</TouchableOpacity>
-					<TouchableOpacity onPress={()=>this._open_qr()} style={[styles.icon_qr]}>
+					<TouchableOpacity onPress={()=>this._open_qr(item.address)} style={[styles.icon_qr]}>
 						<FontAwesome name="qrcode" style={[styles.icon, common_styles.default_font_color]}/>
 					</TouchableOpacity>
 				</View>
 		);
 		//
-		_send_amount = () => {
+		_send_amount = (address) => {
 
 		};
 		//
-		_open_qr = () => {
-
+		_open_qr = (address) => {
+			this.props.navigation.navigate('QRCode', {
+				address: address
+			});
 		};
 		//check whether user logined before
 		_check_logined_user = () => {
@@ -112,10 +115,11 @@ class Wallet extends BaseScreen {
 	    .get().then(function(querySnapshot) {
 					if (querySnapshot.size == 0){
 						//there is no wallets
-						Utils.dlog('There is no wallet');
+						Utils.dlog('There is no address');
 					} else {
 						//there is wallet
 						querySnapshot.forEach(function(doc) {
+							me.state.address_list[doc.data()['network']] = doc.data()['address'];
 							//get information of each address
 							me._get_address_transactions(doc.data());
 				 		});
@@ -164,6 +168,7 @@ class Wallet extends BaseScreen {
 		//calculate total amount of 1 address
 		//https://developers.coinbase.com/api/v2#list-address39s-transactions
 		_calculate_total = (trans_list) => {
+			var me = this;
 			var len = trans_list.length;
 			var total = 0;
 			var network_name = '';
@@ -173,14 +178,19 @@ class Wallet extends BaseScreen {
 				}
 				network_name = trans_list[i]['network']['name'];
 			}
-			//update to the list
+			//update total to the list
 			let newArray = [...this.state.data_list];
 			for (var i=0; i<this.state.data_list.length; i++){
 				newArray[i]['total'] = 0;
 				if (network_name == this.state.data_list[i]['network']){
 					newArray[i]['total'] = total;
 				}
+				//assign address to each wallet (account)
+				Object.keys(this.state.coin_list).forEach(function(db_account_id) {
+						newArray[i]['address'] = me.state.address_list[newArray[i]['network']];
+				});
 			}
+			//
 			this.setState({data_list: newArray});
 		};
 		//==========

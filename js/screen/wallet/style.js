@@ -31,5 +31,6 @@ export default {
 	td_item: {fontSize:20,width:'30%'},
 	icon_send: {width:'20%'},
 	icon_qr: {width:'10%'},
-	icon: {fontSize:20}
+	icon: {fontSize:20},
+	addr_str: {fontSize:12}
 };
