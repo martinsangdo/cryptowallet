@@ -7,21 +7,21 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>973040703089-qt4ng1g0tpki339qc6v7lbf01qjo0b1t.apps.googleusercontent.com</string>
+	<string>25714788159-0s9h1c688qlfvif7b78r3gk5l5mq9894.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.973040703089-qt4ng1g0tpki339qc6v7lbf01qjo0b1t</string>
+	<string>com.googleusercontent.apps.25714788159-0s9h1c688qlfvif7b78r3gk5l5mq9894</string>
 	<key>API_KEY</key>
-	<string>AIzaSyCkt-m_I-pvNDjx5eWuakdpzFYC3eqxc0g</string>
+	<string>AIzaSyABjNJjaoAPUGyf6gmcwj8_qtc1DGbc_Jg</string>
 	<key>GCM_SENDER_ID</key>
-	<string>973040703089</string>
+	<string>25714788159</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.xufagroup.blockbod</string>
+	<string>com.xufagroup.cryptowallet</string>
 	<key>PROJECT_ID</key>
-	<string>blockbod-19cb2</string>
+	<string>cryptowallet-703c2</string>
 	<key>STORAGE_BUCKET</key>
-	<string>blockbod-19cb2.appspot.com</string>
+	<string>cryptowallet-703c2.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<true></true>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -33,8 +33,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:973040703089:ios:c3d754450c7894e4</string>
+	<string>1:25714788159:ios:71a5b4d0275673ec</string>
 	<key>DATABASE_URL</key>
-	<string>https://blockbod-19cb2.firebaseio.com</string>
+	<string>https://cryptowallet-703c2.firebaseio.com</string>
 </dict>
 </plist>

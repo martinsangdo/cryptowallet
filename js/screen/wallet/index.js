@@ -67,22 +67,26 @@ class Wallet extends BaseScreen {
 				<View style={[styles.wallet_item, common_styles.fetch_row]}>
 					<Text style={styles.coin_name}>{item.code}</Text>
 					<Text style={styles.td_item}>{item.total}</Text>
-					<TouchableOpacity onPress={()=>this._send_amount(item.address)} style={[styles.icon_send]}>
+					<TouchableOpacity onPress={()=>this._send_amount(item.code, item.address)} style={[styles.icon_send]}>
 						<FontAwesome name="send" style={[styles.icon, common_styles.default_font_color]}/>
 					</TouchableOpacity>
-					<TouchableOpacity onPress={()=>this._open_qr(item.address)} style={[styles.icon_qr]}>
+					<TouchableOpacity onPress={()=>this._open_qr(item.code, item.address)} style={[styles.icon_qr]}>
 						<FontAwesome name="qrcode" style={[styles.icon, common_styles.default_font_color]}/>
 					</TouchableOpacity>
 				</View>
 		);
 		//
-		_send_amount = (address) => {
-
+		_send_amount = (code, address) => {
+			this.props.navigation.navigate('SendCoin', {
+				address: address,
+				code: code
+			});
 		};
 		//
-		_open_qr = (address) => {
+		_open_qr = (code, address) => {
 			this.props.navigation.navigate('QRCode', {
-				address: address
+				address: address,
+				code: code
 			});
 		};
 		//check whether user logined before

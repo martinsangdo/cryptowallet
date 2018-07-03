@@ -1,73 +1,72 @@
 import React, {Component} from "react";
-import {View, TouchableOpacity, Share, Dimensions, Platform, TextInput} from "react-native";
+import {View, TouchableOpacity, Platform, Alert} from "react-native";
 
-import {Container, Content, Button, Text, Header, Body, Left, Right, Icon, Form} from "native-base";
+import {Container, Content, Button, Text, Header, Body, Left, Right, Icon, Form,Item,Input} from "native-base";
 
 import BaseScreen from "../../base/BaseScreen.js";
 import common_styles from "../../../css/common";
 import styles from "./style";    //CSS defined here
 import Utils from "../../utils/functions";
-import {C_Const, C_MULTI_LANG} from '../../utils/constant';
-import AutoHTML from 'react-native-autoheight-webview';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import firebase from 'react-native-firebase';
+import {C_Const} from '../../utils/constant';
 import store from 'react-native-simple-store';
 
 import RequestData from '../../utils/https/RequestData';
 import {API_URI} from '../../utils/api_uri';
 import Spinner from 'react-native-loading-spinner-overlay';
-import {setting, Coinbase} from "../../utils/config";
-//https://github.com/moschan/react-native-simple-radio-button
-import {RadioGroup, RadioButton} from 'react-native-flexi-radio-button'
-https://github.com/cssivision/react-native-qrcode
-class CreateWallet extends BaseScreen {
+import {setting} from "../../utils/config";
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
+class SendCoin extends BaseScreen {
 		constructor(props) {
 			super(props);
-			this.ref = firebase.firestore().collection(C_Const.COLLECTION_NAME.ADDRESS);
 			this.state = {
-        name: '',   //name of wallet
-				coin_index: 0,
-        user_id: '',
+  				to_address: '',
+  				amount: 0,
+					currency: '',
+					description: '',
 				isSubmitting: false,
 				err_mess: '',
+				user_id: '',
 				loading_indicator_state: false
 			};
 		}
 		//
 		componentDidMount() {
-      //get user id from store
-      store.get(C_Const.STORE_KEY.USER_INFO)
-      .then(res => {
-        if (res!=null && !Utils.isEmpty(res[C_Const.STORE_KEY.USER_ID]) && !Utils.isEmpty(res[C_Const.STORE_KEY.EMAIL])){
-          this.setState({user_id: res[C_Const.STORE_KEY.USER_ID]});
-        } else {
-          //error
-        }
-      });
+			this.setState({
+				to_address: this.props.navigation.state.params.address,
+				currency: this.props.navigation.state.params.code
+			});
 		}
 		//
 		_on_go_back = () => {
 			this.props.navigation.goBack();
 		};
 		//check if all input values are valid
-		_is_valid_input(){
+		_is_valid_input(values){
 			var all_valid = false;
-			if (Utils.trim(this.state.name) == ''){
-				this.setState({err_mess: C_Const.TEXT.ERR_EMPTY_NAME});
-			} else if (Utils.trim(this.state.user_id) == ''){
-				this.setState({err_mess: C_Const.TEXT.ERR_NOT_LOGIN});
+			if (Utils.trim(values.email) == ''){
+				this.setState({err_mess: C_Const.TEXT.ERR_EMPTY_EMAIL});
+			} else if (!Utils.validateEmail(values.email)){
+				this.setState({err_mess: C_Const.TEXT.ERR_WRONG_EMAIL});
+			} else if (Utils.trim(values.password) == ''){
+				this.setState({err_mess: C_Const.TEXT.ERR_INVALID_PASSWORD});
+			} else if (Utils.trim(values.password).length < 8){
+				this.setState({err_mess: C_Const.TEXT.ERR_SHORT_PASS_LEN});
+			} else if (Utils.trim(values.confirm_password) == ''){
+				this.setState({err_mess: C_Const.TEXT.ERR_EMPTY_CONFIRM_PASS});
+			} else if (Utils.trim(values.password) != Utils.trim(values.confirm_password)){
+				this.setState({err_mess: C_Const.TEXT.ERR_WRONG_CONFIRM_PASS});
 			} else {
-        all_valid = true;
-      }
+				all_valid = true;
+			}
 			return all_valid;
 		};
-		//user clicks Create
-		_create_wallet = () => {
+		//user clicks Register
+		_begin_send = () => {
 			if (this.state.isSubmitting){
 				return;
 			}
-			if (!this._is_valid_input()){
+			if (!this._is_valid_input(this.state.fields)){
 				return;
 			}
 			//clear messages
@@ -77,47 +76,18 @@ class CreateWallet extends BaseScreen {
 				loading_indicator_state: true
 			});
 			var me = this;
-      //create wallet (address) in Coinbase
-			var uri = '/v2/accounts/'+Coinbase.COIN_LIST[me.state.coin_index].id+'/addresses?name='+this.state.name;
-      var extra_headers = Utils.createCoinbaseHeader('POST', uri);
-			RequestData.sentPostRequestWithExtraHeaders(setting.WALLET_IP + uri,
-				extra_headers, null, (detail, error) => {
-				if (detail && !Utils.isEmpty(detail.data)){
-					// Utils.xlog('detail create addr', detail);
-					//save into our DB
-					me.ref.add({
-							user_id: me.state.user_id,
-							name: me.state.name,
-							coinbase_addr_id: detail.data.id,
-							address: detail.data.address,
-							code: Coinbase.COIN_LIST[me.state.coin_index].code
-					})
-					.then(function(docRef) {
-							if (docRef.id){
-								me.setState({err_mess: C_Const.TEXT.MESS_CREATE_WALLET_OK, isSubmitting: false, loading_indicator_state: false});
-							} else {
-								me.setState({err_mess: C_Const.TEXT.ERR_SERVER, isSubmitting: false, loading_indicator_state: false});
-							}
-					})
-					.catch(function(error) {
-							me.setState({err_mess: C_Const.TEXT.ERR_SERVER, isSubmitting: false, loading_indicator_state: false});
-					});
-				} else if (error){
-					//create address failed
-					this.setState({err_mess: C_Const.TEXT.ERR_SERVER, isSubmitting: false, loading_indicator_state: false});
-				}
-			});
+
 		};
-		//
-		_open_terms = () => {
+		//after scanning qr code
+		_scanned_qr = () => {
 
 		};
 		//
-		onSelect(index, value){
-		  this.setState({
-		    coin_index: index
-		  });
-		}
+		_open_scanner = () => {
+			this.props.navigation.navigate('Scanner', {
+				onScanned: this._scanned_qr
+			});
+		};
 	 //==========
 		render() {
 				return (
@@ -134,7 +104,7 @@ class CreateWallet extends BaseScreen {
 								</Left>
 								<Body style={styles.headerBody}>
 									<View style={[common_styles.margin_l_10, common_styles.float_center]}>
-										<Text uppercase={false} style={[common_styles.default_font_color]}>Create new wallet</Text>
+										<Text uppercase={false} style={[common_styles.default_font_color]}>Send coin</Text>
 									</View>
 								</Body>
 								<Right style={[common_styles.headerRight]}>
@@ -146,35 +116,25 @@ class CreateWallet extends BaseScreen {
 								<Spinner visible={this.state.loading_indicator_state} textStyle={common_styles.whiteColor} />
 
                 <Form ref="register_form">
-									<View style={common_styles.margin_t_5_ios_border} />
-									<View style={common_styles.txt_item_center}>
-										<Text style={[common_styles.blueColor, common_styles.float_left, styles.txt_label]}>Wallet name</Text>
-									</View>
-									<View style={common_styles.txt_item_center_row}>
-											<Body style={common_styles.flex_100p}><TextInput ref='name' returnKeyType = {"next"} style={[common_styles.text_input]}
-											 placeholder={'Wallet name'} autoCapitalize="none" onChange={(event) => this.setState({name: event.nativeEvent.text})}/></Body>
-									</View>
-									<RadioGroup onSelect = {(index, value) => this.onSelect(index, value)} selectedIndex={0} >
-						        <RadioButton value={Coinbase.COIN_LIST[0].id} >
-						          <Text>{Coinbase.COIN_LIST[0].name}</Text>
-						        </RadioButton>
-						        <RadioButton value={Coinbase.COIN_LIST[1].id}>
-						          <Text>{Coinbase.COIN_LIST[1].name}</Text>
-						        </RadioButton>
-						        <RadioButton value={Coinbase.COIN_LIST[2].id}>
-						          <Text>{Coinbase.COIN_LIST[2].name}</Text>
-						        </RadioButton>
-										<RadioButton value={Coinbase.COIN_LIST[3].id}>
-						          <Text>{Coinbase.COIN_LIST[3].name}</Text>
-						        </RadioButton>
-						      </RadioGroup>
+									<Item>
+										<Input placeholder="Receiver's Address" autoCapitalize="none" onChange={(event) => this.setState({to_address: event.nativeEvent.text})}/>
+										<TouchableOpacity onPress={()=>{this._open_scanner()}} style={common_styles.margin_r_20}>
+											<FontAwesome name="qrcode" style={[styles.icon, common_styles.default_font_color]}/>
+										</TouchableOpacity>
+									</Item>
+									<Item>
+										<Input placeholder="Amount" autoCapitalize="none" onChange={(event) => this.setState({amount: event.nativeEvent.text})}/>
+									</Item>
+									<Item>
+										<Input placeholder="Description" autoCapitalize="none" onChange={(event) => this.setState({description: event.nativeEvent.text})}/>
+									</Item>
                 </Form>
 
-								<View style={common_styles.view_align_center}>
+								<View style={[common_styles.view_align_center]}>
 									<Button transparent style={common_styles.default_button}
-											onPress={this._create_wallet.bind(this)}
+											onPress={this._begin_send.bind(this)}
 									>
-										<Text style={[common_styles.whiteColor, common_styles.float_center]}>Create</Text>
+										<Text style={[common_styles.whiteColor, common_styles.float_center]}>Send</Text>
 									</Button>
 								</View>
 								<View style={common_styles.view_align_center}>
@@ -186,4 +146,4 @@ class CreateWallet extends BaseScreen {
 		}
 }
 
-export default CreateWallet;
+export default SendCoin;

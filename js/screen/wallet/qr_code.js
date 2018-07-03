@@ -19,13 +19,15 @@ class QRCode extends BaseScreen {
 	constructor(props) {
 		super(props);
 		this.state = {
-			address: ''
+			address: '',
+			code: ''
 		};
 	}
 		//like onload event
 		componentDidMount() {
 			this.setState({
-				address: this.props.navigation.state.params.address
+				address: this.props.navigation.state.params.address,
+				code: this.props.navigation.state.params.code
 			});
 		}
 		//
@@ -49,7 +51,7 @@ class QRCode extends BaseScreen {
 								</TouchableOpacity>
 								</Left>
 								<Body style={styles.headerBody}>
-									<Text style={common_styles.bold}>Wallet Address</Text>
+									<Text style={common_styles.bold}>{this.state.code} Address</Text>
 								</Body>
 								<Right style={[common_styles.headerRight, {flex:0.15}]}>
 								</Right>
