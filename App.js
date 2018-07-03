@@ -31,7 +31,7 @@ import Wallet from "./js/screen/wallet";
 import Setting from "./js/screen/setting";
 import ArticleDetail from "./js/screen/news/detail";
 import Signup from "./js/screen/wallet/signup";
-import CreateWallet from "./js/screen/wallet/create";
+import SendCoin from "./js/screen/wallet/send_coin";
 import Login from "./js/screen/wallet/login";
 
 
@@ -48,7 +48,7 @@ const AppNavigator = StackNavigator({
 				ArticleDetail: {screen: ArticleDetail},
 				Login: {screen: Login},
 				Signup: {screen: Signup},
-				CreateWallet: {screen: CreateWallet},
+				SendCoin: {screen: SendCoin},
 				//define tab bar
 				Main: {
 					screen: TabNavigator({

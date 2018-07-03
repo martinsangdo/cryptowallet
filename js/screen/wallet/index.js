@@ -30,7 +30,8 @@ class Wallet extends BaseScreen {
 				data_list: [],		//wallet list
 				loading_indicator_state: true,
 				isShowMore: false,
-				is_logined: false,		//indicate user logined or not
+				coin_list: {},		//activating coins
+				is_logined: false		//indicate user logined or not
 			};
 		}
 		//
@@ -42,7 +43,9 @@ class Wallet extends BaseScreen {
 			store.get(C_Const.STORE_KEY.COIN_LIST)
 			.then(res => {
 				if (res!=null){
-					this._check_logined_user();
+					this.setState({coin_list: res}, () => {
+						this._check_logined_user();
+					});
 				} else {
 					//don't have any coin, don't know why
 					Alert.alert(
@@ -56,14 +59,42 @@ class Wallet extends BaseScreen {
 				}
 			});
 		};
+		//
+		_keyExtractor = (item) => item.code;
+		//render the list. MUST use "item" as param
+		_renderItem = ({item}) => (
+				<View style={[styles.wallet_item, common_styles.fetch_row]}>
+					<Text style={styles.coin_name}>{item.code}</Text>
+					<Text style={styles.td_item}>{item.total}</Text>
+					<TouchableOpacity onPress={()=>this._send_amount()} style={[styles.icon_send]}>
+						<FontAwesome name="send" style={[styles.icon, common_styles.default_font_color]}/>
+					</TouchableOpacity>
+					<TouchableOpacity onPress={()=>this._open_qr()} style={[styles.icon_qr]}>
+						<FontAwesome name="qrcode" style={[styles.icon, common_styles.default_font_color]}/>
+					</TouchableOpacity>
+				</View>
+		);
+		//
+		_send_amount = () => {
+
+		};
+		//
+		_open_qr = () => {
+
+		};
 		//check whether user logined before
 		_check_logined_user = () => {
+			var me = this;
 			store.get(C_Const.STORE_KEY.USER_INFO)
 			.then(user_info => {
 				Utils.xlog('user_info', user_info);
 					if (user_info!=null && !Utils.isEmpty(user_info[C_Const.STORE_KEY.USER_ID]) && !Utils.isEmpty(user_info[C_Const.STORE_KEY.EMAIL])){
 						//logined
 						this.setState({is_logined: true});
+						//convert into showing list
+						Object.keys(this.state.coin_list).forEach(function(db_account_id) {
+							me.state.data_list.push(me.state.coin_list[db_account_id]);
+						});
 						//get list of wallets (address)
 						this._get_addresses_by_user(user_info[C_Const.STORE_KEY.USER_ID]);
 					} else {
@@ -74,6 +105,7 @@ class Wallet extends BaseScreen {
 		};
 		//get wallets (addresses) of user
 		_get_addresses_by_user = (user_id) => {
+			var me = this;
 			var col_address = this.ref.collection(C_Const.COLLECTION_NAME.ADDRESS);
 			//find if this user has some addresses
 			col_address.where('user_id', '==', user_id)
@@ -83,39 +115,37 @@ class Wallet extends BaseScreen {
 						Utils.dlog('There is no wallet');
 					} else {
 						//there is wallet
-						Utils.xlog('wallets', querySnapshot);
+						querySnapshot.forEach(function(doc) {
+							//get information of each address
+							me._get_address_transactions(doc.data());
+				 		});
 					}
 				});
 		};
-		//test some API
-		_get_accounts = () => {
-      var extra_headers = Utils.createCoinbaseHeader('GET', API_URI.WALLET_ACCOUNTS);
-			RequestData.sentGetRequestWithExtraHeaders(setting.WALLET_IP + API_URI.WALLET_ACCOUNTS, extra_headers,
+		//get transactions of each address
+		_get_address_transactions = (addr_db_info) => {
+			//get account id corresponding to this address
+			var coinbase_acc_id = '';
+			var me = this;
+			Object.keys(this.state.coin_list).forEach(function(db_account_id) {
+				if (me.state.coin_list[db_account_id]['network'] == addr_db_info['network']){
+					coinbase_acc_id = me.state.coin_list[db_account_id]['coinbase_id'];
+				}
+			});
+			var uri = '/v2/accounts/'+coinbase_acc_id+'/addresses/'+addr_db_info['coinbase_addr_id']+'/transactions';
+			var extra_headers = Utils.createCoinbaseHeader('GET', uri);
+			RequestData.sentGetRequestWithExtraHeaders(setting.WALLET_IP + uri, extra_headers,
 				(detail, error) => {
 					if (detail){
-						Utils.xlog('detail get acc', detail);
-						//get addresses
-						if (detail.data){
-							this._get_addresses();
-						}
+						// Utils.xlog('detail get trans', detail);
+						//todo: get all transactions
+						me._calculate_total(detail.data);
 					} else if (error){
 						Utils.xlog('error', error);
 					}
 			});
 		};
-		//get addresses
-		_get_addresses = () => {
-			var extra_headers = Utils.createCoinbaseHeader('GET', '/v2/accounts/d0ca887e-21dc-5425-b37e-c5505c22cbee/addresses');
-			RequestData.sentGetRequestWithExtraHeaders(setting.WALLET_IP + '/v2/accounts/d0ca887e-21dc-5425-b37e-c5505c22cbee/addresses', extra_headers,
-				(detail, error) => {
-					if (detail){
-						Utils.xlog('detail get addr', detail);
-					} else if (error){
-						Utils.xlog('error', error);
-					}
-			});
-		};
-		//create new account
+		//open create new account
 		_begin_register = () => {
 			this.props.navigation.navigate('Signup', {
 				onFinishSignUp: this._on_finish_signup
@@ -127,11 +157,31 @@ class Wallet extends BaseScreen {
 		};
 		//login
 		_begin_login = () => {
-			this.props.navigation.navigate('Login');
+			this.props.navigation.navigate('Login', {
+				onFinishLogin: this._on_finish_signup
+			});
 		};
-		//
-		_open_create_wallet = () => {
-
+		//calculate total amount of 1 address
+		//https://developers.coinbase.com/api/v2#list-address39s-transactions
+		_calculate_total = (trans_list) => {
+			var len = trans_list.length;
+			var total = 0;
+			var network_name = '';
+			for (var i=0; i<len; i++){
+				if (trans_list[i]['status'] == 'completed'){
+					total += trans_list[i]['amount']['amount'];
+				}
+				network_name = trans_list[i]['network']['name'];
+			}
+			//update to the list
+			let newArray = [...this.state.data_list];
+			for (var i=0; i<this.state.data_list.length; i++){
+				newArray[i]['total'] = 0;
+				if (network_name == this.state.data_list[i]['network']){
+					newArray[i]['total'] = total;
+				}
+			}
+			this.setState({data_list: newArray});
 		};
 		//==========
 		render() {
@@ -166,6 +216,17 @@ class Wallet extends BaseScreen {
 										</Button>
 									</View>
 								}
+
+								<View style={{flex:1}}>
+									<FlatList
+												data={this.state.data_list}
+												renderItem={this._renderItem}
+												refreshing={false}
+												onEndReachedThreshold={0.5}
+												keyExtractor={this._keyExtractor}
+												initialNumToRender={20}
+											/>
+								</View>
 
 							</Content>
 						</Container>

@@ -8,9 +8,6 @@ import common_styles from "../../../css/common";
 import styles from "./style";    //CSS defined here
 import Utils from "../../utils/functions";
 import {C_Const} from '../../utils/constant';
-import AutoHTML from 'react-native-autoheight-webview';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import store from 'react-native-simple-store';
 import firebase from 'react-native-firebase';
 import DeviceInfo from 'react-native-device-info';
@@ -25,9 +22,6 @@ class Signup extends BaseScreen {
 			super(props);
 			this.ref = firebase.firestore();
 			this.state = {
-				title: '',
-				content: '',
-				link: '',
         fields: {		//values in form
   				email: '',
   				password: '',
@@ -106,7 +100,7 @@ class Signup extends BaseScreen {
 			var me = this;
 			//check if email existed
 			var collection_user = this.ref.collection(C_Const.COLLECTION_NAME.USER);
-			collection_user.where('email', '==', this.state.fields.email)
+			collection_user.where('email', '==', Utils.trim(this.state.fields.email))
 	    .get().then(function(querySnapshot) {
 					if (querySnapshot.size == 0){
 						//email not existed, create a record in DB
@@ -137,7 +131,7 @@ class Signup extends BaseScreen {
 												user_id: docRef.id
 											}, () => {
 												me._create_addresses();
-											})
+											});
 										} else {
 											//not saved, don't know why
 											me._trigger_go_back();
@@ -161,7 +155,6 @@ class Signup extends BaseScreen {
 		_create_addresses = () => {
 			var me = this;
 			var coin_list_num = Utils.getObjLen(this.state.coin_list);
-			Utils.xlog('coin_list_num', coin_list_num);
 			var created_addr_num = 0;
 			var collection_address = this.ref.collection(C_Const.COLLECTION_NAME.ADDRESS);
 			Object.keys(this.state.coin_list).forEach(function(db_account_id) {
@@ -171,24 +164,21 @@ class Signup extends BaseScreen {
 				RequestData.sentPostRequestWithExtraHeaders(setting.WALLET_IP + uri,
 					extra_headers, null, (detail, error) => {
 					if (detail && !Utils.isEmpty(detail.data)){
-						Utils.xlog('detail create addr', detail);
+						// Utils.xlog('detail create addr', detail);
 						//save into our DB
 						collection_address.add({
 								user_id: me.state.user_id,
-								// name: me.state.name,
+								network: detail.data.network,
 								coinbase_addr_id: detail.data.id,
 								address: detail.data.address
-								// code: me.state.coin_list[db_account_id]['code']
 						})
 						.then(function(docRef) {
 							created_addr_num++;		//created 1 address in Coinbase & DB
-							Utils.xlog('created_addr_num', created_addr_num);
 							if (created_addr_num == coin_list_num){
 								me._trigger_go_back();		//back to Wallet page
 							}
 						})
 						.catch(function(error) {
-							Utils.xlog('111', error);
 							//cannot save in DB
 							me._trigger_go_back();
 						});

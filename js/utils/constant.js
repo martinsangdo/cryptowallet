@@ -24,6 +24,7 @@ export const C_Const = {
 		ERR_EXISTED_EMAIL: 'This email is existed',
 		ERR_SERVER: 'Please try it later',
 		ERR_NET_REQUEST_FAIL: 'Network request failed',   //cannot connect to server
+		ERR_LOGIN_FAILED: 'Your email or password is not correct',
 		//message
 		MESS_SIGNUP_OK: 'Registered successfully, please wait...',
 		MESS_CREATE_WALLET_OK: 'Wallet is created successfully'

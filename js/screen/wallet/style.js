@@ -25,5 +25,11 @@ export default {
 	home_avatar: {
     width:100,height:100,marginBottom:10, borderRadius: 6
   },
-	a_href: {color:'#00f', fontWeight: 'bold'}
+	a_href: {color:'#00f', fontWeight: 'bold'},
+	wallet_item: {padding:20, borderTopWidth:1, borderTopColor: '#ddd'},
+	coin_name: {fontSize:20, fontWeight: 'bold', width:'40%'},
+	td_item: {fontSize:20,width:'30%'},
+	icon_send: {width:'20%'},
+	icon_qr: {width:'10%'},
+	icon: {fontSize:20}
 };
