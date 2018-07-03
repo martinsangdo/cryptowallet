@@ -30,7 +30,15 @@ exports.dynamicSort = function(property) {
     return result * sortOrder;
   };
 };
-
+//get length of object
+exports.getObjLen = function(obj) {
+  var len = 0;
+  Object.keys(obj).forEach(function(key) {
+      len++;
+  });
+  return len;
+};
+//
 exports.removeObjectfromArray = function(array, key, value) {
   return array.filter((el) => el[key] !== value);
 };

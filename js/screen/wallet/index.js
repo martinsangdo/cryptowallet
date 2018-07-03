@@ -60,7 +60,7 @@ class Wallet extends BaseScreen {
 		_check_logined_user = () => {
 			store.get(C_Const.STORE_KEY.USER_INFO)
 			.then(user_info => {
-				Utils.dlog(user_info);
+				Utils.xlog('user_info', user_info);
 					if (user_info!=null && !Utils.isEmpty(user_info[C_Const.STORE_KEY.USER_ID]) && !Utils.isEmpty(user_info[C_Const.STORE_KEY.EMAIL])){
 						//logined
 						this.setState({is_logined: true});
@@ -86,15 +86,6 @@ class Wallet extends BaseScreen {
 						Utils.xlog('wallets', querySnapshot);
 					}
 				});
-		};
-		//DB Firestore
-		_test2 = () => {
-			this.ref.get().then((documentSnapshot) => {
-				documentSnapshot.forEach(function(doc) {
-				 console.log(doc.id, " => ", doc.data());
-		 		});
-		  });
-
 		};
 		//test some API
 		_get_accounts = () => {
@@ -126,7 +117,13 @@ class Wallet extends BaseScreen {
 		};
 		//create new account
 		_begin_register = () => {
-			this.props.navigation.navigate('Signup');
+			this.props.navigation.navigate('Signup', {
+				onFinishSignUp: this._on_finish_signup
+			});
+		};
+		//listen even after user signup
+		_on_finish_signup = () => {
+			this._check_logined_user();
 		};
 		//login
 		_begin_login = () => {
@@ -155,7 +152,7 @@ class Wallet extends BaseScreen {
 								<View style={common_styles.view_align_center}>
 									<Image source={avatar} style={styles.home_avatar}/>
 								</View>
-								{!this.state.is_logined && this.state.activating_coin_num > 0 &&
+								{!this.state.is_logined &&
 									<View style={common_styles.view_align_center}>
 										<Button transparent style={common_styles.default_button}
 											onPress={this._begin_login.bind(this)}

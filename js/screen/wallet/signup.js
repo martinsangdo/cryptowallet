@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {View, TouchableOpacity, Share, Dimensions, Platform, TextInput} from "react-native";
+import {View, TouchableOpacity, Platform, Alert} from "react-native";
 
 import {Container, Content, Button, Text, Header, Body, Left, Right, Icon, Form,Item,Input} from "native-base";
 
@@ -7,7 +7,7 @@ import BaseScreen from "../../base/BaseScreen.js";
 import common_styles from "../../../css/common";
 import styles from "./style";    //CSS defined here
 import Utils from "../../utils/functions";
-import {C_Const, C_MULTI_LANG} from '../../utils/constant';
+import {C_Const} from '../../utils/constant';
 import AutoHTML from 'react-native-autoheight-webview';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -23,7 +23,7 @@ import {setting} from "../../utils/config";
 class Signup extends BaseScreen {
 		constructor(props) {
 			super(props);
-			this.ref = firebase.firestore().collection(C_Const.COLLECTION_NAME.USER);
+			this.ref = firebase.firestore();
 			this.state = {
 				title: '',
 				content: '',
@@ -36,16 +36,34 @@ class Signup extends BaseScreen {
   			},
 				isSubmitting: false,
 				err_mess: '',
-				loading_indicator_state: false
+				user_id: '',
+				loading_indicator_state: false,
+				coin_list: {},		//activating coins
+				is_created_all_addresses: false		//created all addresses
 			};
 		}
 		//
 		componentDidMount() {
-			
+			this._get_saved_coins();
 		}
-		//
-		_test = () => {
-
+		//get list of activating coins from store
+		_get_saved_coins = () => {
+			store.get(C_Const.STORE_KEY.COIN_LIST)
+			.then(res => {
+				if (res!=null){
+					this.setState({coin_list: res});
+				} else {
+					//don't have any coin, don't know why
+					Alert.alert(
+						'Alert',
+						C_Const.TEXT.ERR_SERVER,
+						[
+							{text: 'OK', onPress: () => RNExitApp.exitApp()},
+						],
+						{ cancelable: false }
+					);
+				}
+			});
 		};
 		//
 		_on_go_back = () => {
@@ -87,11 +105,12 @@ class Signup extends BaseScreen {
 			});
 			var me = this;
 			//check if email existed
-			this.ref.where('email', '==', this.state.fields.email)
+			var collection_user = this.ref.collection(C_Const.COLLECTION_NAME.USER);
+			collection_user.where('email', '==', this.state.fields.email)
 	    .get().then(function(querySnapshot) {
 					if (querySnapshot.size == 0){
 						//email not existed, create a record in DB
-						me.ref.add({
+						collection_user.add({
 								email: Utils.trim(me.state.fields.email),
 								password: Utils.encrypt_text(me.state.fields.password),
 								mnemonic: Utils.trim(me.state.fields.email),
@@ -104,12 +123,7 @@ class Signup extends BaseScreen {
 								 device_version: Platform.OS + ' ' + DeviceInfo.getSystemVersion()
 						})
 						.then(function(docRef) {
-							//saved user info into DB, now create wallets (addresses)
-
-
-
-
-								//save info to Preference/Store
+								//save user info to Preference/Store
 								store.update(C_Const.STORE_KEY.USER_INFO, {
 										user_id: docRef.id,
 										email: me.state.fields.email
@@ -119,15 +133,16 @@ class Signup extends BaseScreen {
 									store.get(C_Const.STORE_KEY.USER_INFO)
 									.then(res => {
 										if (res!=null && !Utils.isEmpty(res[C_Const.STORE_KEY.USER_ID]) && !Utils.isEmpty(res[C_Const.STORE_KEY.EMAIL])){
-											//saved
-											//todo: trigger previous page
-											// this.props.navigation.goBack();
-											//
+											me.setState({
+												user_id: docRef.id
+											}, () => {
+												me._create_addresses();
+											})
 										} else {
 											//not saved, don't know why
+											me._trigger_go_back();
 										}
 									});
-									me.setState({err_mess: C_Const.TEXT.MESS_SIGNUP_OK, isSubmitting: false, loading_indicator_state: false});
 								}, 100);
 						})
 						.catch(function(error) {
@@ -141,6 +156,53 @@ class Signup extends BaseScreen {
 	    .catch(function(error) {
 					me.setState({err_mess: C_Const.TEXT.ERR_SERVER, isSubmitting: false, loading_indicator_state: false});
 	    });
+		};
+		//create addresses
+		_create_addresses = () => {
+			var me = this;
+			var coin_list_num = Utils.getObjLen(this.state.coin_list);
+			Utils.xlog('coin_list_num', coin_list_num);
+			var created_addr_num = 0;
+			var collection_address = this.ref.collection(C_Const.COLLECTION_NAME.ADDRESS);
+			Object.keys(this.state.coin_list).forEach(function(db_account_id) {
+				//create wallet (address) in Coinbase
+				var uri = '/v2/accounts/'+me.state.coin_list[db_account_id]['coinbase_id']+'/addresses';
+	      var extra_headers = Utils.createCoinbaseHeader('POST', uri);
+				RequestData.sentPostRequestWithExtraHeaders(setting.WALLET_IP + uri,
+					extra_headers, null, (detail, error) => {
+					if (detail && !Utils.isEmpty(detail.data)){
+						Utils.xlog('detail create addr', detail);
+						//save into our DB
+						collection_address.add({
+								user_id: me.state.user_id,
+								// name: me.state.name,
+								coinbase_addr_id: detail.data.id,
+								address: detail.data.address
+								// code: me.state.coin_list[db_account_id]['code']
+						})
+						.then(function(docRef) {
+							created_addr_num++;		//created 1 address in Coinbase & DB
+							Utils.xlog('created_addr_num', created_addr_num);
+							if (created_addr_num == coin_list_num){
+								me._trigger_go_back();		//back to Wallet page
+							}
+						})
+						.catch(function(error) {
+							Utils.xlog('111', error);
+							//cannot save in DB
+							me._trigger_go_back();
+						});
+					} else if (error){
+						//create address failed in Coinbase
+						me._trigger_go_back();
+					}
+				});
+			});
+		};
+		//go back after signup
+		_trigger_go_back = () => {
+			this.props.navigation.state.params.onFinishSignUp();
+			this.props.navigation.goBack();
 		};
 		//open terms page
 		_open_terms = () => {

@@ -1,7 +1,7 @@
 import React, {Component} from "react";
-import {View, TouchableOpacity, Linking, BackHandler} from "react-native";
+import {View, TouchableOpacity} from "react-native";
 
-import {Container, Content, Text, Header, Title, Body, Left, Right, Icon, Picker, Item} from "native-base";
+import {Container, Content, Text, Header, Title, Body, Left, Right, Icon, Item} from "native-base";
 import {NavigationActions} from "react-navigation";
 
 import BaseScreen from "../../base/BaseScreen.js";
@@ -14,8 +14,6 @@ import {API_URI} from '../../utils/api_uri';
 import Spinner from 'react-native-loading-spinner-overlay';
 import RequestData from '../../utils/https/RequestData';
 
-const PickerItem = Picker.Item;
-
 class Setting extends BaseScreen {
     constructor(props) {
   		super(props);
@@ -27,6 +25,24 @@ class Setting extends BaseScreen {
     //
     componentDidMount() {
     }
+    //
+    _sign_out = () => {
+      store.update(C_Const.STORE_KEY.USER_INFO, {
+          user_id: '',
+          email: ''
+      });
+      //verify it's saved into Store
+      setTimeout( () => {		//to make sure it's saved
+        store.get(C_Const.STORE_KEY.USER_INFO)
+        .then(res => {
+          if (res!=null && !Utils.isEmpty(res[C_Const.STORE_KEY.USER_ID]) && !Utils.isEmpty(res[C_Const.STORE_KEY.EMAIL])){
+            //saved
+          } else {
+            //not saved, don't know why
+          }
+        });
+      }, 100);
+    };
    //==========
     render() {
         return (
@@ -42,7 +58,9 @@ class Setting extends BaseScreen {
 
               <Content>
                 <Spinner visible={this.state.loading_indicator_state} textStyle={common_styles.whiteColor} />
-
+                <TouchableOpacity onPress={() => this._sign_out()}>
+                  <Text>Log out</Text>
+                </TouchableOpacity>
               </Content>
             </Container>
         );
