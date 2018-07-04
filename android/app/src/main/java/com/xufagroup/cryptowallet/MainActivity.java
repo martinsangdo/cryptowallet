@@ -1,4 +1,4 @@
-package com.cryptowallet;
+package com.xufagroup.cryptowallet;
 
 import com.facebook.react.ReactActivity;
 

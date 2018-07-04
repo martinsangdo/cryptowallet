@@ -1,8 +1,9 @@
-package com.cryptowallet;
+package com.xufagroup.cryptowallet;
 
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.learnium.RNDeviceInfo.BuildConfig;
 import com.tradle.react.UdpSocketsModule;
 import com.peel.react.TcpSocketsModule;
 import com.peel.react.rnos.RNOSModule;
@@ -16,7 +17,6 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-import com.xufagroup.cryptowallet.BuildConfig;
 
 import java.util.Arrays;
 import java.util.List;
