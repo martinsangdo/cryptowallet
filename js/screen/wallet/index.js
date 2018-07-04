@@ -234,6 +234,10 @@ class Wallet extends BaseScreen {
         });
       }, 100);
 		};
+		//
+		_forgot_pass = () => {
+			this.props.navigation.navigate('ForgotPass');
+		};
 		//==========
 		render() {
 				return (
@@ -259,17 +263,24 @@ class Wallet extends BaseScreen {
 									<Image source={avatar} style={styles.home_avatar}/>
 								</View>
 								{!this.state.is_logined &&
-									<View style={common_styles.view_align_center}>
-										<Button transparent style={common_styles.default_button}
-											onPress={this._begin_login.bind(this)}
-										>
-											<Text style={[common_styles.whiteColor, common_styles.float_center]}>Login</Text>
-										</Button>
-										<Button transparent style={common_styles.default_button}
-											onPress={this._begin_register.bind(this)}
-										>
-											<Text style={[common_styles.whiteColor, common_styles.float_center]}>Signup</Text>
-										</Button>
+									<View>
+										<View style={common_styles.view_align_center}>
+											<Button transparent style={common_styles.default_button}
+												onPress={this._begin_login.bind(this)}
+											>
+												<Text style={[common_styles.whiteColor, common_styles.float_center]}>Login</Text>
+											</Button>
+											<Button transparent style={common_styles.default_button}
+												onPress={this._begin_register.bind(this)}
+											>
+												<Text style={[common_styles.whiteColor, common_styles.float_center]}>Signup</Text>
+											</Button>
+										</View>
+										<View style={[common_styles.view_align_center, common_styles.margin_t_20, common_styles.margin_b_20]}>
+											<TouchableOpacity onPress={this._forgot_pass.bind(this)}>
+												<Text>Forgot your password, <Text style={styles.a_href}>tap here</Text></Text>
+											</TouchableOpacity>
+										</View>
 									</View>
 								}
 								{this.state.is_logined &&

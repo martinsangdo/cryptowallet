@@ -22,6 +22,7 @@ export const C_Const = {
 		ERR_EMPTY_EMAIL: 'Please input valid email',
 		ERR_WRONG_EMAIL: 'Email is wrong format',
 		ERR_EXISTED_EMAIL: 'This email is existed',
+		ERR_NON_EXISTED_EMAIL: 'This email is not existed',
 		ERR_SERVER: 'Please try it later',
 		ERR_NET_REQUEST_FAIL: 'Network request failed',   //cannot connect to server
 		ERR_LOGIN_FAILED: 'Your email or password is not correct',
@@ -31,13 +32,15 @@ export const C_Const = {
 		MESS_SIGNUP_OK: 'Registered successfully, please wait...',
 		MESS_CREATE_WALLET_OK: 'Wallet is created successfully',
 		MESS_SEND_COIN_OK: 'The amount is sent successfully',
+		MESS_RESET_OK: 'An email will be sent to you within 24 hours'
 
 	},
 	COLLECTION_NAME: {		//in Firestore
 		USER: 'user',
 		ACCOUNT: 'account',	//account of coinbase
 		ADDRESS: 'address',
-		BOOKMARK: 'bookmark'
+		BOOKMARK: 'bookmark',
+		FORGOT_PASS: 'forgot_pass'		//list of email need to reset pass
 	},
 	SALT_PASS: '6653bf66-82f6-4e2f-b341-4a8f49224575',	//to encrypt password
 	COURSE_TYPE: 'event',

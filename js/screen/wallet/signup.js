@@ -241,11 +241,6 @@ class Signup extends BaseScreen {
 
                 </Form>
 
-								<View style={[common_styles.view_align_center, common_styles.margin_t_20, common_styles.margin_b_20]}>
-									<TouchableOpacity onPress={this._open_terms()}>
-										<Text>By clicking Sign Up, you agreed to our <Text style={styles.a_href}>Terms</Text></Text>
-									</TouchableOpacity>
-								</View>
 								<View style={[common_styles.view_align_center]}>
 									<Button transparent style={common_styles.default_button}
 											onPress={this._signup.bind(this)}

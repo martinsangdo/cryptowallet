@@ -35,7 +35,7 @@ import SendCoin from "./js/screen/wallet/send_coin";
 import Login from "./js/screen/wallet/login";
 import QRCode from "./js/screen/wallet/qr_code";
 import Scanner from "./js/screen/wallet/scanner";
-import Term from "./js/screen/setting/term";
+import ForgotPass from "./js/screen/wallet/forgot_pass";
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
@@ -53,7 +53,7 @@ const AppNavigator = StackNavigator({
 				SendCoin: {screen: SendCoin},
 				QRCode: {screen: QRCode},
 				Scanner: {screen: Scanner},
-				Term: {screen: Term},
+				ForgotPass: {screen: ForgotPass},
 				//define tab bar
 				Main: {
 					screen: TabNavigator({
