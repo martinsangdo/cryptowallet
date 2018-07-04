@@ -20,6 +20,10 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const avatar = require('../../../img/default_avatar.jpg');
+const bitcoin = require("../../../img/icons/BTC.png");
+const ethereum = require("../../../img/icons/ETH.png");
+const bitcoin_cash = require("../../../img/icons/BCH.png");
+const litecoin = require("../../../img/icons/LTC.png");
 
 class Wallet extends BaseScreen {
 		constructor(props) {
@@ -39,6 +43,18 @@ class Wallet extends BaseScreen {
 		componentDidMount() {
 			this._get_saved_coins();
 		}
+		//
+		_get_icon = (name) => {
+			if (name == 'bitcoin'){
+				return bitcoin;
+			} else if (name == 'ethereum'){
+				return ethereum;
+			} else if (name == 'bitcoin_cash'){
+				return bitcoin_cash;
+			} else if (name == 'litecoin'){
+				return litecoin;
+			}
+		};
 		//get list of activating coins from store
 		_get_saved_coins = () => {
 			store.get(C_Const.STORE_KEY.COIN_LIST)
@@ -65,6 +81,7 @@ class Wallet extends BaseScreen {
 		//render the list. MUST use "item" as param
 		_renderItem = ({item}) => (
 				<View style={[styles.wallet_item, common_styles.fetch_row]}>
+					<Image source={this._get_icon(item.network)} style={styles.coin_icon}/>
 					<Text style={styles.coin_name}>{item.code}</Text>
 					<Text style={styles.td_item}>{item.total}</Text>
 					<TouchableOpacity onPress={()=>this._send_amount(item.code, item.coinbase_id)} style={[styles.icon_send]}>
