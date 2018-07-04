@@ -17,7 +17,7 @@ import DeviceInfo from 'react-native-device-info';
 import store from 'react-native-simple-store';
 import firebase from 'react-native-firebase';
 
-const launchscreenLogo = require("../../../img/logo.png");
+const launchscreenLogo = require("../../../img/logo.jpg");
 
 class Splash extends BaseScreen {
 	constructor(props) {
@@ -102,7 +102,7 @@ class Splash extends BaseScreen {
 
 				return (
 						<Container>
-								<View style={[common_styles.mainColorBg, styles.container]}>
+								<View style={[styles.container]}>
 										<Image source={launchscreenLogo} style={styles.logo}/>
 								</View>
 						</Container>
