@@ -142,7 +142,6 @@ class News extends BaseScreen {
 							{/* END header */}
 							<Spinner visible={this.state.loading_indicator_state} textStyle={common_styles.whiteColor} />
 
-							<Content>
 							<View style={{flex:1}}>
 								<FlatList
 											data={this.state.data_list}
@@ -155,7 +154,6 @@ class News extends BaseScreen {
 											initialNumToRender={20}
 										/>
 							</View>
-							</Content>
 						</Container>
 				);
 		}

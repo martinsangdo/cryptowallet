@@ -6,6 +6,7 @@ const React = require("react-native");
 const { StyleSheet, Dimensions, Platform } = React;
 
 const deviceWidth = Dimensions.get("window").width;
+const deviceHeight = Dimensions.get("window").height;
 
 export default {
   headerBody: {
@@ -20,5 +21,10 @@ export default {
     borderWidth: 1, alignItems: 'center',
     backgroundColor: '#fff'
   },
-  picker_arrow: {position: 'absolute', right:20, top: 12}
+  picker_arrow: {position: 'absolute', right:20, top: 12},
+	webview: {
+		flex:1, width:'100%', minWidth:deviceWidth,
+		minHeight:deviceHeight-80, //why 80???
+		height:'100%'
+	}
 };

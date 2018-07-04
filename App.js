@@ -81,11 +81,11 @@ const AppNavigator = StackNavigator({
 										),
 								})
 						},
-						Setting: {   //tab 4
+						Info: {   //tab 4
 								screen: Setting,
 								navigationOptions: ({ navigation, screenProps }) => ({
 										tabBarIcon: ({ tintColor }) => (
-											<Icon name="ios-settings" style={{color:tintColor, fontSize:18}}/>
+											<Icon name="md-information" style={{color:tintColor, fontSize:24}}/>
 										),
 								})
 						}

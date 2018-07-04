@@ -1,40 +1,51 @@
-import React, {Component} from "react";
-import {View} from "react-native";
-
-import {Container, Content, Text, Header, Title, Body, Left, Right, Icon} from "native-base";
-import BaseScreen from "../../base/BaseScreen.js";
+import React, { Component } from "react";
+import {View, WebView} from "react-native";
+import { Content, Text, Body } from "native-base";
 
 import common_styles from "../../../css/common";
 import styles from "./style";    //CSS defined here
+import Spinner from 'react-native-loading-spinner-overlay';
+import {C_Const} from '../../utils/constant';
 
-class Term extends BaseScreen {
-	constructor(props) {
+export default class TabTerm extends Component {
+  constructor(props) {
 		super(props);
+		this.state = {
+			loading_indicator_state: false
+		};
 	}
-	 //==========
-		render() {
-				return (
-						<Container>
-							<Header style={[common_styles.header, common_styles.whiteBg, {maxHeight:50}]}>
-								<Left style={{flex:0.3, flexDirection: 'row', marginBottom:5}}>
-									<TouchableOpacity onPress={() => this._go_back()} style={{width:40}}>
-										<Icon name="ios-arrow-back-outline" style={styles.header_icon}/>
-									</TouchableOpacity>
-								</Left>
-								<Body style={[styles.headerBody, {flex:0.8, marginBottom:5}]}>
-									<Text>Terms</Text>
-								</Body>
-								<Right style={{flex:0.2, marginBottom:5}}>
-								</Right>
-							</Header>
-							{/* END header */}
+  //close spinner after page loading
+	_close_spinner = () => {
+		this.setState({
+			loading_indicator_state: false
+		});
+	};
+	//
+	_start_spinner = () => {
+		setTimeout( () => {
+			this.setState({
+				loading_indicator_state: true
+			});
+		}, 1000);
+	};
+	//
+	_onNavigationStateChange = (event) => {
 
-							<Content>
-								
-							</Content>
-						</Container>
-				);
-		}
+	};
+  //============
+  render() {
+    return (
+      <Content padder>
+
+        <WebView
+            ref={'WEBVIEW_REF'}
+            source={{uri: C_Const.TERM_URL}}
+            style={styles.webview}
+            onLoadEnd={this._close_spinner}
+            onLoadStart={this._start_spinner}
+            onNavigationStateChange={this._onNavigationStateChange}
+          />
+      </Content>
+    );
+  }
 }
-
-export default Term;

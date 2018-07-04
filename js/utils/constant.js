@@ -68,5 +68,7 @@ export const C_Const = {
 		COIN_LIST: 'COIN_LIST'
 	},
 	ACTIVE_COLOR: '#008da9',
-	ICON_URL: 'https://blockbod.com/public/blockbod/img/logo.jpeg'
+	ICON_URL: 'https://blockbod.com/public/blockbod/img/logo.jpeg',	//empty image in News
+	TERM_URL: 'https://www.coinbase.com/about',
+	PRIVACY_URL: 'https://www.coinbase.com/about'
 };
