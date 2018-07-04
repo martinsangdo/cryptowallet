@@ -48,12 +48,12 @@ class Setting extends BaseScreen {
         return (
             <Container padder>
               <Header style={[common_styles.header, common_styles.whiteBg]}>
-                <Left style={styles.left}>
+                <Left style={[common_styles.headerLeft, {flex:0.15}]}>
                 </Left>
                 <Body style={styles.headerBody}>
-                  <Text uppercase={false} style={[common_styles.bold, common_styles.margin_l_10]}>Settings</Text>
+                  <Text uppercase={false} style={[common_styles.bold, common_styles.default_font_color]}>Settings</Text>
                 </Body>
-                <Right style={styles.right}></Right>
+                <Right style={[common_styles.headerRight, {flex:0.15}]}></Right>
               </Header>
 
               <Content>

@@ -17,6 +17,7 @@ export default {
 		width: deviceWidth - 120, height: Platform.OS==='ios'?35:40, backgroundColor: '#eee',
 		justifyContent: 'center', marginTop: 2, borderRadius:6, borderColor:'#eee'
 	},
+	header_icon: {color: '#008da9'},
 	search_cancel: {width:100, justifyContent: 'center'},
 	list_item: {marginBottom:20},
 	btn_row: {flex:1, flexDirection: 'row', justifyContent: 'space-between', marginLeft:20, marginRight:20},

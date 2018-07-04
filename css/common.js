@@ -50,7 +50,7 @@ export default {
 				backgroundColor: "#fff"    //white
 		},
 		//header
-		header: {},
+		header: {borderBottomColor:'#bbb', borderBottomWidth:1},
 		headerBg: {
 				backgroundColor: '#0097de'
 		},

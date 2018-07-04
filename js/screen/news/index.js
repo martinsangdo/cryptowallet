@@ -134,7 +134,7 @@ class News extends BaseScreen {
 								<Left style={[common_styles.headerLeft, {flex:0.15}]}>
 								</Left>
 								<Body style={styles.headerBody}>
-									<Text style={common_styles.bold}>Latest news</Text>
+									<Text style={[common_styles.bold, common_styles.default_font_color]}>Latest news</Text>
 								</Body>
 								<Right style={[common_styles.headerRight, {flex:0.15}]}>
 								</Right>
@@ -142,6 +142,7 @@ class News extends BaseScreen {
 							{/* END header */}
 							<Spinner visible={this.state.loading_indicator_state} textStyle={common_styles.whiteColor} />
 
+							<Content>
 							<View style={{flex:1}}>
 								<FlatList
 											data={this.state.data_list}
@@ -154,6 +155,7 @@ class News extends BaseScreen {
 											initialNumToRender={20}
 										/>
 							</View>
+							</Content>
 						</Container>
 				);
 		}

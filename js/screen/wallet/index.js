@@ -205,7 +205,7 @@ class Wallet extends BaseScreen {
 								<Left style={[common_styles.headerLeft, {flex:0.15}]}>
 								</Left>
 								<Body style={styles.headerBody}>
-									<Text style={common_styles.bold}>My wallets</Text>
+									<Text style={[common_styles.bold, common_styles.default_font_color]}>My wallets</Text>
 								</Body>
 								<Right style={[common_styles.headerRight, {flex:0.15}]}>
 								</Right>

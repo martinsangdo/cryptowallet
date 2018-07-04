@@ -113,7 +113,7 @@ class SendCoin extends BaseScreen {
 				return (
 						<Container padder>
 							<Header style={[common_styles.header, common_styles.whiteBg]}>
-								<Left style={styles.left}>
+								<Left style={[common_styles.headerLeft, {flex:0.15}]}>
 									<TouchableOpacity onPress={() => this._on_go_back()}>
 										<View style={styles.left_row}>
 											<View style={[common_styles.float_center]}>
@@ -123,11 +123,9 @@ class SendCoin extends BaseScreen {
 									</TouchableOpacity>
 								</Left>
 								<Body style={styles.headerBody}>
-									<View style={[common_styles.margin_l_10, common_styles.float_center]}>
-										<Text uppercase={false} style={[common_styles.default_font_color]}>Send {this.state.currency}</Text>
-									</View>
+										<Text uppercase={false} style={[[common_styles.bold, common_styles.default_font_color]]}>Send {this.state.currency}</Text>
 								</Body>
-								<Right style={[common_styles.headerRight]}>
+								<Right style={[common_styles.headerRight, {flex:0.15}]}>
 
 								</Right>
 							</Header>

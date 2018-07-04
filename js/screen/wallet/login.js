@@ -106,7 +106,7 @@ class Login extends BaseScreen {
 				return (
 						<Container padder>
 							<Header style={[common_styles.header, common_styles.whiteBg]}>
-								<Left style={styles.left}>
+								<Left style={[common_styles.headerLeft, {flex:0.15}]}>
 									<TouchableOpacity onPress={() => this._on_go_back()}>
 										<View style={styles.left_row}>
 											<View style={[common_styles.float_center]}>
@@ -116,11 +116,11 @@ class Login extends BaseScreen {
 									</TouchableOpacity>
 								</Left>
 								<Body style={styles.headerBody}>
-									<View style={[common_styles.margin_l_10, common_styles.float_center]}>
-										<Text uppercase={false} style={[common_styles.default_font_color]}>Login</Text>
+									<View style={[common_styles.float_center]}>
+										<Text uppercase={false} style={[common_styles.bold, common_styles.default_font_color]}>Login</Text>
 									</View>
 								</Body>
-								<Right style={[common_styles.headerRight]}>
+								<Right style={[common_styles.headerRight, {flex:0.15}]}>
 
 								</Right>
 							</Header>
@@ -130,7 +130,7 @@ class Login extends BaseScreen {
 
                 <Form ref="register_form">
                   <Item>
-                    <Input placeholder="Email" keyboardType={'email'} autoCapitalize="none" onChange={(event) => this.setState({email: event.nativeEvent.text})}/>
+                    <Input placeholder="Email" keyboardType={'email-address'} autoCapitalize="none" onChange={(event) => this.setState({email: event.nativeEvent.text})}/>
                   </Item>
                   <Item>
                     <Input placeholder="Password" secureTextEntry={true} autoCapitalize="none" onChange={(event) => this.setState({password: event.nativeEvent.text})}/>
