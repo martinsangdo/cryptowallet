@@ -18,6 +18,7 @@ import {C_Const, C_MULTI_LANG} from '../../utils/constant';
 import RequestData from '../../utils/https/RequestData';
 import Spinner from 'react-native-loading-spinner-overlay';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const avatar = require('../../../img/default_avatar.jpg');
 const bitcoin = require("../../../img/icons/BTC.png");
@@ -214,6 +215,25 @@ class Wallet extends BaseScreen {
 			//
 			this.setState({data_list: newArray});
 		};
+		//
+		_log_out = () => {
+			store.update(C_Const.STORE_KEY.USER_INFO, {
+          user_id: '',
+          email: ''
+      });
+      //verify it's saved into Store
+      setTimeout( () => {		//to make sure it's saved
+        store.get(C_Const.STORE_KEY.USER_INFO)
+        .then(res => {
+          if (res!=null && Utils.isEmpty(res[C_Const.STORE_KEY.USER_ID]) && Utils.isEmpty(res[C_Const.STORE_KEY.EMAIL])){
+            //saved
+						this._check_logined_user();
+          } else {
+            //not saved, don't know why
+          }
+        });
+      }, 100);
+		};
 		//==========
 		render() {
 				return (
@@ -225,6 +245,11 @@ class Wallet extends BaseScreen {
 									<Text style={[common_styles.bold, common_styles.default_font_color]}>My wallets</Text>
 								</Body>
 								<Right style={[common_styles.headerRight, {flex:0.15}]}>
+								{this.state.is_logined &&
+									<TouchableOpacity style={common_styles.margin_r_10} onPress={() => this._log_out()} style={{marginRight:10, justifyContent: 'flex-start', marginBottom:3}}>
+										<MaterialCommunityIcons name="logout" style={[common_styles.default_font_color, {fontSize:21}]}/>
+									</TouchableOpacity>
+								}
 								</Right>
 							</Header>
 							{/* END header */}
@@ -247,7 +272,7 @@ class Wallet extends BaseScreen {
 										</Button>
 									</View>
 								}
-
+								{this.state.is_logined &&
 								<View style={{flex:1}}>
 									<FlatList
 												data={this.state.data_list}
@@ -258,7 +283,7 @@ class Wallet extends BaseScreen {
 												initialNumToRender={20}
 											/>
 								</View>
-
+							}
 							</Content>
 						</Container>
 				);
