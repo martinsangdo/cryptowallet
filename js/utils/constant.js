@@ -25,9 +25,13 @@ export const C_Const = {
 		ERR_SERVER: 'Please try it later',
 		ERR_NET_REQUEST_FAIL: 'Network request failed',   //cannot connect to server
 		ERR_LOGIN_FAILED: 'Your email or password is not correct',
+		ERR_EMPTY_TO_ADDR: 'Please input correct receiver address',
+		ERR_INVALID_AMOUNT: 'Please input correct amount',
 		//message
 		MESS_SIGNUP_OK: 'Registered successfully, please wait...',
-		MESS_CREATE_WALLET_OK: 'Wallet is created successfully'
+		MESS_CREATE_WALLET_OK: 'Wallet is created successfully',
+		MESS_SEND_COIN_OK: 'The amount is sent successfully',
+
 	},
 	COLLECTION_NAME: {		//in Firestore
 		USER: 'user',

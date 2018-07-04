@@ -227,6 +227,10 @@ exports.getHomepageLanguage = function (lang) {
 exports.encrypt_text = function (text) {
     return CryptoJS.HmacSHA256(text, C_Const.SALT_PASS).toString();
 };
+//
+exports.getTimestamp = function (text) {
+    return Math.floor(Date.now() / 1000);
+};
 //create Coinbase header
 exports.createCoinbaseHeader = function (method, uri) {
   //https://github.com/brix/crypto-js

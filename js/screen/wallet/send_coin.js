@@ -23,17 +23,18 @@ class SendCoin extends BaseScreen {
   				to_address: '',
   				amount: 0,
 					currency: '',
-					description: '',
+					description: 'hi',
 				isSubmitting: false,
 				err_mess: '',
 				user_id: '',
-				loading_indicator_state: false
+				loading_indicator_state: false,
+				account_id: ''
 			};
 		}
 		//
 		componentDidMount() {
 			this.setState({
-				to_address: this.props.navigation.state.params.address,
+				account_id: this.props.navigation.state.params.account_id,
 				currency: this.props.navigation.state.params.code
 			});
 		}
@@ -42,20 +43,12 @@ class SendCoin extends BaseScreen {
 			this.props.navigation.goBack();
 		};
 		//check if all input values are valid
-		_is_valid_input(values){
+		_is_valid_input(){
 			var all_valid = false;
-			if (Utils.trim(values.email) == ''){
-				this.setState({err_mess: C_Const.TEXT.ERR_EMPTY_EMAIL});
-			} else if (!Utils.validateEmail(values.email)){
-				this.setState({err_mess: C_Const.TEXT.ERR_WRONG_EMAIL});
-			} else if (Utils.trim(values.password) == ''){
-				this.setState({err_mess: C_Const.TEXT.ERR_INVALID_PASSWORD});
-			} else if (Utils.trim(values.password).length < 8){
-				this.setState({err_mess: C_Const.TEXT.ERR_SHORT_PASS_LEN});
-			} else if (Utils.trim(values.confirm_password) == ''){
-				this.setState({err_mess: C_Const.TEXT.ERR_EMPTY_CONFIRM_PASS});
-			} else if (Utils.trim(values.password) != Utils.trim(values.confirm_password)){
-				this.setState({err_mess: C_Const.TEXT.ERR_WRONG_CONFIRM_PASS});
+			if (Utils.trim(this.state.to_address) == ''){
+				this.setState({err_mess: C_Const.TEXT.ERR_EMPTY_TO_ADDR});
+			} else if (Utils.trim(this.state.amount) == '' || Utils.trim(this.state.amount) <= 0){
+				this.setState({err_mess: C_Const.TEXT.ERR_INVALID_AMOUNT});
 			} else {
 				all_valid = true;
 			}
@@ -66,7 +59,7 @@ class SendCoin extends BaseScreen {
 			if (this.state.isSubmitting){
 				return;
 			}
-			if (!this._is_valid_input(this.state.fields)){
+			if (!this._is_valid_input()){
 				return;
 			}
 			//clear messages
@@ -76,7 +69,32 @@ class SendCoin extends BaseScreen {
 				loading_indicator_state: true
 			});
 			var me = this;
-
+			//begin send money
+			var uri = '/v2/accounts/'+me.state.account_id+'/transactions?to='+
+					Utils.trim(this.state.to_address)+'&type=send&amount='+Utils.trim(this.state.amount)+
+					'&currency='+this.state.currency+'&idem='+Utils.getTimestamp();
+			if (!Utils.isEmpty(Utils.trim(this.state.description))){
+				uri += '&description='+Utils.trim(this.state.description);
+			}
+			var extra_headers = Utils.createCoinbaseHeader('POST', uri);
+			RequestData.sentPostRequestWithExtraHeaders(setting.WALLET_IP + uri,
+				extra_headers, null, (detail, error) => {
+				if (detail && !Utils.isEmpty(detail.data)){
+					//send successfully
+					this.setState({
+						err_mess: C_Const.TEXT.MESS_SEND_COIN_OK
+					});
+				} else if (detail.errors){
+					//send failed in Coinbase
+					this.setState({
+						err_mess: detail.errors[0].message
+					});
+				}
+				this.setState({
+					isSubmitting: false,
+					loading_indicator_state: false
+				});
+			});
 		};
 		//after scanning qr code
 		_scanned_qr = () => {
@@ -104,7 +122,7 @@ class SendCoin extends BaseScreen {
 								</Left>
 								<Body style={styles.headerBody}>
 									<View style={[common_styles.margin_l_10, common_styles.float_center]}>
-										<Text uppercase={false} style={[common_styles.default_font_color]}>Send coin</Text>
+										<Text uppercase={false} style={[common_styles.default_font_color]}>Send {this.state.currency}</Text>
 									</View>
 								</Body>
 								<Right style={[common_styles.headerRight]}>
