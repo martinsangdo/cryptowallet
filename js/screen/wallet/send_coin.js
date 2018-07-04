@@ -97,8 +97,10 @@ class SendCoin extends BaseScreen {
 			});
 		};
 		//after scanning qr code
-		_scanned_qr = () => {
-
+		_scanned_qr = (code) => {
+			this.setState({
+				to_address: code
+			});
 		};
 		//
 		_open_scanner = () => {
@@ -135,13 +137,13 @@ class SendCoin extends BaseScreen {
 
                 <Form ref="register_form">
 									<Item>
-										<Input placeholder="Receiver's Address" autoCapitalize="none" onChange={(event) => this.setState({to_address: event.nativeEvent.text})}/>
+										<Input placeholder="Receiver's Address" autoCapitalize="none" onChange={(event) => this.setState({to_address: event.nativeEvent.text})} value={this.state.to_address}/>
 										<TouchableOpacity onPress={()=>{this._open_scanner()}} style={common_styles.margin_r_20}>
 											<FontAwesome name="qrcode" style={[styles.icon, common_styles.default_font_color]}/>
 										</TouchableOpacity>
 									</Item>
 									<Item>
-										<Input placeholder="Amount" autoCapitalize="none" onChange={(event) => this.setState({amount: event.nativeEvent.text})}/>
+										<Input placeholder="Amount" keyboardType={'numeric'} autoCapitalize="none" onChange={(event) => this.setState({amount: event.nativeEvent.text})}/>
 									</Item>
 									<Item>
 										<Input placeholder="Description" autoCapitalize="none" onChange={(event) => this.setState({description: event.nativeEvent.text})}/>

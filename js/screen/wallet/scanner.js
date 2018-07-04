@@ -16,15 +16,15 @@ const {windowW, windowH} = Dimensions.get('window');
 class Scanner extends BaseScreen {
 	constructor(props) {
 		super(props);
-		this.state = {
-		};
 	}
 		componentWillMount() {
 		}
 		//
 		_detected_code = (code) => {
-      Utils.xlog('code', code);
-
+      // Utils.xlog('scanned code', code);
+			//goback with scanned code
+			this.props.navigation.state.params.onScanned(code);
+			this.props.navigation.goBack();
 		};
 		//
 		_go_back = () => {

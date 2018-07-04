@@ -227,7 +227,7 @@ class Signup extends BaseScreen {
 
                 <Form ref="register_form">
 									<Item>
-										<Input placeholder="Email" autoCapitalize="none" onChange={(event) => this.setState({fields: {...this.state.fields, email : event.nativeEvent.text}})}/>
+										<Input placeholder="Email" keyboardType={'email'} autoCapitalize="none" onChange={(event) => this.setState({fields: {...this.state.fields, email : event.nativeEvent.text}})}/>
 									</Item>
 									<Item>
 										<Input placeholder="Password" secureTextEntry={true} autoCapitalize="none" onChange={(event) => this.setState({fields: {...this.state.fields, password : event.nativeEvent.text}})}/>
