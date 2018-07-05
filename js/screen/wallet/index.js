@@ -32,7 +32,7 @@ class Wallet extends BaseScreen {
 			this.ref = firebase.firestore();
 			this.state = {
 				data_list: [],		//wallet list to show in DB
-				loading_indicator_state: true,
+				loading_indicator_state: false,
 				isShowMore: false,
 				coin_list: {},		//activating coins
 				is_logined: false,		//indicate user logined or not
@@ -138,12 +138,14 @@ class Wallet extends BaseScreen {
 						//there is no wallets
 						Utils.dlog('There is no address');
 					} else {
-						//there is wallet
-						querySnapshot.forEach(function(doc) {
-							me.state.address_list[doc.data()['network']] = doc.data()['address'];
-							//get information of each address
-							me._get_address_transactions(doc.data());
-				 		});
+						//there is wallet, get data from each
+						me.setState({loading_indicator_state: true}, ()=>{
+							querySnapshot.forEach(function(doc) {
+								me.state.address_list[doc.data()['network']] = doc.data()['address'];
+								//get information of each address
+								me._get_address_transactions(doc.data());
+					 		});
+						});
 					}
 				});
 		};
@@ -165,8 +167,13 @@ class Wallet extends BaseScreen {
 						// Utils.xlog('detail get trans', detail);
 						//todo: get all transactions
 						me._calculate_total(detail.data);
+						if (me.state.data_list.length == Utils.getObjLen(me.state.coin_list)){
+							//got all data
+							me.setState({loading_indicator_state: false});
+						}
 					} else if (error){
 						Utils.xlog('error', error);
+						me.setState({loading_indicator_state: false});
 					}
 			});
 		};
@@ -263,6 +270,7 @@ class Wallet extends BaseScreen {
 							</Header>
 							{/* END header */}
 							<Content>
+								<Spinner visible={this.state.loading_indicator_state} textStyle={common_styles.whiteColor} />
 								<View style={common_styles.margin_b_20} />
 								<View style={common_styles.view_align_center}>
 									<Image source={avatar} style={styles.home_avatar}/>
