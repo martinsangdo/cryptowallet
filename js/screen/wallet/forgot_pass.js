@@ -68,7 +68,6 @@ class Signup extends BaseScreen {
 						//email not existed
 						me.setState({err_mess: C_Const.TEXT.ERR_NON_EXISTED_EMAIL, isSubmitting: false, loading_indicator_state: false});
 					} else {
-						//todo: send reset email to user
 						var collection_reset_pass = me.ref.collection(C_Const.COLLECTION_NAME.FORGOT_PASS);
 						//email existed, save log to reset it to DB
 						collection_reset_pass.add({
@@ -82,6 +81,8 @@ class Signup extends BaseScreen {
 						.catch(function(error) {
 								me.setState({err_mess: C_Const.TEXT.ERR_SERVER, isSubmitting: false, loading_indicator_state: false});
 						});
+						//todo: send reset email to user
+
 					}
 	    })
 	    .catch(function(error) {

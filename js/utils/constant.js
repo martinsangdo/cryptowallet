@@ -48,6 +48,7 @@ export const C_Const = {
 	ANDROID: 'ANDROID',
 	IOS: 'IOS',
 	SPLASH_TIMER: 1000,   //time to display splash screen
+	MAX_WAIT_RESPONSE: 30000, //max time to wait response
 	MAX_SPLASH_TIMER: 60000,   //maximum time to display splash screen
 	DATE_FORMAT: 'YYYY-MM-DD',   //birthday format
 	NOTIFICATION_DATE_FORMAT: 'YYYY-MM-DD HH:mm:ss',

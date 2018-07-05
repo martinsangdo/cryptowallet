@@ -56,7 +56,6 @@ class News extends BaseScreen {
 		);
 		//get latest news
 		_get_data = () => {
-			// Utils.dlog('----- begin get news');
 			this.setState({is_getting_data: true, loading_indicator_state: true}, () => {
 				var url = API_URI.GET_NEWS_LIST + '&page=' + (this.state.offset / C_Const.PAGE_LEN + 1);
 				// Utils.dlog(url);
@@ -94,6 +93,12 @@ class News extends BaseScreen {
 					}
 					this.setState({is_getting_data: false, loading_indicator_state: false});
 				});
+				//timeout of waiting request
+				setTimeout(() => {
+					if (this.state.loading_indicator_state){
+						this.setState({loading_indicator_state: false});  //stop loading
+					}
+				}, C_Const.MAX_WAIT_RESPONSE);
 			});
 		};
     //get media list of a post

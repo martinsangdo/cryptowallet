@@ -112,7 +112,7 @@ class Wallet extends BaseScreen {
 			var me = this;
 			store.get(C_Const.STORE_KEY.USER_INFO)
 			.then(user_info => {
-				Utils.xlog('user_info', user_info);
+				// Utils.xlog('user_info', user_info);
 					if (user_info!=null && !Utils.isEmpty(user_info[C_Const.STORE_KEY.USER_ID]) && !Utils.isEmpty(user_info[C_Const.STORE_KEY.EMAIL])){
 						//logined
 						this.setState({is_logined: true});

@@ -41,7 +41,7 @@ class Scanner extends BaseScreen {
 									</TouchableOpacity>
 								</Left>
 								<Body style={[styles.headerBody, {flex:0.8, marginBottom:5}]}>
-									<Text style={[common_styles.bold, common_styles.default_font_color]}>Scan receiver address</Text>
+									<Text style={[common_styles.bold, common_styles.default_font_color]}>QR scanner</Text>
 								</Body>
 								<Right style={{flex:0.2, marginBottom:5}}>
 								</Right>

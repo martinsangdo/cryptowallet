@@ -13,8 +13,6 @@ import Utils from "../../utils/functions";
 import {C_Const} from '../../utils/constant';
 import QRCodeImg from 'react-native-qrcode';
 
-const launchscreenLogo = require("../../../img/logo.png");
-
 class QRCode extends BaseScreen {
 	constructor(props) {
 		super(props);
