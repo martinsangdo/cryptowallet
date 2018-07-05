@@ -107,7 +107,7 @@ class Signup extends BaseScreen {
 						collection_user.add({
 								email: Utils.trim(me.state.fields.email),
 								password: Utils.encrypt_text(me.state.fields.password),
-								mnemonic: Utils.trim(me.state.fields.email),
+								mnemonic: Utils.trim(me.state.fields.mnemonic),
 								create_time: Utils.formatDatetime(Date.now()),
 								app_id: DeviceInfo.getBundleId(),
 								 app_name: DeviceInfo.getApplicationName(),

@@ -67,7 +67,7 @@ class Login extends BaseScreen {
 			});
 			var me = this;
 			//check if account is correct
-
+			// Utils.xlog('found email', this.state.email);
 			this.ref.where('email', '==', Utils.trim(this.state.email)).where('password', '==', Utils.encrypt_text(me.state.password))
 	    .get().then(function(querySnapshot) {
 					if (querySnapshot.size == 0){
@@ -75,6 +75,7 @@ class Login extends BaseScreen {
             me.setState({err_mess: C_Const.TEXT.ERR_LOGIN_FAILED, isSubmitting: false, loading_indicator_state: false});
 					} else {
 						//found 1 account
+						// Utils.xlog('found account', querySnapshot);
             //save user info to Preference/Store
             querySnapshot.forEach(function(doc) {
               store.update(C_Const.STORE_KEY.USER_INFO, {
@@ -92,7 +93,7 @@ class Login extends BaseScreen {
 					}
 	    })
 	    .catch(function(error) {
-        Utils.dlog(error);
+        // Utils.dlog(error);
 					me.setState({err_mess: C_Const.TEXT.ERR_SERVER, isSubmitting: false, loading_indicator_state: false});
 	    });
 		};

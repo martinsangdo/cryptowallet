@@ -31,8 +31,7 @@ class Wallet extends BaseScreen {
 			super(props);
 			this.ref = firebase.firestore();
 			this.state = {
-				offset: 0,
-				data_list: [],		//wallet list
+				data_list: [],		//wallet list to show in DB
 				loading_indicator_state: true,
 				isShowMore: false,
 				coin_list: {},		//activating coins
@@ -221,6 +220,12 @@ class Wallet extends BaseScreen {
           user_id: '',
           email: ''
       });
+			//reset data
+			this.setState({
+				data_list: [],		//wallet list to show in DB
+				is_logined: false,		//indicate user logined or not
+				address_list: {}
+			});
       //verify it's saved into Store
       setTimeout( () => {		//to make sure it's saved
         store.get(C_Const.STORE_KEY.USER_INFO)
