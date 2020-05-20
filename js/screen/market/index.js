@@ -47,9 +47,10 @@ class Market extends BaseScreen {
 		_get_data = () => {
 			this.setState({loading_indicator_state: true}, () => {
 				var url = API_URI.GET_CURRENT_PRICE + '&start=' + this.state.offset;
-				// Utils.dlog(url);
+				Utils.dlog(url);
 				RequestData.sentGetRequest(url,
 					(detail, error) => {
+						Utils.xlog('detail', detail);
 					if (detail != null && detail.data != null){
 						var list = detail.data;
 						var me = this;
@@ -76,7 +77,7 @@ class Market extends BaseScreen {
 							this.setState({isShowMore: true});  //maybe have more
 						}
 					} else {
-							// Utils.xlog('error', error);
+							Utils.xlog('error', error);
 							this.setState({isShowMore: false});
 					}
 					this.setState({loading_indicator_state: false});

@@ -11,6 +11,7 @@ export const API_URI = {
 				'Expires': 0,
 				'Accept': 'application/json',
 				'Content-Type': 'application/json; charset=utf-8',
+        'X-CMC_PRO_API_KEY': Coinbase.API_KEY,
 				'CB-ACCESS-KEY': Coinbase.API_KEY,
 				'CB-VERSION': '2018-06-02'		//get from https://www.coinbase.com/settings/api
 		},
@@ -19,7 +20,8 @@ export const API_URI = {
 		},
 		//Splash
 		//Market
-		GET_CURRENT_PRICE: setting.PRICE_IP + 'ticker/?limit=20',
+    GET_CURRENT_PRICE: setting.PRICE_IP + 'cryptocurrency/quotes/latest?limit=20',
+		// GET_CURRENT_PRICE: setting.PRICE_IP + 'ticker/?limit=20',
 		//News
 		GET_NEWS_LIST: setting.NEWS_IP + 'posts?per_page=20',
 		GET_MEDIA_LIST: 'media',
