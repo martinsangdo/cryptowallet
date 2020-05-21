@@ -21,6 +21,7 @@ class Market extends BaseScreen {
 				data_list: [],
 				loading_indicator_state: true,
 				isShowMore: false,
+				total: 0,
 				jwt: '',
 				key_list: {}		//to make sure there is no duplicate coin in list
 			};
@@ -28,13 +29,13 @@ class Market extends BaseScreen {
 		//
 		componentDidMount() {
 			//get top chart
-			this._get_data();
+			this._get_data_tradingview();
 		}
 		//
 		_keyExtractor = (item) => item.index;
 		//render the list. MUST use "item" as param
 		_renderItem = ({item}) => (
-				<View style={[styles.list_item, common_styles.fetch_row, item.idx%2==0 && styles.odd_item]}>
+				<View style={[styles.list_item, common_styles.fetch_row, item.idx%2==0 && styles.odd_item]} key={item.symbol}>
 					<View style={styles.td_item_name}>
 						<Text style={styles.coin_name}>{item.name}</Text>
 						<Text>{item.symbol}</Text>
@@ -43,45 +44,82 @@ class Market extends BaseScreen {
 					<Text style={[styles.td_item, common_styles.justifyCenter, styles.percent_change_down, (item.change >= 0) && styles.percent_change_up]}>{item.change} %</Text>
 				</View>
 		);
-		//get latest price
-		_get_data = () => {
-			this.setState({loading_indicator_state: true}, () => {
-				var url = API_URI.GET_CURRENT_PRICE + '&start=' + this.state.offset;
-				Utils.dlog(url);
-				RequestData.sentGetRequest(url,
-					(detail, error) => {
-						Utils.xlog('detail', detail);
-					if (detail != null && detail.data != null){
-						var list = detail.data;
-						var me = this;
-						var len = 0;
-						Object.keys(list).forEach(function(id) {
-							var coin_info = list[id];
-							if (!me.state.key_list[id] || me.state.key_list[id]==null){
-								me.state.data_list.push({
-									idx: me.state.data_list.length,
-									index: coin_info.id,
-									name: coin_info.name,
-									symbol: coin_info.symbol,
-									price: coin_info.quotes['USD']['price'],
-									change: coin_info.quotes['USD']['percent_change_1h']
-								});
-								me.state.key_list[id] = true;
-							}
-							len++;
-						});
-						if (len < C_Const.PAGE_LEN){
-							//no more
-							this.setState({isShowMore: false});
-						} else {
-							this.setState({isShowMore: true});  //maybe have more
+		//
+		_get_data_tradingview = () => {
+			var params = {
+					"filter": [
+						{
+							"left": "market_cap_calc",
+							"operation": "nempty"
+						},
+						{
+							"left": "sector",
+							"operation": "nempty"
+						},
+						{
+							"left": "name",
+							"operation": "match",
+							"right": "USD$"
 						}
-					} else {
-							Utils.xlog('error', error);
-							this.setState({isShowMore: false});
-					}
-					this.setState({loading_indicator_state: false});
-				});
+					],
+					"options": {
+						"lang": "en"
+					},
+					"columns": [
+						"crypto_code",
+						"sector",
+											"close",
+						"market_cap_calc",
+						"total_shares_outstanding",
+						"total_value_traded",
+						"change"
+						],
+					"sort": {
+						"sortBy": "market_cap_calc",
+						"sortOrder": "desc"
+					},
+					"range": [
+						this.state.offset,
+						this.state.offset + C_Const.PAGE_LEN
+					]
+				};
+				var extra_headers = {
+					'Content-Type': 'application/json'
+				};
+				var me = this;
+			this.setState({loading_indicator_state: true}, () => {
+				RequestData.sentPostRequestWithExtraHeaders(API_URI.GET_CURRENT_PRICE,
+					extra_headers, params, (detail, error) => {
+						Utils.xlog('detail', detail);
+						if (detail){
+							if (detail.totalCount){
+								me.setState({total: detail.totalCount});
+								var item;
+								var len = 0;
+								for (var i=0; i<detail.data.length; i++){
+									item = detail.data[i].d;
+									me.state.data_list.push({
+										idx: me.state.data_list.length,	//index
+										index: item[0],
+										name: item[1],
+										symbol: item[0],
+										price: item[2],
+										change: item[6]
+									});
+									len++;
+								}
+								if (len < C_Const.PAGE_LEN){
+									//no more
+									this.setState({isShowMore: false});
+								} else {
+									this.setState({isShowMore: true});  //maybe have more
+								}
+							}
+						} else if (error){
+							me.setState({isShowMore: false});
+						}
+						me.setState({loading_indicator_state: false});
+					});
 			});
 			//timeout of waiting request
 			setTimeout(() => {
@@ -89,16 +127,12 @@ class Market extends BaseScreen {
 					this.setState({loading_indicator_state: false});  //stop loading
 				}
 			}, C_Const.MAX_WAIT_RESPONSE);
-		};
-		//
-		_refresh_list = () => {
-
-		};
+		}
 		//
 		_load_more = () => {
 			if (!this.state.loading_indicator_state && this.state.isShowMore){
 				this.setState({offset: this.state.offset + C_Const.PAGE_LEN}, () => {
-					this._get_data();
+					this._get_data_tradingview();
 				});
 			}
 		};
@@ -106,6 +140,8 @@ class Market extends BaseScreen {
 		_open_search = () => {
 
 		};
+		//
+		_refresh_list = () =>{};
 		//==========
 		render() {
 			{/* define how to render country list */}
