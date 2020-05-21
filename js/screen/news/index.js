@@ -49,7 +49,7 @@ class News extends BaseScreen {
             <Text style={styles.time_label}>{item.date}</Text>
           </View>
 					<View style={styles.forward_ico}>
-						<Icon name="ios-arrow-forward-outline" style={common_styles.darkGrayColor}/>
+						<Icon name="ios-arrow-forward" style={common_styles.darkGrayColor}/>
 					</View>
         </View>
       </TouchableOpacity>
@@ -58,7 +58,7 @@ class News extends BaseScreen {
 		_get_data = () => {
 			this.setState({is_getting_data: true, loading_indicator_state: true}, () => {
 				var url = API_URI.GET_NEWS_LIST + '&page=' + (this.state.offset / C_Const.PAGE_LEN + 1);
-				// Utils.dlog(url);
+				Utils.dlog(url);
 				RequestData.sentGetRequest(url,
 					(list, error) => {
 					if (list != null){
@@ -103,8 +103,10 @@ class News extends BaseScreen {
 		};
     //get media list of a post
     _get_feature_media = (item_index, featured_media_url) => {
+			console.log(featured_media_url);
       RequestData.sentGetRequest(featured_media_url,
         (detail, error) => {
+					console.log(detail);
           if (!(Utils.isEmpty(detail) || Utils.isEmpty(detail['media_details']) || Utils.isEmpty(detail['media_details']['sizes']) ||
               Utils.isEmpty(detail['media_details']['sizes']['medium']) || Utils.isEmpty(detail['media_details']['sizes']['medium']['source_url']))){
             var medium_size_url = detail['media_details']['sizes']['medium']['source_url'];

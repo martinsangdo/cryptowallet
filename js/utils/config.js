@@ -5,8 +5,9 @@
 
 export const setting = {
   WALLET_IP: 'https://api.coinbase.com',    //API IP
-  PRICE_IP: 'http://api.coinmarketcap.com/v2/',
-  NEWS_IP: 'http://news.bitcoin.com/wp-json/wp/v2/'
+  // PRICE_IP: 'http://api.coinmarketcap.com/v2/',
+  PRICE_IP: 'https://pro-api.coinmarketcap.com/v1/',
+  NEWS_IP: 'https://cryptocurrencynews.com/wp-json/wp/v2/'
 };
 
 export const Coinbase = {

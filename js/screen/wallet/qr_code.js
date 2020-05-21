@@ -43,7 +43,7 @@ class QRCode extends BaseScreen {
 								<TouchableOpacity onPress={() => this._on_go_back()}>
 									<View style={styles.left_row}>
 										<View style={[common_styles.float_center]}>
-											<Icon name="ios-arrow-back-outline" style={common_styles.default_font_color}/>
+											<Icon name="ios-arrow-back" style={common_styles.default_font_color}/>
 										</View>
 									</View>
 								</TouchableOpacity>

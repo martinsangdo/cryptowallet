@@ -37,7 +37,7 @@ class Scanner extends BaseScreen {
 							<Header style={[common_styles.header, common_styles.whiteBg, {maxHeight:50}]}>
 								<Left style={{flex:0.3, flexDirection: 'row', marginBottom:5}}>
 									<TouchableOpacity onPress={() => this._go_back()} style={{width:40}}>
-										<Icon name="ios-arrow-back-outline" style={styles.header_icon}/>
+										<Icon name="ios-arrow-back" style={styles.header_icon}/>
 									</TouchableOpacity>
 								</Left>
 								<Body style={[styles.headerBody, {flex:0.8, marginBottom:5}]}>
