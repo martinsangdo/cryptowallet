@@ -20,7 +20,7 @@ export const API_URI = {
 		},
 		//Splash
 		//Market
-    GET_CURRENT_PRICE: 'https://scanner.tradingview.com/crypto/scan',
+    GET_CURRENT_PRICE: 'https://scanner.tradingview.com/crypto/scan', //https://www.tradingview.com/widget/
 		// GET_CURRENT_PRICE: setting.PRICE_IP + 'ticker/?limit=20',
 		//News
 		GET_NEWS_LIST: setting.NEWS_IP + 'posts?per_page=20',

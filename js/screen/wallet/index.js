@@ -291,6 +291,11 @@ class Wallet extends BaseScreen {
 										</View>
 										<View style={[common_styles.view_align_center, common_styles.margin_t_20, common_styles.margin_b_20]}>
 											<TouchableOpacity onPress={this._forgot_pass.bind(this)}>
+												<Text>Have your own wallet without a fee!</Text>
+											</TouchableOpacity>
+										</View>
+										<View style={[common_styles.view_align_center, common_styles.margin_t_20, common_styles.margin_b_20]}>
+											<TouchableOpacity onPress={this._forgot_pass.bind(this)}>
 												<Text>Forgot your password, <Text style={styles.a_href}>tap here</Text></Text>
 											</TouchableOpacity>
 										</View>

@@ -41,6 +41,7 @@ class Market extends BaseScreen {
 						<Text>{item.symbol}</Text>
 					</View>
 					<Text style={styles.td_item}>{item.price}</Text>
+					<Text style={styles.td_item}>{item.traded_volumn}</Text>
 					<Text style={[styles.td_item, common_styles.justifyCenter, styles.percent_change_down, (item.change >= 0) && styles.percent_change_up]}>{item.change} %</Text>
 				</View>
 		);
@@ -103,8 +104,9 @@ class Market extends BaseScreen {
 										index: item[0],
 										name: item[1],
 										symbol: item[0],
-										price: item[2],
-										change: item[6]
+										price: Utils.number_to_float(item[2]),
+										change: Utils.number_to_float(item[6]),
+										traded_volumn: Utils.shorten_big_num(item[5])
 									});
 									len++;
 								}
@@ -152,16 +154,20 @@ class Market extends BaseScreen {
 								<Left style={[common_styles.headerLeft, {flex:0.15}]}>
 								</Left>
 								<Body style={styles.headerBody}>
-									<Text style={[common_styles.bold, common_styles.default_font_color]}>Market</Text>
+									<Text style={[common_styles.bold, common_styles.default_font_color]}>Current market</Text>
 								</Body>
 								<Right style={[common_styles.headerRight, {flex:0.15}]}>
 								</Right>
 							</Header>
 							{/* END header */}
 							<Spinner visible={this.state.loading_indicator_state} textStyle={common_styles.whiteColor} />
+							<View style={{height:25, justifyContent: 'center', flexDirection: 'row'}}>
+								<Text style={styles.coin_name}>Click coin name to view detail</Text>
+							</View>
 							<View style={[styles.tbl_header, common_styles.mainColorBg]}>
 								<Text style={[styles.td_item_name, common_styles.bold]}>Name</Text>
-								<Text style={[styles.td_item, common_styles.bold]}>Price ($)</Text>
+								<Text style={[styles.td_item, common_styles.bold]}>Price (USD)</Text>
+								<Text style={[styles.td_item, common_styles.bold]}>Traded Vol</Text>
 								<Text style={[styles.td_item, common_styles.justifyCenter, common_styles.bold]}>Change</Text>
 							</View>
 							<View style={{flex:1}}>

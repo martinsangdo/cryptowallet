@@ -24,9 +24,9 @@ export default {
 	btn_row: {flex:1, flexDirection: 'row', justifyContent: 'space-between', marginLeft:20, marginRight:20},
 	thumb: {width: deviceWidth, height: 185},
 	btn_active: {backgroundColor: '#008da9'},
-	td_item_name: {width:'40%'},
-	td_item: {width:'30%'},
-	percent_change_up: {color: '#0f0', fontWeight:'bold'},
+	td_item_name: {width:'25%'},
+	td_item: {width:'25%'},
+	percent_change_up: {color: '#41BBD9', fontWeight:'bold'},
 	percent_change_down: {color: '#f00', fontWeight:'bold'},
 	coin_name: {color:'#777', fontSize:15},
 	odd_item: {backgroundColor: '#CDEDF6'}

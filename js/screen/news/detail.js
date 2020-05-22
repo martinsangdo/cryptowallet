@@ -28,7 +28,7 @@ class ArticleDetail extends BaseScreen {
 				content: '',
 				link: '',
 				is_bookmarked: false,
-				loading_indicator_state: false
+				loading_indicator_state: true
 			};
 		}
 		//
@@ -40,6 +40,9 @@ class ArticleDetail extends BaseScreen {
 				title: this.props.navigation.state.params.detail.title,
         content: content
 			});
+			setTimeout(()=>{
+				this.setState({loading_indicator_state:false});
+			}, 2000);
 		}
 		//
 		_on_go_back = () => {
@@ -120,7 +123,7 @@ class ArticleDetail extends BaseScreen {
 										autoHeight={true}
 										style={{ width: Dimensions.get('window').width - 10 }}
 										source={{baseUrl: '', html: this.state.content}}
-										customStyle={'img {max-width:100%;height:auto;} body {font-family:arial;} p,span,a {font-size:13.5pt !important;}'} />
+										customStyle={'img {max-width:100% !important;height:auto;} body {font-family:arial;} p,span,a {font-size:13.5pt !important;}'} />
 								</View>
 							</Content>
 						</Container>
