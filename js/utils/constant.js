@@ -47,9 +47,9 @@ export const C_Const = {
 	AUTHORIZATION_PREFIX_HEADER: 'Bearer ', //used in header of Authorization
 	ANDROID: 'ANDROID',
 	IOS: 'IOS',
-	SPLASH_TIMER: 1000,   //time to display splash screen
-	MAX_WAIT_RESPONSE: 30000, //max time to wait response
-	MAX_SPLASH_TIMER: 60000,   //maximum time to display splash screen
+	SPLASH_TIMER: 1000,   //1s, time to display splash screen
+	MAX_WAIT_RESPONSE: 30000, //30s, max time to wait response
+	MAX_SPLASH_TIMER: 60000,   //60s, maximum time to display splash screen
 	DATE_FORMAT: 'YYYY-MM-DD',   //birthday format
 	NOTIFICATION_DATE_FORMAT: 'YYYY-MM-DD HH:mm:ss',
 	COURSE_DATE_FORMAT: 'DD MMMM YYYY, dddd',
@@ -69,8 +69,14 @@ export const C_Const = {
 		FIREBASE_TOKEN: 'FIREBASE_TOKEN',
 		USER_ID: 'user_id',
 		EMAIL: 'email',
-		COIN_LIST: 'COIN_LIST'
+		COIN_LIST: 'COIN_LIST',
+    LATEST_PRICE_DATA:'LATEST_PRICE_DATA',  //of coins
+    LATEST_NEWS_DATA:'LATEST_NEWS_DATA',
+    LATEST_PRICE_TIME:'LATEST_PRICE_TIME',  //last time get data from server
+    LATEST_NEWS_TIME:'LATEST_NEWS_TIME',
 	},
+  LATEST_PRICE_CACHE_DURATION: 5*60*1000*1000,  //5 mins
+  LATEST_PRICE_NEWS_DURATION: 60*60*1000*1000,  //1 hour
 	ACTIVE_COLOR: '#008da9',
 	ICON_URL: 'https://blockbod.com/public/blockbod/img/logo.jpeg',	//empty image in News
 	TERM_URL: 'https://www.coinbase.com/about',

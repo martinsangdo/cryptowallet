@@ -7,7 +7,7 @@ import BaseScreen from "../../base/BaseScreen.js";
 import common_styles from "../../../css/common";
 import styles from "./style";    //CSS defined here
 import {API_URI} from '../../utils/api_uri';
-
+import store from 'react-native-simple-store';
 import Utils from "../../utils/functions";
 import {C_Const} from '../../utils/constant';
 import RequestData from '../../utils/https/RequestData';
@@ -22,14 +22,38 @@ class Market extends BaseScreen {
 				loading_indicator_state: true,
 				isShowMore: false,
 				total: 0,
-				jwt: '',
-				key_list: {}		//to make sure there is no duplicate coin in list
+				jwt: ''
 			};
 		}
 		//
 		componentDidMount() {
-			//get top chart
-			this._get_data_tradingview();
+			Utils.dlog(Utils.get_current_timestamp());
+			//get top price from cache, if any
+			var me = this;
+			store.get(C_Const.STORE_KEY.LATEST_PRICE_TIME)
+			.then(saved_time => {
+				if (saved_time!=null){
+					//saved last time
+					if (Utils.get_current_timestamp() - saved_time.t >= C_Const.LATEST_PRICE_CACHE_DURATION){
+						me._get_data_tradingview();
+					} else {
+						//get data from cache
+						store.get(C_Const.STORE_KEY.LATEST_PRICE_DATA)
+						.then(saved_data => {
+							if (saved_data!=null){
+								//saved cache
+								me.setState({data_list: saved_data.d, loading_indicator_state: false, total: saved_data.d.length, isShowMore:true, offset:saved_data.d.length-1});
+							} else {
+								//no cache, get from server directly
+								me._get_data_tradingview();
+							}
+						});
+					}
+				} else {
+					//no cache, get from server directly
+					me._get_data_tradingview();
+				}
+			});
 		}
 		//
 		_keyExtractor = (item) => item.index;
@@ -89,9 +113,10 @@ class Market extends BaseScreen {
 				};
 				var me = this;
 			this.setState({loading_indicator_state: true}, () => {
+				// Utils.xlog('Begin get price from server from offset: ', me.state.offset);
 				RequestData.sentPostRequestWithExtraHeaders(API_URI.GET_CURRENT_PRICE,
 					extra_headers, params, (detail, error) => {
-						Utils.xlog('detail', detail);
+						// Utils.xlog('detail', detail);
 						if (detail){
 							if (detail.totalCount){
 								me.setState({total: detail.totalCount});
@@ -110,6 +135,9 @@ class Market extends BaseScreen {
 									});
 									len++;
 								}
+								//save to cache
+								store.update(C_Const.STORE_KEY.LATEST_PRICE_DATA, {d:me.state.data_list});
+								store.update(C_Const.STORE_KEY.LATEST_PRICE_TIME, {t: Utils.get_current_timestamp()});
 								if (len < C_Const.PAGE_LEN){
 									//no more
 									this.setState({isShowMore: false});

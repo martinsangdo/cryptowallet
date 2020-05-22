@@ -173,6 +173,9 @@ exports.number_to_float = function(number){
 exports.makeApplink = function (file_src) {
     return setting.SERVER_URL + file_src;
 };
+exports.get_current_timestamp = function () {
+    return Moment().unix();
+};
 //convert date time to duration likes "xx ago"
 exports.getDurationTime = function (target_date, lang_info){
   // var today = Moment.utc(new Date()).format(C_Const.NOTIFICATION_DATE_FORMAT);
