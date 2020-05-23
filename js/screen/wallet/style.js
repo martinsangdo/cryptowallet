@@ -41,6 +41,7 @@ export default {
 		width: deviceWidth,
     height: deviceHeight - 100
   },
+	td_item_name: {width:'25%',justifyContent: "center", textAlign: 'center'},
   preview: {
     width: 300,
     height: 200

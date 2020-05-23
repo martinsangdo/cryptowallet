@@ -271,10 +271,6 @@ class Wallet extends BaseScreen {
 							{/* END header */}
 							<Content>
 								<Spinner visible={this.state.loading_indicator_state} textStyle={common_styles.whiteColor} />
-								<View style={common_styles.margin_b_20} />
-								<View style={common_styles.view_align_center}>
-									<Image source={avatar} style={styles.home_avatar}/>
-								</View>
 								{!this.state.is_logined &&
 									<View>
 										<View style={common_styles.view_align_center}>
@@ -298,6 +294,12 @@ class Wallet extends BaseScreen {
 								}
 								{this.state.is_logined &&
 								<View style={{flex:1}}>
+									<View style={[{flexDirection: 'row', justifyContent: 'space-between', padding:10}]}>
+										<Text style={[styles.td_item_name]}>Symbol</Text>
+										<Text style={[styles.td_item_name]}>Balance</Text>
+										<Text style={[styles.td_item_name]}>Trade</Text>
+										<Text style={[styles.td_item_name]}>Address</Text>
+									</View>
 									<FlatList
 												data={this.state.data_list}
 												renderItem={this._renderItem}
