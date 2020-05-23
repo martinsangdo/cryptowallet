@@ -286,13 +286,8 @@ class Wallet extends BaseScreen {
 											<Button transparent style={common_styles.default_button}
 												onPress={this._begin_register.bind(this)}
 											>
-												<Text style={[common_styles.whiteColor, common_styles.float_center]}>Signup</Text>
+												<Text style={[common_styles.whiteColor, common_styles.float_center]}>Register</Text>
 											</Button>
-										</View>
-										<View style={[common_styles.view_align_center, common_styles.margin_t_20, common_styles.margin_b_20]}>
-											<TouchableOpacity onPress={this._forgot_pass.bind(this)}>
-												<Text>Have your own wallet without a fee!</Text>
-											</TouchableOpacity>
 										</View>
 										<View style={[common_styles.view_align_center, common_styles.margin_t_20, common_styles.margin_b_20]}>
 											<TouchableOpacity onPress={this._forgot_pass.bind(this)}>

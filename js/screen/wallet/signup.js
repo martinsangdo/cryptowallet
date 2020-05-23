@@ -214,7 +214,7 @@ class Signup extends BaseScreen {
 								</Left>
 								<Body style={styles.headerBody}>
 									<View style={[common_styles.margin_l_10, common_styles.float_center]}>
-										<Text uppercase={false} style={[common_styles.bold, common_styles.default_font_color]}>Sign Up</Text>
+										<Text uppercase={false} style={[common_styles.bold, common_styles.default_font_color]}>Fill all data</Text>
 									</View>
 								</Body>
 								<Right style={[common_styles.headerRight, {flex:0.15}]}>
@@ -227,16 +227,16 @@ class Signup extends BaseScreen {
 
                 <Form ref="register_form">
 									<Item>
-										<Input placeholder="Email" keyboardType={'email-address'} autoCapitalize="none" onChange={(event) => this.setState({fields: {...this.state.fields, email : event.nativeEvent.text}})}/>
+										<Input placeholder="Email (*)" keyboardType={'email-address'} autoCapitalize="none" onChange={(event) => this.setState({fields: {...this.state.fields, email : event.nativeEvent.text}})}/>
 									</Item>
 									<Item>
-										<Input placeholder="Password" secureTextEntry={true} autoCapitalize="none" onChange={(event) => this.setState({fields: {...this.state.fields, password : event.nativeEvent.text}})}/>
+										<Input placeholder="Password (*)" secureTextEntry={true} autoCapitalize="none" onChange={(event) => this.setState({fields: {...this.state.fields, password : event.nativeEvent.text}})}/>
 									</Item>
 									<Item>
-										<Input placeholder="Confirm Password" secureTextEntry={true} autoCapitalize="none" onChange={(event) => this.setState({fields: {...this.state.fields, confirm_password : event.nativeEvent.text}})}/>
+										<Input placeholder="Confirm Password (*)" secureTextEntry={true} autoCapitalize="none" onChange={(event) => this.setState({fields: {...this.state.fields, confirm_password : event.nativeEvent.text}})}/>
 									</Item>
 									<Item>
-										<Input placeholder="Mnemonic" autoCapitalize="none" onChange={(event) => this.setState({fields: {...this.state.fields, mnemonic : event.nativeEvent.text}})}/>
+										<Input placeholder="Mnemonic (*)" autoCapitalize="none" onChange={(event) => this.setState({fields: {...this.state.fields, mnemonic : event.nativeEvent.text}})}/>
 									</Item>
 
                 </Form>
@@ -245,7 +245,7 @@ class Signup extends BaseScreen {
 									<Button transparent style={common_styles.default_button}
 											onPress={this._signup.bind(this)}
 									>
-										<Text style={[common_styles.whiteColor, common_styles.float_center]}>Sign Up</Text>
+										<Text style={[common_styles.whiteColor, common_styles.float_center]}>Register</Text>
 									</Button>
 								</View>
 								<View style={common_styles.view_align_center}>
