@@ -40,9 +40,10 @@ class ArticleDetail extends BaseScreen {
 				title: this.props.navigation.state.params.detail.title,
         content: content
 			});
+			//wait content to render
 			setTimeout(()=>{
 				this.setState({loading_indicator_state:false});
-			}, 2000);
+			}, 3000);
 		}
 		//
 		_on_go_back = () => {

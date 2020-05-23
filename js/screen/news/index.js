@@ -26,7 +26,6 @@ class News extends BaseScreen {
 				is_getting_data: true,
 				loading_indicator_state: false,
 				isShowMore: false,
-				jwt: '',
 				key_list: {}		//to make sure there is no duplicate item in list
 			};
 		}
@@ -44,22 +43,18 @@ class News extends BaseScreen {
 						//get data from cache
 						store.get(C_Const.STORE_KEY.LATEST_NEWS_DATA)
 						.then(saved_data => {
+							// Utils.xlog('saved_data news', saved_data);
 							if (saved_data!=null){
 								//saved cache
 								me.setState({data_list: saved_data.d,
 									loading_indicator_state: false,
 									is_getting_data: false,
 									isShowMore:true,
-									offset:saved_data.d.length-1,
+									offset:saved_data.d.length>0?saved_data.d.length-1:0,
 									key_list:saved_data.key_list
 								}, ()=>{
 									for (var i=0; i<me.state.data_list.length; i++){
-										Utils.xlog('111', me.state.key_list[i]);
-										Utils.xlog('222', me.state.key_list[i]['id']);
-										Utils.xlog('333', me.state.key_list[me.state.key_list[i]['id']]);
-										if (!me.state.key_list[i] && !me.state.key_list[me.state.key_list[i]['id']] || me.state.key_list[me.state.key_list[i]['id']]==null){
-										// me._get_feature_media(me.state.data_list.length - 1, me.state.data_list[i]['_links']['wp:featuredmedia'][0]['href']);
-									}
+										me._get_feature_media(i, me.state.data_list[i]['featuredmedia_href']);
 									}
 								});
 							} else {
@@ -96,18 +91,19 @@ class News extends BaseScreen {
 		//get latest news
 		_get_data = () => {
 			this.setState({is_getting_data: true, loading_indicator_state: true}, () => {
-				var url = API_URI.GET_NEWS_LIST + '&page=' + (this.state.offset / C_Const.PAGE_LEN + 1);
-				// Utils.dlog(url);
+				var url = API_URI.GET_NEWS_LIST + '&page=' + (Math.ceil(this.state.offset / C_Const.PAGE_LEN) + 1);
+				Utils.dlog(url);
 				var me = this;
 				Utils.xlog('Begin get news from server from offset: ', me.state.offset);
 				RequestData.sentGetRequest(url,
 					(list, error) => {
+						Utils.dlog(error);
 					if (list != null){
-            // Utils.dlog(list);
+            Utils.dlog(list);
 						var len = list.length;
             for (var i=0; i<len; i++){
               if (!me.state.key_list[list[i]['id']] || me.state.key_list[list[i]['id']]==null){
-                // Utils.dlog(list[i]);
+                Utils.dlog(list[i]);
                 me.state.data_list.push({
                     id: list[i]['id'],
                     index: me.state.data_list.length,
@@ -115,15 +111,16 @@ class News extends BaseScreen {
                     img_src: C_Const.ICON_URL,
                     date: Utils.formatDatetime(list[i]['date']),
 										link: list[i]['link'],
-                    content: list[i]['content']['rendered']
+                    content: list[i]['content']['rendered'],
+										featuredmedia_href: list[i]['_links']['wp:featuredmedia'][0]['href']
                 });
                 me.state.key_list[list[i]['id']] = true;
                 me._get_feature_media(me.state.data_list.length - 1, list[i]['_links']['wp:featuredmedia'][0]['href']);
               }
             }
 						//save to cache
-						store.update(C_Const.STORE_KEY.LATEST_NEWS_DATA, {d:me.state.data_list});
-						store.update(C_Const.STORE_KEY.LATEST_NEWS_TIME, {t: Utils.get_current_timestamp(), key_list: me.state.key_list});
+						store.update(C_Const.STORE_KEY.LATEST_NEWS_DATA, {d:me.state.data_list, key_list: me.state.key_list});
+						store.update(C_Const.STORE_KEY.LATEST_NEWS_TIME, {t: Utils.get_current_timestamp()});
 						if (len < C_Const.PAGE_LEN){
 							//no more
 							this.setState({isShowMore: false, loading_indicator_state: false});
@@ -150,7 +147,12 @@ class News extends BaseScreen {
       RequestData.sentGetRequest(featured_media_url,
         (detail, error) => {
 					// console.log(detail);
-          if (!(Utils.isEmpty(detail) || Utils.isEmpty(detail['media_details']) || Utils.isEmpty(detail['media_details']['sizes']) ||
+					if (!(Utils.isEmpty(detail) || Utils.isEmpty(detail['media_details']) || Utils.isEmpty(detail['media_details']['sizes']) ||
+              Utils.isEmpty(detail['media_details']['sizes']['thumbnail']) || Utils.isEmpty(detail['media_details']['sizes']['thumbnail']['source_url']))){
+            var thumbnail_size_url = detail['media_details']['sizes']['thumbnail']['source_url'];
+            this.state.data_list[item_index]['img_src'] = thumbnail_size_url;
+            this.forceUpdate();
+          } else if (!(Utils.isEmpty(detail) || Utils.isEmpty(detail['media_details']) || Utils.isEmpty(detail['media_details']['sizes']) ||
               Utils.isEmpty(detail['media_details']['sizes']['medium']) || Utils.isEmpty(detail['media_details']['sizes']['medium']['source_url']))){
             var medium_size_url = detail['media_details']['sizes']['medium']['source_url'];
             this.state.data_list[item_index]['img_src'] = medium_size_url;

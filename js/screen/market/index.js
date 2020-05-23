@@ -41,7 +41,11 @@ class Market extends BaseScreen {
 						.then(saved_data => {
 							if (saved_data!=null){
 								//saved cache
-								me.setState({data_list: saved_data.d, loading_indicator_state: false, total: saved_data.d.length, isShowMore:true, offset:saved_data.d.length-1});
+								me.setState({data_list: saved_data.d,
+									loading_indicator_state: false,
+									total: saved_data.d.length,
+									isShowMore:true,
+									offset:saved_data.d.length>0?saved_data.d.length-1:0});
 							} else {
 								//no cache, get from server directly
 								me._get_data_tradingview();
