@@ -92,18 +92,14 @@ class News extends BaseScreen {
 		_get_data = () => {
 			this.setState({is_getting_data: true, loading_indicator_state: true}, () => {
 				var url = API_URI.GET_NEWS_LIST + '&page=' + (Math.ceil(this.state.offset / C_Const.PAGE_LEN) + 1);
-				Utils.dlog(url);
 				var me = this;
 				Utils.xlog('Begin get news from server from offset: ', me.state.offset);
 				RequestData.sentGetRequest(url,
 					(list, error) => {
-						Utils.dlog(error);
 					if (list != null){
-            Utils.dlog(list);
 						var len = list.length;
             for (var i=0; i<len; i++){
               if (!me.state.key_list[list[i]['id']] || me.state.key_list[list[i]['id']]==null){
-                Utils.dlog(list[i]);
                 me.state.data_list.push({
                     id: list[i]['id'],
                     index: me.state.data_list.length,

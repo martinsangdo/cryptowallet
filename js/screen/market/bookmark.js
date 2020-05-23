@@ -13,7 +13,7 @@ import {C_Const} from '../../utils/constant';
 import RequestData from '../../utils/https/RequestData';
 import Spinner from 'react-native-loading-spinner-overlay';
 
-class Market extends BaseScreen {
+class Bookmark extends BaseScreen {
 		constructor(props) {
 			super(props);
 			this.state = {
@@ -22,21 +22,13 @@ class Market extends BaseScreen {
 				loading_indicator_state: true,
 				isShowMore: false,
 				total: 0,
-				bookmarked_coins: {}
+				jwt: ''
 			};
 		}
 		//
 		componentDidMount() {
-			//get bookmarked icons
-			var me = this;
-			store.get(C_Const.STORE_KEY.BOOKMARKED_COINS)
-			.then(saved_coins => {
-				Utils.xlog('saved_coins', saved_coins.d);
-				if (saved_coins!=null && saved_coins.d!=null){
-					me.setState({bookmarked_coins: saved_coins.d});
-				}
-			});
 			//get latest price from cache, if any
+			var me = this;
 			store.get(C_Const.STORE_KEY.LATEST_PRICE_TIME)
 			.then(saved_time => {
 				if (saved_time!=null){
@@ -75,23 +67,9 @@ class Market extends BaseScreen {
 						<Text style={styles.coin_name}>{item.name}</Text>
 						<Text>{item.symbol}</Text>
 					</View>
-					<Text style={styles.td_item_last}>{item.price}</Text>
+					<Text style={styles.td_item}>{item.price}</Text>
 					<Text style={styles.td_item}>{item.traded_volumn}</Text>
-					<View style={[styles.td_item_last]}>
-						<TouchableOpacity onPress={() => this._toggle_bookmark(item.symbol)}>
-							<Text style={[common_styles.justifyCenter, styles.percent_change_down, (item.change >= 0) && styles.percent_change_up]}>{Utils.isEmpty(item.change)?'0':item.change}</Text>
-						</TouchableOpacity>
-					</View>
-					<View>
-						<TouchableOpacity onPress={() => this._toggle_bookmark(item.symbol)}>
-						{this.state.bookmarked_coins[item.symbol] &&
-							<Icon name="ios-bookmark" style={[common_styles.greenColor]}/>
-						}
-						{!this.state.bookmarked_coins[item.symbol] &&
-							<Icon name="ios-bookmark" style={[common_styles.grayColor]}/>
-						}
-						</TouchableOpacity>
-					</View>
+					<Text style={[styles.td_item, common_styles.justifyCenter, styles.percent_change_down, (item.change >= 0) && styles.percent_change_up]}>{item.change} %</Text>
 				</View>
 		);
 		//
@@ -197,22 +175,6 @@ class Market extends BaseScreen {
 		};
 		//
 		_refresh_list = () =>{};
-		//set/remove symbol
-		_toggle_bookmark = (symbol) =>{
-			if (this.state.loading_indicator_state){
-				return;
-			}
-			var bookmarked_coins = Utils.cloneObj(this.state.bookmarked_coins);
-			bookmarked_coins[symbol] = !bookmarked_coins[symbol];
-			var me = this;
-			//save back to store
-			store.update(C_Const.STORE_KEY.BOOKMARKED_COINS, {d:bookmarked_coins});
-			this.setState({loading_indicator_state: true, bookmarked_coins: bookmarked_coins}, () => {
-				setTimeout(() => {
-					me.setState({loading_indicator_state: false});  //stop loading
-				}, 200);
-			});
-		}
 		//==========
 		render() {
 			{/* define how to render country list */}
@@ -235,15 +197,9 @@ class Market extends BaseScreen {
 							</View>
 							<View style={[styles.tbl_header, common_styles.mainColorBg]}>
 								<Text style={[styles.td_item_name, common_styles.bold]}>Name</Text>
-								<View style={[styles.td_item_last]}>
-									<Text style={[common_styles.bold]}>Price</Text>
-									<Text>USD</Text>
-								</View>
+								<Text style={[styles.td_item, common_styles.bold]}>Price (USD)</Text>
 								<Text style={[styles.td_item, common_styles.bold]}>Traded Vol</Text>
-								<View style={[styles.td_item_last]}>
-									<Text style={[common_styles.bold]}>Change</Text>
-									<Text>%</Text>
-								</View>
+								<Text style={[styles.td_item, common_styles.justifyCenter, common_styles.bold]}>Change</Text>
 							</View>
 							<View style={{flex:1}}>
 								<FlatList
@@ -262,4 +218,4 @@ class Market extends BaseScreen {
 		}
 }
 
-export default Market;
+export default Bookmark;

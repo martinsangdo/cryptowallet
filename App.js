@@ -36,6 +36,7 @@ import Login from "./js/screen/wallet/login";
 import QRCode from "./js/screen/wallet/qr_code";
 import Scanner from "./js/screen/wallet/scanner";
 import ForgotPass from "./js/screen/wallet/forgot_pass";
+import Bookmark from "./js/screen/market/bookmark";
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
@@ -54,6 +55,7 @@ const AppNavigator = StackNavigator({
 				QRCode: {screen: QRCode},
 				Scanner: {screen: Scanner},
 				ForgotPass: {screen: ForgotPass},
+				Bookmark: {screen: Bookmark},
 				//define tab bar
 				Main: {
 					screen: TabNavigator({

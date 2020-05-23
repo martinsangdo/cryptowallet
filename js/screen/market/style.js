@@ -26,6 +26,7 @@ export default {
 	btn_active: {backgroundColor: '#008da9'},
 	td_item_name: {width:'25%'},
 	td_item: {width:'25%'},
+	td_item_last: {width:'20%'},
 	percent_change_up: {color: '#41BBD9', fontWeight:'bold'},
 	percent_change_down: {color: '#f00', fontWeight:'bold'},
 	coin_name: {color:'#777', fontSize:15},

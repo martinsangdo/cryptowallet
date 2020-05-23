@@ -253,6 +253,14 @@ exports.encrypt_text = function (text) {
 exports.getTimestamp = function (text) {
     return Math.floor(Date.now() / 1000);
 };
+//
+exports.cloneObj = function (original_obj) {
+  var dest_obj = {};
+  Object.keys(original_obj).forEach(function(key) {
+      dest_obj[key] = original_obj[key];
+  });
+  return dest_obj;
+};
 //create Coinbase header
 exports.createCoinbaseHeader = function (method, uri) {
   //https://github.com/brix/crypto-js
