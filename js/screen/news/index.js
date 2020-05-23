@@ -32,8 +32,47 @@ class News extends BaseScreen {
 		}
 		//
 		componentDidMount() {
-			//get top chart
-			this._get_data(0);
+			//get latest news from cache, if any
+			var me = this;
+			store.get(C_Const.STORE_KEY.LATEST_NEWS_TIME)
+			.then(saved_time => {
+				if (saved_time!=null){
+					//saved last time
+					if (Utils.get_current_timestamp() - saved_time.t >= C_Const.LATEST_NEWS_CACHE_DURATION){
+						me._get_data();
+					} else {
+						//get data from cache
+						store.get(C_Const.STORE_KEY.LATEST_NEWS_DATA)
+						.then(saved_data => {
+							if (saved_data!=null){
+								//saved cache
+								me.setState({data_list: saved_data.d,
+									loading_indicator_state: false,
+									is_getting_data: false,
+									isShowMore:true,
+									offset:saved_data.d.length-1,
+									key_list:saved_data.key_list
+								}, ()=>{
+									for (var i=0; i<me.state.data_list.length; i++){
+										Utils.xlog('111', me.state.key_list[i]);
+										Utils.xlog('222', me.state.key_list[i]['id']);
+										Utils.xlog('333', me.state.key_list[me.state.key_list[i]['id']]);
+										if (!me.state.key_list[i] && !me.state.key_list[me.state.key_list[i]['id']] || me.state.key_list[me.state.key_list[i]['id']]==null){
+										// me._get_feature_media(me.state.data_list.length - 1, me.state.data_list[i]['_links']['wp:featuredmedia'][0]['href']);
+									}
+									}
+								});
+							} else {
+								//no cache, get from server directly
+								me._get_data();
+							}
+						});
+					}
+				} else {
+					//no cache, get from server directly
+					me._get_data();
+				}
+			});
 		}
 		//
 		_keyExtractor = (item) => item.id;
@@ -59,11 +98,12 @@ class News extends BaseScreen {
 			this.setState({is_getting_data: true, loading_indicator_state: true}, () => {
 				var url = API_URI.GET_NEWS_LIST + '&page=' + (this.state.offset / C_Const.PAGE_LEN + 1);
 				// Utils.dlog(url);
+				var me = this;
+				Utils.xlog('Begin get news from server from offset: ', me.state.offset);
 				RequestData.sentGetRequest(url,
 					(list, error) => {
 					if (list != null){
             // Utils.dlog(list);
-						var me = this;
 						var len = list.length;
             for (var i=0; i<len; i++){
               if (!me.state.key_list[list[i]['id']] || me.state.key_list[list[i]['id']]==null){
@@ -81,6 +121,9 @@ class News extends BaseScreen {
                 me._get_feature_media(me.state.data_list.length - 1, list[i]['_links']['wp:featuredmedia'][0]['href']);
               }
             }
+						//save to cache
+						store.update(C_Const.STORE_KEY.LATEST_NEWS_DATA, {d:me.state.data_list});
+						store.update(C_Const.STORE_KEY.LATEST_NEWS_TIME, {t: Utils.get_current_timestamp(), key_list: me.state.key_list});
 						if (len < C_Const.PAGE_LEN){
 							//no more
 							this.setState({isShowMore: false, loading_indicator_state: false});
@@ -106,7 +149,7 @@ class News extends BaseScreen {
 			// console.log(featured_media_url);
       RequestData.sentGetRequest(featured_media_url,
         (detail, error) => {
-					console.log(detail);
+					// console.log(detail);
           if (!(Utils.isEmpty(detail) || Utils.isEmpty(detail['media_details']) || Utils.isEmpty(detail['media_details']['sizes']) ||
               Utils.isEmpty(detail['media_details']['sizes']['medium']) || Utils.isEmpty(detail['media_details']['sizes']['medium']['source_url']))){
             var medium_size_url = detail['media_details']['sizes']['medium']['source_url'];

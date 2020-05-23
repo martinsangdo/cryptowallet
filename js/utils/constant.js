@@ -74,9 +74,10 @@ export const C_Const = {
     LATEST_NEWS_DATA:'LATEST_NEWS_DATA',
     LATEST_PRICE_TIME:'LATEST_PRICE_TIME',  //last time get data from server
     LATEST_NEWS_TIME:'LATEST_NEWS_TIME',
+    LATEST_NEWS_KEY_LIST:'LATEST_NEWS_KEY_LIST'
 	},
   LATEST_PRICE_CACHE_DURATION: 5*60*1000*1000,  //5 mins
-  LATEST_PRICE_NEWS_DURATION: 60*60*1000*1000,  //1 hour
+  LATEST_NEWS_CACHE_DURATION: 60*60*1000*1000,  //1 hour
 	ACTIVE_COLOR: '#008da9',
 	ICON_URL: 'https://blockbod.com/public/blockbod/img/logo.jpeg',	//empty image in News
 	TERM_URL: 'https://www.coinbase.com/about',

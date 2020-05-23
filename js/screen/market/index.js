@@ -27,8 +27,7 @@ class Market extends BaseScreen {
 		}
 		//
 		componentDidMount() {
-			Utils.dlog(Utils.get_current_timestamp());
-			//get top price from cache, if any
+			//get latest price from cache, if any
 			var me = this;
 			store.get(C_Const.STORE_KEY.LATEST_PRICE_TIME)
 			.then(saved_time => {
@@ -113,7 +112,7 @@ class Market extends BaseScreen {
 				};
 				var me = this;
 			this.setState({loading_indicator_state: true}, () => {
-				// Utils.xlog('Begin get price from server from offset: ', me.state.offset);
+				Utils.xlog('Begin get price from server from offset: ', me.state.offset);
 				RequestData.sentPostRequestWithExtraHeaders(API_URI.GET_CURRENT_PRICE,
 					extra_headers, params, (detail, error) => {
 						// Utils.xlog('detail', detail);
