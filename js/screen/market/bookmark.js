@@ -33,7 +33,13 @@ class Bookmark extends BaseScreen {
 				.then(saved_coins => {
 					if (saved_coins!=null && saved_coins.d!=null){
 						me.setState({bookmarked_coins: saved_coins.d}, ()=>{
-							me._get_data_tradingview();
+							var coin_list = [];
+							Object.keys(saved_coins.d).forEach(function(full_symbol) {
+						      if (saved_coins.d[full_symbol]){
+										coin_list.push(full_symbol);
+									}
+						  });
+							me._get_data_tradingview(coin_list, coin_list.length);
 						});
 					} else {
 						me.setState({loading_indicator_state: false});
@@ -41,7 +47,13 @@ class Bookmark extends BaseScreen {
 				});
 			} else {
 				this.setState({bookmarked_coins: bookmarked_coins}, ()=>{
-					me._get_data_tradingview();
+					var coin_list = [];
+					Object.keys(bookmarked_coins).forEach(function(full_symbol) {
+							if (bookmarked_coins[full_symbol]){
+								coin_list.push(full_symbol);
+							}
+					});
+					me._get_data_tradingview(coin_list, coin_list.length);
 				});
 			}
 		}
@@ -49,33 +61,33 @@ class Bookmark extends BaseScreen {
 		_keyExtractor = (item) => item.index;
 		//render the list. MUST use "item" as param
 		_renderItem = ({item}) => (
-				<View style={[styles.list_item, common_styles.fetch_row, item.idx%2==0 && styles.odd_item]} key={item.symbol}>
-					<View style={styles.td_item_name}>
-						<Text style={styles.coin_name}>{item.name}</Text>
-						<Text>{item.symbol}</Text>
-					</View>
-					<Text style={styles.td_item_last}>{item.price}</Text>
-					<Text style={styles.td_item}>{item.traded_volumn}</Text>
-					<View style={[styles.td_item_last]}>
-						<TouchableOpacity onPress={() => this._toggle_bookmark(item.symbol)}>
-							<Text style={[common_styles.justifyCenter, styles.percent_change_down, (item.change >= 0) && styles.percent_change_up]}>{Utils.isEmpty(item.change)?'0':item.change}</Text>
-						</TouchableOpacity>
-					</View>
-					<View>
-						<TouchableOpacity onPress={() => this._toggle_bookmark(item.symbol)}>
-						{this.state.bookmarked_coins[item.symbol] &&
-							<Icon name="ios-bookmark" style={[common_styles.greenColor]}/>
-						}
-						{!this.state.bookmarked_coins[item.symbol] &&
-							<Icon name="ios-bookmark" style={[common_styles.grayColor]}/>
-						}
-						</TouchableOpacity>
-					</View>
+			<View style={[styles.list_item, common_styles.fetch_row, item.idx%2==0 && styles.odd_item]} key={item.symbol}>
+				<View style={styles.td_item_name}>
+					<Text style={styles.coin_name}>{item.name}</Text>
+					<Text>{item.symbol}</Text>
 				</View>
+				<Text style={styles.td_item_last}>{item.price}</Text>
+				<Text style={styles.td_item}>{item.traded_volumn}</Text>
+				<View style={[styles.td_item_last]}>
+					<TouchableOpacity onPress={() => this._toggle_bookmark(item.symbol)}>
+						<Text style={[common_styles.justifyCenter, styles.percent_change_down, (item.change >= 0) && styles.percent_change_up]}>{Utils.isEmpty(item.change)?'0':item.change}</Text>
+					</TouchableOpacity>
+				</View>
+				<View>
+					<TouchableOpacity onPress={() => this._toggle_bookmark(item.full_symbol)}>
+					{this.state.bookmarked_coins[item.full_symbol] &&
+						<Icon name="ios-bookmark" style={[common_styles.greenColor]}/>
+					}
+					{!this.state.bookmarked_coins[item.full_symbol] &&
+						<Icon name="ios-bookmark" style={[common_styles.grayColor]}/>
+					}
+					</TouchableOpacity>
+				</View>
+			</View>
 		);
 		//
-		_get_data_tradingview = () => {
-			return;
+		_get_data_tradingview = (coin_list, coin_list_length) => {
+			Utils.xlog('coin_list', coin_list);
 			var params = {
 					"filter": [
 						{
@@ -95,12 +107,17 @@ class Bookmark extends BaseScreen {
 					"options": {
 						"lang": "en"
 					},
+					"symbols": {
+				    "query": {
+				      "types": []
+				    },
+				    "tickers":
+				      coin_list
+				  },
 					"columns": [
 						"crypto_code",
 						"sector",
 						"close",
-						"market_cap_calc",
-						"total_shares_outstanding",
 						"total_value_traded",
 						"change"
 						],
@@ -109,16 +126,14 @@ class Bookmark extends BaseScreen {
 						"sortOrder": "desc"
 					},
 					"range": [
-						this.state.offset,
-						this.state.offset + C_Const.PAGE_LEN
+						0,
+						coin_list_length
 					]
 				};
 				var extra_headers = {
 					'Content-Type': 'application/json'
 				};
 				var me = this;
-			this.setState({loading_indicator_state: true}, () => {
-				Utils.xlog('Begin get price from server from offset: ', me.state.offset);
 				RequestData.sentPostRequestWithExtraHeaders(API_URI.GET_CURRENT_PRICE,
 					extra_headers, params, (detail, error) => {
 						// Utils.xlog('detail', detail);
@@ -126,28 +141,18 @@ class Bookmark extends BaseScreen {
 							if (detail.totalCount){
 								me.setState({total: detail.totalCount});
 								var item;
-								var len = 0;
 								for (var i=0; i<detail.data.length; i++){
 									item = detail.data[i].d;
 									me.state.data_list.push({
 										idx: me.state.data_list.length,	//index
+										full_symbol: detail.data[i].s,	//"BITSTAMP:BTCUSD" used in Search
 										index: item[0],
 										name: item[1],
 										symbol: item[0],
 										price: Utils.number_to_float(item[2]),
-										change: Utils.number_to_float(item[6]),
-										traded_volumn: Utils.shorten_big_num(item[5])
+										traded_volumn: Utils.shorten_big_num(item[3]),
+										change: Utils.number_to_float(item[4])
 									});
-									len++;
-								}
-								//save to cache
-								store.update(C_Const.STORE_KEY.LATEST_PRICE_DATA, {d:me.state.data_list});
-								store.update(C_Const.STORE_KEY.LATEST_PRICE_TIME, {t: Utils.get_current_timestamp()});
-								if (len < C_Const.PAGE_LEN){
-									//no more
-									this.setState({isShowMore: false});
-								} else {
-									this.setState({isShowMore: true});  //maybe have more
 								}
 							}
 						} else if (error){
@@ -155,7 +160,6 @@ class Bookmark extends BaseScreen {
 						}
 						me.setState({loading_indicator_state: false});
 					});
-			});
 			//timeout of waiting request
 			setTimeout(() => {
 				if (this.state.loading_indicator_state){
@@ -165,11 +169,7 @@ class Bookmark extends BaseScreen {
 		}
 		//
 		_load_more = () => {
-			if (!this.state.loading_indicator_state && this.state.isShowMore){
-				this.setState({offset: this.state.offset + C_Const.PAGE_LEN}, () => {
-					this._get_data_tradingview();
-				});
-			}
+
 		};
 		//
 		_open_search = () => {
@@ -179,6 +179,27 @@ class Bookmark extends BaseScreen {
 		_refresh_list = () =>{};
 		_on_go_back = () => {
 			this.props.navigation.goBack();
+		}
+		//set/remove symbol
+		_toggle_bookmark = (full_symbol) =>{
+			if (this.state.loading_indicator_state){
+				return;
+			}
+			var bookmarked_coins = Utils.cloneObj(this.state.bookmarked_coins);
+			bookmarked_coins[full_symbol] = !bookmarked_coins[full_symbol];
+			var me = this;
+			//save back to store
+			store.update(C_Const.STORE_KEY.BOOKMARKED_COINS, {d:bookmarked_coins});
+			this.setState({loading_indicator_state: true, bookmarked_coins: bookmarked_coins}, () => {
+				//clear UI
+
+				//inform Homepage
+
+				//
+				setTimeout(() => {
+					me.setState({loading_indicator_state: false});  //stop loading
+				}, 200);
+			});
 		}
 		//==========
 		render() {
