@@ -27,11 +27,12 @@ class Market extends BaseScreen {
 		}
 		//
 		componentDidMount() {
+			this._test();
 			//get bookmarked icons
 			var me = this;
 			store.get(C_Const.STORE_KEY.BOOKMARKED_COINS)
 			.then(saved_coins => {
-				Utils.xlog('saved_coins', saved_coins.d);
+				// Utils.xlog('saved_coins', saved_coins.d);
 				if (saved_coins!=null && saved_coins.d!=null){
 					me.setState({bookmarked_coins: saved_coins.d});
 				}
@@ -67,10 +68,14 @@ class Market extends BaseScreen {
 			});
 		}
 		//
+		_test = () =>{
+
+		}
+		//
 		_keyExtractor = (item) => item.index;
 		//render the list. MUST use "item" as param
 		_renderItem = ({item}) => (
-				<View style={[styles.list_item, common_styles.fetch_row, item.idx%2==0 && styles.odd_item]} key={item.symbol}>
+				<View style={[styles.list_item, common_styles.fetch_row, item.idx%2==0 && styles.odd_item]} key={item.key}>
 					<View style={styles.td_item_name}>
 						<Text style={styles.coin_name}>{item.name}</Text>
 						<Text>{item.symbol}</Text>
@@ -140,6 +145,7 @@ class Market extends BaseScreen {
 				RequestData.sentPostRequestWithExtraHeaders(API_URI.GET_CURRENT_PRICE,
 					extra_headers, params, (detail, error) => {
 						// Utils.xlog('detail', detail);
+						// Utils.xlog('error', error);
 						if (detail){
 							if (detail.totalCount){
 								me.setState({total: detail.totalCount});
@@ -149,6 +155,7 @@ class Market extends BaseScreen {
 									item = detail.data[i].d;
 									me.state.data_list.push({
 										idx: me.state.data_list.length,	//index
+										key: detail.data[i].s + Math.random(),
 										full_symbol: detail.data[i].s,	//"BITSTAMP:BTCUSD" used in Search
 										index: item[0],
 										name: item[1],

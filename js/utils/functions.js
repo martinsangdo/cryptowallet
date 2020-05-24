@@ -174,7 +174,7 @@ exports.makeApplink = function (file_src) {
     return setting.SERVER_URL + file_src;
 };
 exports.get_current_timestamp = function () {
-    return Moment().unix();
+    return Moment().unix() * 1000;  //milliseconds
 };
 //convert date time to duration likes "xx ago"
 exports.getDurationTime = function (target_date, lang_info){

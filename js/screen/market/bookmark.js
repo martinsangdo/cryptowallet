@@ -61,7 +61,7 @@ class Bookmark extends BaseScreen {
 		_keyExtractor = (item) => item.index;
 		//render the list. MUST use "item" as param
 		_renderItem = ({item}) => (
-			<View style={[styles.list_item, common_styles.fetch_row, item.idx%2==0 && styles.odd_item]} key={item.symbol}>
+			<View style={[styles.list_item, common_styles.fetch_row, item.idx%2==0 && styles.odd_item]} key={item.key}>
 				<View style={styles.td_item_name}>
 					<Text style={styles.coin_name}>{item.name}</Text>
 					<Text>{item.symbol}</Text>
@@ -144,6 +144,7 @@ class Bookmark extends BaseScreen {
 									item = detail.data[i].d;
 									me.state.data_list.push({
 										idx: me.state.data_list.length,	//index
+										key: detail.data[i].s + Math.random(),
 										full_symbol: detail.data[i].s,	//"BITSTAMP:BTCUSD" used in Search
 										index: item[0],
 										name: item[1],
