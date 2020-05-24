@@ -49,7 +49,7 @@ class QRCode extends BaseScreen {
 								</TouchableOpacity>
 								</Left>
 								<Body style={styles.headerBody}>
-									<Text style={[common_styles.bold, common_styles.default_font_color]}>{this.state.code} Address</Text>
+									<Text style={[common_styles.bold, common_styles.default_font_color]}>My {this.state.code} Address</Text>
 								</Body>
 								<Right style={[common_styles.headerRight, {flex:0.15}]}>
 								</Right>

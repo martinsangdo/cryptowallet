@@ -27,7 +27,7 @@ class Market extends BaseScreen {
 		}
 		//
 		componentDidMount() {
-			this._test();
+			// this._test();
 			//get bookmarked icons
 			var me = this;
 			store.get(C_Const.STORE_KEY.BOOKMARKED_COINS)
@@ -69,7 +69,16 @@ class Market extends BaseScreen {
 		}
 		//
 		_test = () =>{
+			var url = 'https://query1.finance.yahoo.com/v7/finance/download/OMG-USD?period1=1583107200&period2=1590335154&interval=1d&events=history';
+			RequestData.sentPlainGetRequest(url, (detail, error) => {
+					Utils.xlog('detail', detail);
+					//parse data
+					if (Utils.isEmpty(detail)){
+						//todo
+					}
+					var history_list = [];
 
+				});
 		}
 		//
 		_keyExtractor = (item) => item.index;

@@ -120,3 +120,19 @@ exports.sentGetRequestWithHeader = function (urlString, headers, callback) {
 						callback(null, error);
 				});
 };
+//raw response, not json
+exports.sentPlainGetRequest = function (urlString, callback) {
+		fetch(urlString, {
+				method: 'GET'
+		}).then((response) => {
+			return response;
+    }).then((response) => {
+      if (response['ok'] && response['status'] == 200){
+        callback(response['_bodyText'], null);
+      } else {
+        callback(null, "Invalid repsonse");
+      }
+		}).catch((error) => {
+			callback(null, error);
+		});
+};
