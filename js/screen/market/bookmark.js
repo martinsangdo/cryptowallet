@@ -17,46 +17,33 @@ class Bookmark extends BaseScreen {
 		constructor(props) {
 			super(props);
 			this.state = {
-				offset: 0,
 				data_list: [],
-				loading_indicator_state: true,
-				isShowMore: false,
-				total: 0,
-				jwt: ''
+				bookmarked_coins: {},	//get from Homepage or cache
+				loading_indicator_state: true
 			};
 		}
 		//
 		componentDidMount() {
-			//get latest price from cache, if any
+			var bookmarked_coins = this.props.navigation.state.params.bookmarked_coins;
+			Utils.xlog('params', bookmarked_coins);
 			var me = this;
-			store.get(C_Const.STORE_KEY.LATEST_PRICE_TIME)
-			.then(saved_time => {
-				if (saved_time!=null){
-					//saved last time
-					if (Utils.get_current_timestamp() - saved_time.t >= C_Const.LATEST_PRICE_CACHE_DURATION){
-						me._get_data_tradingview();
-					} else {
-						//get data from cache
-						store.get(C_Const.STORE_KEY.LATEST_PRICE_DATA)
-						.then(saved_data => {
-							if (saved_data!=null){
-								//saved cache
-								me.setState({data_list: saved_data.d,
-									loading_indicator_state: false,
-									total: saved_data.d.length,
-									isShowMore:true,
-									offset:saved_data.d.length>0?saved_data.d.length-1:0});
-							} else {
-								//no cache, get from server directly
-								me._get_data_tradingview();
-							}
+			if (bookmarked_coins == null){
+				//try to get from cache
+				store.get(C_Const.STORE_KEY.BOOKMARKED_COINS)
+				.then(saved_coins => {
+					if (saved_coins!=null && saved_coins.d!=null){
+						me.setState({bookmarked_coins: saved_coins.d}, ()=>{
+							me._get_data_tradingview();
 						});
+					} else {
+						me.setState({loading_indicator_state: false});
 					}
-				} else {
-					//no cache, get from server directly
+				});
+			} else {
+				this.setState({bookmarked_coins: bookmarked_coins}, ()=>{
 					me._get_data_tradingview();
-				}
-			});
+				});
+			}
 		}
 		//
 		_keyExtractor = (item) => item.index;
@@ -67,13 +54,28 @@ class Bookmark extends BaseScreen {
 						<Text style={styles.coin_name}>{item.name}</Text>
 						<Text>{item.symbol}</Text>
 					</View>
-					<Text style={styles.td_item}>{item.price}</Text>
+					<Text style={styles.td_item_last}>{item.price}</Text>
 					<Text style={styles.td_item}>{item.traded_volumn}</Text>
-					<Text style={[styles.td_item, common_styles.justifyCenter, styles.percent_change_down, (item.change >= 0) && styles.percent_change_up]}>{item.change} %</Text>
+					<View style={[styles.td_item_last]}>
+						<TouchableOpacity onPress={() => this._toggle_bookmark(item.symbol)}>
+							<Text style={[common_styles.justifyCenter, styles.percent_change_down, (item.change >= 0) && styles.percent_change_up]}>{Utils.isEmpty(item.change)?'0':item.change}</Text>
+						</TouchableOpacity>
+					</View>
+					<View>
+						<TouchableOpacity onPress={() => this._toggle_bookmark(item.symbol)}>
+						{this.state.bookmarked_coins[item.symbol] &&
+							<Icon name="ios-bookmark" style={[common_styles.greenColor]}/>
+						}
+						{!this.state.bookmarked_coins[item.symbol] &&
+							<Icon name="ios-bookmark" style={[common_styles.grayColor]}/>
+						}
+						</TouchableOpacity>
+					</View>
 				</View>
 		);
 		//
 		_get_data_tradingview = () => {
+			return;
 			var params = {
 					"filter": [
 						{
@@ -96,7 +98,7 @@ class Bookmark extends BaseScreen {
 					"columns": [
 						"crypto_code",
 						"sector",
-											"close",
+						"close",
 						"market_cap_calc",
 						"total_shares_outstanding",
 						"total_value_traded",
@@ -175,6 +177,9 @@ class Bookmark extends BaseScreen {
 		};
 		//
 		_refresh_list = () =>{};
+		_on_go_back = () => {
+			this.props.navigation.goBack();
+		}
 		//==========
 		render() {
 			{/* define how to render country list */}
@@ -183,9 +188,19 @@ class Bookmark extends BaseScreen {
 						<Container padder>
 							<Header style={[common_styles.header, common_styles.whiteBg]}>
 								<Left style={[common_styles.headerLeft, {flex:0.15}]}>
+								<TouchableOpacity onPress={() => this._on_go_back()}>
+									<View style={styles.left_row}>
+										<View style={[common_styles.float_center]}>
+											<Icon name="ios-arrow-back" style={common_styles.default_font_color}/>
+										</View>
+										<View style={[common_styles.margin_l_10, common_styles.float_center]}>
+											<Text uppercase={false} style={[common_styles.default_font_color]}>Back</Text>
+										</View>
+									</View>
+								</TouchableOpacity>
 								</Left>
 								<Body style={styles.headerBody}>
-									<Text style={[common_styles.bold, common_styles.default_font_color]}>Current market</Text>
+									<Text style={[common_styles.bold, common_styles.default_font_color]}>Bookmarked coins</Text>
 								</Body>
 								<Right style={[common_styles.headerRight, {flex:0.15}]}>
 								</Right>
@@ -197,9 +212,15 @@ class Bookmark extends BaseScreen {
 							</View>
 							<View style={[styles.tbl_header, common_styles.mainColorBg]}>
 								<Text style={[styles.td_item_name, common_styles.bold]}>Name</Text>
-								<Text style={[styles.td_item, common_styles.bold]}>Price (USD)</Text>
+								<View style={[styles.td_item_last]}>
+									<Text style={[common_styles.bold]}>Price</Text>
+									<Text>USD</Text>
+								</View>
 								<Text style={[styles.td_item, common_styles.bold]}>Traded Vol</Text>
-								<Text style={[styles.td_item, common_styles.justifyCenter, common_styles.bold]}>Change</Text>
+								<View style={[styles.td_item_last]}>
+									<Text style={[common_styles.bold]}>Change</Text>
+									<Text>%</Text>
+								</View>
 							</View>
 							<View style={{flex:1}}>
 								<FlatList

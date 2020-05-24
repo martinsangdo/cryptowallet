@@ -77,8 +77,8 @@ export const C_Const = {
     LATEST_NEWS_KEY_LIST:'LATEST_NEWS_KEY_LIST',
     BOOKMARKED_COINS: 'BOOKMARK_COINS'  //save bookmarked coins
 	},
-  LATEST_PRICE_CACHE_DURATION: 5*60*1000*1000,  //5 mins
-  LATEST_NEWS_CACHE_DURATION: 60*60*1000*1000,  //1 hour
+  LATEST_PRICE_CACHE_DURATION: 5*60*1*1000,  //5 mins
+  LATEST_NEWS_CACHE_DURATION: 60*60*1*1000,  //1 hour
 	ACTIVE_COLOR: '#008da9',
 	ICON_URL: 'https://blockbod.com/public/blockbod/img/logo.jpeg',	//empty image in News
 	TERM_URL: 'https://www.coinbase.com/about',

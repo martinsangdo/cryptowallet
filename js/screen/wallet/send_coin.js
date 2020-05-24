@@ -123,7 +123,7 @@ class SendCoin extends BaseScreen {
 									</TouchableOpacity>
 								</Left>
 								<Body style={styles.headerBody}>
-										<Text uppercase={false} style={[[common_styles.bold, common_styles.default_font_color]]}>Send {this.state.currency}</Text>
+										<Text uppercase={false} style={[[common_styles.bold, common_styles.default_font_color]]}>Send {this.state.currency} to someone</Text>
 								</Body>
 								<Right style={[common_styles.headerRight, {flex:0.15}]}>
 

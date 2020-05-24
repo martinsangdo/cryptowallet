@@ -163,7 +163,7 @@ class News extends BaseScreen {
     //
     _open_detail = (index) => {
       this.props.navigation.navigate('ArticleDetail', {
-				detail: this.state.data_list[index],
+				detail: this.state.data_list[index]
 			});
     };
 		//

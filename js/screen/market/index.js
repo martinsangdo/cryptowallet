@@ -83,11 +83,11 @@ class Market extends BaseScreen {
 						</TouchableOpacity>
 					</View>
 					<View>
-						<TouchableOpacity onPress={() => this._toggle_bookmark(item.symbol)}>
-						{this.state.bookmarked_coins[item.symbol] &&
+						<TouchableOpacity onPress={() => this._toggle_bookmark(item.full_symbol)}>
+						{this.state.bookmarked_coins[item.full_symbol] &&
 							<Icon name="ios-bookmark" style={[common_styles.greenColor]}/>
 						}
-						{!this.state.bookmarked_coins[item.symbol] &&
+						{!this.state.bookmarked_coins[item.full_symbol] &&
 							<Icon name="ios-bookmark" style={[common_styles.grayColor]}/>
 						}
 						</TouchableOpacity>
@@ -118,9 +118,7 @@ class Market extends BaseScreen {
 					"columns": [
 						"crypto_code",
 						"sector",
-											"close",
-						"market_cap_calc",
-						"total_shares_outstanding",
+						"close",
 						"total_value_traded",
 						"change"
 						],
@@ -151,12 +149,13 @@ class Market extends BaseScreen {
 									item = detail.data[i].d;
 									me.state.data_list.push({
 										idx: me.state.data_list.length,	//index
+										full_symbol: detail.data[i].s,	//"BITSTAMP:BTCUSD" used in Search
 										index: item[0],
 										name: item[1],
 										symbol: item[0],
 										price: Utils.number_to_float(item[2]),
-										change: Utils.number_to_float(item[6]),
-										traded_volumn: Utils.shorten_big_num(item[5])
+										traded_volumn: Utils.shorten_big_num(item[3]),
+										change: Utils.number_to_float(item[4])
 									});
 									len++;
 								}
@@ -198,12 +197,12 @@ class Market extends BaseScreen {
 		//
 		_refresh_list = () =>{};
 		//set/remove symbol
-		_toggle_bookmark = (symbol) =>{
+		_toggle_bookmark = (full_symbol) =>{
 			if (this.state.loading_indicator_state){
 				return;
 			}
 			var bookmarked_coins = Utils.cloneObj(this.state.bookmarked_coins);
-			bookmarked_coins[symbol] = !bookmarked_coins[symbol];
+			bookmarked_coins[full_symbol] = !bookmarked_coins[full_symbol];
 			var me = this;
 			//save back to store
 			store.update(C_Const.STORE_KEY.BOOKMARKED_COINS, {d:bookmarked_coins});
@@ -211,6 +210,12 @@ class Market extends BaseScreen {
 				setTimeout(() => {
 					me.setState({loading_indicator_state: false});  //stop loading
 				}, 200);
+			});
+		}
+		//
+		_open_bookmark_page = () =>{
+			this.props.navigation.navigate('Bookmark', {
+				bookmarked_coins: this.state.bookmarked_coins
 			});
 		}
 		//==========
@@ -226,6 +231,9 @@ class Market extends BaseScreen {
 									<Text style={[common_styles.bold, common_styles.default_font_color]}>Current market</Text>
 								</Body>
 								<Right style={[common_styles.headerRight, {flex:0.15}]}>
+									<TouchableOpacity onPress={() => this._open_bookmark_page()}>
+										<Icon name="ios-bookmark" style={[common_styles.greenColor]}/>
+									</TouchableOpacity>
 								</Right>
 							</Header>
 							{/* END header */}
