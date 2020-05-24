@@ -25,7 +25,7 @@ class Bookmark extends BaseScreen {
 		//
 		componentDidMount() {
 			var bookmarked_coins = this.props.navigation.state.params.bookmarked_coins;
-			Utils.xlog('params', bookmarked_coins);
+			// Utils.xlog('params', bookmarked_coins);
 			var me = this;
 			if (bookmarked_coins == null){
 				//try to get from cache
@@ -87,7 +87,6 @@ class Bookmark extends BaseScreen {
 		);
 		//
 		_get_data_tradingview = (coin_list, coin_list_length) => {
-			Utils.xlog('coin_list', coin_list);
 			var params = {
 					"filter": [
 						{
@@ -192,9 +191,15 @@ class Bookmark extends BaseScreen {
 			store.update(C_Const.STORE_KEY.BOOKMARKED_COINS, {d:bookmarked_coins});
 			this.setState({loading_indicator_state: true, bookmarked_coins: bookmarked_coins}, () => {
 				//clear UI
-
+				var new_data_list = me.state.data_list;
+				for (var i=new_data_list.length-1; i>=0; i--){
+					if (new_data_list[i]['full_symbol'] == full_symbol){
+						Utils.removeArrayAtIndex(new_data_list, i);
+					}
+				}
+				me.setState({data_list: new_data_list});
 				//inform Homepage
-
+				me.props.navigation.state.params._update_bookmarked_coins(bookmarked_coins);
 				//
 				setTimeout(() => {
 					me.setState({loading_indicator_state: false});  //stop loading

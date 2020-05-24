@@ -215,8 +215,15 @@ class Market extends BaseScreen {
 		//
 		_open_bookmark_page = () =>{
 			this.props.navigation.navigate('Bookmark', {
-				bookmarked_coins: this.state.bookmarked_coins
+				bookmarked_coins: this.state.bookmarked_coins,
+				_update_bookmarked_coins: this._update_bookmarked_coins
 			});
+		}
+		//
+		_update_bookmarked_coins = (new_bookmarked_coins) =>{
+			if (new_bookmarked_coins != null){
+				this.setState({bookmarked_coins: new_bookmarked_coins});
+			}
 		}
 		//==========
 		render() {
