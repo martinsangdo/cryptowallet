@@ -6,23 +6,14 @@ import {Container, Content, Button, Text, Header, Body, Left, Right, Icon} from 
 import BaseScreen from "../../base/BaseScreen.js";
 import common_styles from "../../../css/common";
 import styles from "./style";    //CSS defined here
-import Utils from "../../utils/functions";
-import {C_Const} from '../../utils/constant';
 import AutoHTML from 'react-native-autoheight-webview';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import firebase from 'react-native-firebase';
 
-import RequestData from '../../utils/https/RequestData';
-import {API_URI} from '../../utils/api_uri';
 import Spinner from 'react-native-loading-spinner-overlay';
-import {setting} from "../../utils/config";
-import DeviceInfo from 'react-native-device-info';
 
 class ArticleDetail extends BaseScreen {
 		constructor(props) {
 			super(props);
-			this.ref = firebase.firestore().collection(C_Const.COLLECTION_NAME.BOOKMARK);
 			this.state = {
 				title: '',
 				content: '',
@@ -39,11 +30,12 @@ class ArticleDetail extends BaseScreen {
 				link: this.props.navigation.state.params.detail.link,
 				title: this.props.navigation.state.params.detail.title,
         content: content
+			}, ()=>{
+				//wait content to render
+				setTimeout(()=>{
+					this.setState({loading_indicator_state:false});
+				}, 3000);
 			});
-			//wait content to render
-			setTimeout(()=>{
-				this.setState({loading_indicator_state:false});
-			}, 3000);
 		}
 		//
 		_on_go_back = () => {
@@ -59,28 +51,6 @@ class ArticleDetail extends BaseScreen {
 					// Android only:
 					dialogTitle: 'Choose app'
 			});
-		};
-		//bookmark / unbookmark article
-		_toggle_bookmark = () => {
-			/*
-			this.ref.add({
-					device_id: me.state.user_id,
-					link: this.state.link,
-					coinbase_addr_id: detail.data.id,
-					address: detail.data.address,
-					code: Coinbase.COIN_LIST[me.state.coin_index].code
-			})
-			.then(function(docRef) {
-					if (docRef.id){
-						me.setState({err_mess: C_Const.TEXT.MESS_CREATE_WALLET_OK, isSubmitting: false, loading_indicator_state: false});
-					} else {
-						me.setState({err_mess: C_Const.TEXT.ERR_SERVER, isSubmitting: false, loading_indicator_state: false});
-					}
-			})
-			.catch(function(error) {
-					me.setState({err_mess: C_Const.TEXT.ERR_SERVER, isSubmitting: false, loading_indicator_state: false});
-			});
-			*/
 		};
 	 //==========
 		render() {

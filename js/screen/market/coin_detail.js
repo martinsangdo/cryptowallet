@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {View, TouchableOpacity, Share, Dimensions, Platform} from "react-native";
+import {View, TouchableOpacity, Share, Dimensions, FlatList} from "react-native";
 
 import {Container, Content, Button, Text, Header, Body, Left, Right, Icon} from "native-base";
 
@@ -8,80 +8,87 @@ import common_styles from "../../../css/common";
 import styles from "./style";    //CSS defined here
 import Utils from "../../utils/functions";
 import {C_Const} from '../../utils/constant';
-import AutoHTML from 'react-native-autoheight-webview';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import firebase from 'react-native-firebase';
 
 import RequestData from '../../utils/https/RequestData';
 import {API_URI} from '../../utils/api_uri';
 import Spinner from 'react-native-loading-spinner-overlay';
-import {setting} from "../../utils/config";
-import DeviceInfo from 'react-native-device-info';
 
 class CoinDetail extends BaseScreen {
 		constructor(props) {
 			super(props);
-			this.ref = firebase.firestore().collection(C_Const.COLLECTION_NAME.BOOKMARK);
 			this.state = {
-				title: '',
-				content: '',
-				link: '',
-				is_bookmarked: false,
-				loading_indicator_state: true
+				full_symbol: '',
+				name: '',
+				loading_indicator_state: true,
+				data_list: []
 			};
 		}
 		//
 		componentDidMount() {
-      var content = this.props.navigation.state.params.detail.content;
-      content = content.replace('\r\n', '<br/>').replace('\n', '<br/>').replace('\r', '<br/>');
-			this.setState({
-				link: this.props.navigation.state.params.detail.link,
-				title: this.props.navigation.state.params.detail.title,
-        content: content
-			});
-			//wait content to render
-			setTimeout(()=>{
+      var full_symbol = this.props.navigation.state.params.full_symbol;
+			if (!Utils.isEmpty(full_symbol)){
+				this.setState({full_symbol:full_symbol, name: this.props.navigation.state.params.name},()=>{
+					this._load_data(full_symbol);
+				});
+			} else {
 				this.setState({loading_indicator_state:false});
-			}, 3000);
+			}
 		}
+		//
+		_keyExtractor = (item) => item.idx;
+		//render the list. MUST use "item" as param
+		_renderItem = ({item}) => (
+				<View style={[styles.list_item, common_styles.fetch_row, item.idx%2==0 && styles.odd_item]} key={item.idx}>
+					<Text style={styles.td_item}>{item.date}</Text>
+					<Text style={styles.td_item}>{item.price}</Text>
+					<Text style={styles.td_item}>{item.traded_volumn}</Text>
+				</View>
+		);
 		//
 		_on_go_back = () => {
 			this.props.navigation.goBack();
 		}
-		//==========
-		_share_link = () => {
-				Share.share({
-					title: this.state.title,
-					message: this.state.link,
-					subject: 'Share Link' //  for email
-				}, {
-					// Android only:
-					dialogTitle: 'Choose app'
-			});
-		};
-		//bookmark / unbookmark article
-		_toggle_bookmark = () => {
-			/*
-			this.ref.add({
-					device_id: me.state.user_id,
-					link: this.state.link,
-					coinbase_addr_id: detail.data.id,
-					address: detail.data.address,
-					code: Coinbase.COIN_LIST[me.state.coin_index].code
-			})
-			.then(function(docRef) {
-					if (docRef.id){
-						me.setState({err_mess: C_Const.TEXT.MESS_CREATE_WALLET_OK, isSubmitting: false, loading_indicator_state: false});
-					} else {
-						me.setState({err_mess: C_Const.TEXT.ERR_SERVER, isSubmitting: false, loading_indicator_state: false});
+		//
+		_load_data = (full_symbol) =>{
+			var current_time = Math.floor(Utils.get_current_timestamp()) / 1000;
+			var url = 'https://query1.finance.yahoo.com/v7/finance/download/'+full_symbol+
+			'?period1='+(current_time-C_Const.HISTORY_PRICE_DURATION)+
+			'&period2='+current_time+'&interval=1d&events=history';
+			// Utils.xlog('url', url);
+			RequestData.sentPlainGetRequest(url, (detail, error) => {
+					//parse data
+					if (!Utils.isEmpty(detail)){
+						var history_list_lines = detail.split('\n');
+						// Utils.xlog('history_list_lines', history_list_lines);
+						for (var i=history_list_lines.length - 1; i>0; i--){
+							if (!Utils.isEmpty(history_list_lines[i])){
+								item = history_list_lines[i].split(',');
+								if (item.length >= 7){
+									this.state.data_list.push({
+										idx: i,	//index
+										key: item[0],	//date
+										date: item[0],
+										price: Utils.number_to_float(parseFloat(item[4])),
+										traded_volumn: Utils.shorten_big_num(parseFloat(item[6]))
+									});
+								}
+							}
+						}
+						this.setState({loading_indicator_state:false});
 					}
-			})
-			.catch(function(error) {
-					me.setState({err_mess: C_Const.TEXT.ERR_SERVER, isSubmitting: false, loading_indicator_state: false});
-			});
-			*/
+				});
+				//timeout of waiting request
+				setTimeout(() => {
+					if (this.state.loading_indicator_state){
+						this.setState({loading_indicator_state: false});  //stop loading
+					}
+				}, C_Const.MAX_WAIT_RESPONSE);
+		}
+		_load_more = () => {
+
 		};
+		//
+		_refresh_list = () =>{};
 	 //==========
 		render() {
 				return (
@@ -99,34 +106,33 @@ class CoinDetail extends BaseScreen {
 										</View>
 									</TouchableOpacity>
 								</Left>
-								<Right style={[common_styles.headerRight]}>
-									<TouchableOpacity style={common_styles.margin_r_10} onPress={() => this._share_link()} style={{marginRight:10, justifyContent: 'flex-start', marginBottom:3}}>
-										<SimpleLineIcons name="share" style={[common_styles.default_font_color, {fontSize:21}]}/>
-									</TouchableOpacity>
-								</Right>
+								<Body style={styles.headerBody}>
+									<Text style={[common_styles.bold, common_styles.default_font_color]}>{this.state.name}</Text>
+								</Body>
 							</Header>
 							{/* END header */}
-							<Content>
 								<Spinner visible={this.state.loading_indicator_state} textStyle={common_styles.whiteColor} />
 								{/* fake webview to auto calculate height */}
-								<View>
-										<AutoHTML
-											autoHeight={true}
-											scalesPageToFit={true}
-											source={{html:''}} />
-								</View>
 								<View style={[common_styles.padding_20]}>
-									<Text style={[common_styles.bold, {fontSize:18}]}>{this.state.title}</Text>
+									<Text style={[common_styles.bold, {fontSize:18}]}>Historial Price in past 90 days</Text>
 								</View>
-								<View style={{margin:10}}>
-									<AutoHTML
-										scalesPageToFit={Platform.OS === 'android' ? true : false}
-										autoHeight={true}
-										style={{ width: Dimensions.get('window').width - 10 }}
-										source={{baseUrl: '', html: this.state.content}}
-										customStyle={'img {max-width:100% !important;height:auto;} body {font-family:arial;} p,span,a {font-size:13.5pt !important;}'} />
+								<View style={[styles.tbl_header, common_styles.mainColorBg]}>
+									<Text style={[styles.td_item, common_styles.bold]}>Date</Text>
+									<Text style={[styles.td_item, common_styles.bold]}>Price (USD)</Text>
+									<Text style={[styles.td_item, common_styles.bold]}>Traded Vol</Text>
 								</View>
-							</Content>
+								<View style={{flex:1}}>
+									<FlatList
+												data={this.state.data_list}
+												renderItem={this._renderItem}
+												refreshing={false}
+												onRefresh={() => this._refresh_list()}
+												onEndReachedThreshold={0.5}
+												keyExtractor={this._keyExtractor}
+												onEndReached={({ distanceFromEnd }) => this._load_more()}
+												initialNumToRender={20}
+											/>
+								</View>
 						</Container>
 				);
 		}

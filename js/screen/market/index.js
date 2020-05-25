@@ -27,7 +27,6 @@ class Market extends BaseScreen {
 		}
 		//
 		componentDidMount() {
-			// this._test();
 			//get bookmarked icons
 			var me = this;
 			store.get(C_Const.STORE_KEY.BOOKMARKED_COINS)
@@ -68,17 +67,11 @@ class Market extends BaseScreen {
 			});
 		}
 		//
-		_test = () =>{
-			var url = 'https://query1.finance.yahoo.com/v7/finance/download/OMG-USD?period1=1583107200&period2=1590335154&interval=1d&events=history';
-			RequestData.sentPlainGetRequest(url, (detail, error) => {
-					Utils.xlog('detail', detail);
-					//parse data
-					if (Utils.isEmpty(detail)){
-						//todo
-					}
-					var history_list = [];
-
-				});
+		_coin_detail = (symbol, name)=>{
+			this.props.navigation.navigate('CoinDetail', {
+				full_symbol: symbol+"-USD",
+				name: name
+			});
 		}
 		//
 		_keyExtractor = (item) => item.index;
@@ -86,8 +79,10 @@ class Market extends BaseScreen {
 		_renderItem = ({item}) => (
 				<View style={[styles.list_item, common_styles.fetch_row, item.idx%2==0 && styles.odd_item]} key={item.key}>
 					<View style={styles.td_item_name}>
-						<Text style={styles.coin_name}>{item.name}</Text>
-						<Text>{item.symbol}</Text>
+						<TouchableOpacity onPress={() => this._coin_detail(item.symbol, item.name)}>
+							<Text style={styles.coin_name}>{item.name}</Text>
+							<Text>{item.symbol}</Text>
+						</TouchableOpacity>
 					</View>
 					<Text style={styles.td_item_last}>{item.price}</Text>
 					<Text style={styles.td_item}>{item.traded_volumn}</Text>
