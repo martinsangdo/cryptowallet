@@ -36,7 +36,8 @@ class Wallet extends BaseScreen {
 				isShowMore: false,
 				coin_list: {},		//activating coins
 				is_logined: false,		//indicate user logined or not
-				address_list: {}		//addresses saved in DB
+				address_list: {},		//addresses saved in DB
+				logined_user_id: ''
 			};
 		}
 		//
@@ -103,7 +104,8 @@ class Wallet extends BaseScreen {
 		_open_qr = (code, address) => {
 			this.props.navigation.navigate('QRCode', {
 				address: address,
-				code: code
+				code: code,
+				logined_user_id: this.state.logined_user_id
 			});
 		};
 		//check whether user logined before
@@ -114,7 +116,7 @@ class Wallet extends BaseScreen {
 				// Utils.xlog('user_info', user_info);
 					if (user_info!=null && !Utils.isEmpty(user_info[C_Const.STORE_KEY.USER_ID]) && !Utils.isEmpty(user_info[C_Const.STORE_KEY.EMAIL])){
 						//logined
-						this.setState({is_logined: true});
+						this.setState({is_logined: true, logined_user_id: user_info[C_Const.STORE_KEY.USER_ID]});
 						//convert into showing list
 						Object.keys(this.state.coin_list).forEach(function(db_account_id) {
 							me.state.data_list.push(me.state.coin_list[db_account_id]);
