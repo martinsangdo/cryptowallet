@@ -271,6 +271,10 @@ class Wallet extends BaseScreen {
 							{/* END header */}
 							<Content>
 								<Spinner visible={this.state.loading_indicator_state} textStyle={common_styles.whiteColor} />
+								<View style={common_styles.margin_b_20} />
+								<View style={common_styles.view_align_center}>
+									<Image source={avatar} style={styles.home_avatar}/>
+								</View>
 								{!this.state.is_logined &&
 									<View>
 										<View style={common_styles.view_align_center}>

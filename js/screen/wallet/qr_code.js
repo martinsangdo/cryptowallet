@@ -58,7 +58,7 @@ class QRCode extends BaseScreen {
 							<Content>
 								<View style={common_styles.margin_t_20}/>
 								<View style={common_styles.view_align_center}>
-									<Text style={styles.addr_str}>{this.state.address}</Text>
+									<Text selectable style={styles.addr_str}>{this.state.address}</Text>
 								</View>
 								<View style={common_styles.margin_t_20}/>
 								<View style={common_styles.view_align_center}>

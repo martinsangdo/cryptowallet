@@ -34,7 +34,7 @@ export default {
 	icon_send: {width:'20%'},
 	icon_qr: {width:'10%'},
 	icon: {fontSize:20},
-	addr_str: {fontSize:12},
+	addr_str: {fontSize:14, fontWeight: 'bold'},
 	camera_container: {
     justifyContent: 'center',
     alignItems: 'center',
