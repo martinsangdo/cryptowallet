@@ -58,13 +58,22 @@ class Bookmark extends BaseScreen {
 			}
 		}
 		//
+		_coin_detail = (symbol, name)=>{
+			this.props.navigation.navigate('CoinDetail', {
+				full_symbol: symbol+"-USD",
+				name: name
+			});
+		}
+		//
 		_keyExtractor = (item) => item.index;
 		//render the list. MUST use "item" as param
 		_renderItem = ({item}) => (
 			<View style={[styles.list_item, common_styles.fetch_row, item.idx%2==0 && styles.odd_item]} key={item.key}>
 				<View style={styles.td_item_name}>
-					<Text style={styles.coin_name}>{item.name}</Text>
-					<Text>{item.symbol}</Text>
+					<TouchableOpacity onPress={() => this._coin_detail(item.symbol, item.name)}>
+						<Text style={styles.coin_name}>{item.name}</Text>
+						<Text>{item.symbol}</Text>
+					</TouchableOpacity>
 				</View>
 				<Text style={styles.td_item_last}>{item.price}</Text>
 				<Text style={styles.td_item}>{item.traded_volumn}</Text>
