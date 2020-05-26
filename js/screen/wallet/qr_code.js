@@ -20,10 +20,12 @@ class QRCode extends BaseScreen {
 		super(props);
 		this.ref = firebase.firestore();
 		this.state = {
-			address: '',
+			address: '',	//hidden or real
 			code: '',
+			real_address: '',
 			is_paid: false,
-			loading_indicator_state: true
+			loading_indicator_state: true,
+			logined_user_id: ''
 		};
 	}
 		//like onload event
@@ -31,29 +33,34 @@ class QRCode extends BaseScreen {
 			//check if user paid money, always get data from Firebase
 			var user_collection = this.ref.collection(C_Const.COLLECTION_NAME.USER);
 			var me = this;
-			// Utils.xlog('logined_user_id', this.props.navigation.state.params.logined_user_id);
-			user_collection.doc(this.props.navigation.state.params.logined_user_id).get('').then(function(querySnapshot) {
+			var logined_user_id = this.props.navigation.state.params.logined_user_id;
+			// Utils.xlog('logined_user_id', logined_user_id);
+			user_collection.doc(logined_user_id).get('').then(function(querySnapshot) {
 					if (querySnapshot.size == 0){
 						//there is no user
 						Utils.dlog('There is no user');
 						me.setState({loading_indicator_state: false});
 					} else {
 						//there is user
+						var real_address = me.props.navigation.state.params.address;
 						if (!Utils.isEmpty(querySnapshot.data()['is_paid']) && querySnapshot.data()['is_paid']){
 							//paid
 							me.setState({
-								address: me.props.navigation.state.params.address,
+								real_address: real_address,
+								address: real_address,
 								code: me.props.navigation.state.params.code,
-								is_paid: true, loading_indicator_state: false
+								is_paid: true, loading_indicator_state: false,
+								logined_user_id: logined_user_id
 							});
 						} else {
 							//unpaid, hide the address
-							var real_address = me.props.navigation.state.params.address;
 							var hidden_address = real_address.substring(0, real_address.length - C_Const.HIDDEN_ADDRESS_POSTFIX.length) + C_Const.HIDDEN_ADDRESS_POSTFIX;
 							me.setState({
+								real_address: real_address,
 								address: hidden_address,
 								code: me.props.navigation.state.params.code,
-								is_paid: false, loading_indicator_state: false
+								is_paid: false, loading_indicator_state: false,
+								logined_user_id: logined_user_id
 							});
 						}
 					}
@@ -65,7 +72,23 @@ class QRCode extends BaseScreen {
 		}
 		//
 		_process_payment = () =>{
+			this.props.navigation.navigate('Payment', {
+				logined_user_id: this.state.logined_user_id,
+				_user_paid: this._user_paid
+			});
+		}
+		//trigger when user paid Paypal
+		_user_paid = () => {
+			//update DB
+			var user_collection = this.ref.collection(C_Const.COLLECTION_NAME.USER);
+			user_collection.doc(this.state.logined_user_id).update(
+          {
+            is_paid: true,
+            paid_date: Utils.get_current_timestamp()
+          }).catch(error => {
 
+          });
+			this.setState({address: this.state.real_address, is_paid: true});
 		}
 	 //==========
 		render() {
@@ -109,7 +132,7 @@ class QRCode extends BaseScreen {
 									<View>
 										<View style={common_styles.margin_b_20} />
 										<View style={[common_styles.view_align_center, common_styles.margin_t_20, common_styles.margin_b_20]}>
-											<Text>Unlock your wallet address with only <Text style={common_styles.bold}>10 USD</Text>.</Text>
+											<Text>Unlock your wallet address with only <Text style={common_styles.bold}>12 USD</Text>.</Text>
 										</View>
 										<View style={[common_styles.view_align_center, common_styles.margin_t_20, common_styles.margin_b_20]}>
 											<Text>We accept Paypal, VISA & MASTER.</Text>

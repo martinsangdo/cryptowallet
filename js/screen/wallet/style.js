@@ -45,5 +45,10 @@ export default {
   preview: {
     width: 300,
     height: 200
+  },
+  webview: {
+    flex:1, width:'100%', minWidth:deviceWidth,
+    minHeight:deviceHeight-80, //why 80???
+    height:'100%'
   }
 };

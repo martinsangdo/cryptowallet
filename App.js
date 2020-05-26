@@ -38,6 +38,7 @@ import Scanner from "./js/screen/wallet/scanner";
 import ForgotPass from "./js/screen/wallet/forgot_pass";
 import Bookmark from "./js/screen/market/bookmark";
 import CoinDetail from "./js/screen/market/coin_detail";
+import Payment from "./js/screen/wallet/payment";
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
@@ -58,6 +59,7 @@ const AppNavigator = StackNavigator({
 				ForgotPass: {screen: ForgotPass},
 				Bookmark: {screen: Bookmark},
 				CoinDetail: {screen: CoinDetail},
+				Payment: {screen: Payment},
 				//define tab bar
 				Main: {
 					screen: TabNavigator({
