@@ -224,16 +224,16 @@ class Bookmark extends BaseScreen {
 						<Container padder>
 							<Header style={[common_styles.header, common_styles.whiteBg]}>
 								<Left style={[common_styles.headerLeft, {flex:0.15}]}>
-								<TouchableOpacity onPress={() => this._on_go_back()}>
-									<View style={styles.left_row}>
-										<View style={[common_styles.float_center]}>
-											<Icon name="ios-arrow-back" style={common_styles.default_font_color}/>
+									<TouchableOpacity onPress={() => this._on_go_back()}>
+										<View style={styles.left_row}>
+											<View style={[common_styles.float_center]}>
+												<Icon name="ios-arrow-back" style={common_styles.default_font_color}/>
+											</View>
+											<View style={[common_styles.margin_l_10, common_styles.float_center]}>
+												<Text uppercase={false} style={[common_styles.default_font_color]}>Back</Text>
+											</View>
 										</View>
-										<View style={[common_styles.margin_l_10, common_styles.float_center]}>
-											<Text uppercase={false} style={[common_styles.default_font_color]}>Back</Text>
-										</View>
-									</View>
-								</TouchableOpacity>
+									</TouchableOpacity>
 								</Left>
 								<Body style={styles.headerBody}>
 									<Text style={[common_styles.bold, common_styles.default_font_color]}>Bookmarked coins</Text>

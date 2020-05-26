@@ -119,6 +119,9 @@ class SendCoin extends BaseScreen {
 											<View style={[common_styles.float_center]}>
 												<Icon name="ios-arrow-back" style={common_styles.default_font_color}/>
 											</View>
+											<View style={[common_styles.margin_l_10, common_styles.float_center]}>
+												<Text uppercase={false} style={[common_styles.default_font_color]}>Back</Text>
+											</View>
 										</View>
 									</TouchableOpacity>
 								</Left>

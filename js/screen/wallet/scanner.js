@@ -36,8 +36,15 @@ class Scanner extends BaseScreen {
 						<Container>
 							<Header style={[common_styles.header, common_styles.whiteBg, {maxHeight:50}]}>
 								<Left style={{flex:0.3, flexDirection: 'row', marginBottom:5}}>
-									<TouchableOpacity onPress={() => this._go_back()} style={{width:40}}>
-										<Icon name="ios-arrow-back" style={styles.header_icon}/>
+									<TouchableOpacity onPress={() => this._go_back()}>
+										<View style={styles.left_row}>
+											<View style={[common_styles.float_center]}>
+												<Icon name="ios-arrow-back" style={common_styles.default_font_color}/>
+											</View>
+											<View style={[common_styles.margin_l_10, common_styles.float_center]}>
+												<Text uppercase={false} style={[common_styles.default_font_color]}>Back</Text>
+											</View>
+										</View>
 									</TouchableOpacity>
 								</Left>
 								<Body style={[styles.headerBody, {flex:0.8, marginBottom:5}]}>
