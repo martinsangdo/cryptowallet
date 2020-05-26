@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "test": "jest",
+    "postinstall": "npx jetify"
   },
   "dependencies": {
     "assert": "^1.5.0",
@@ -45,6 +46,7 @@
     "babel-jest": "22.1.0",
     "babel-preset-react-native": "4.0.0",
     "jest": "22.1.4",
+    "jetifier": "^1.6.5",
     "react-test-renderer": "16.2.0",
     "rn-nodeify": "github:mvayngrib/rn-nodeify"
   },
