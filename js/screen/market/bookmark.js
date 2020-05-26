@@ -244,7 +244,7 @@ class Bookmark extends BaseScreen {
 							{/* END header */}
 							<Spinner visible={this.state.loading_indicator_state} textStyle={common_styles.whiteColor} />
 							<View style={{height:25, justifyContent: 'center', flexDirection: 'row'}}>
-								<Text style={styles.coin_name}>Click coin name to view detail</Text>
+								<Text style={styles.coin_name}>Tap coin name to view detail</Text>
 							</View>
 							<View style={[styles.tbl_header, common_styles.mainColorBg]}>
 								<Text style={[styles.td_item_name, common_styles.bold]}>Name</Text>
