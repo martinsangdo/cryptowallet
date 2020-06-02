@@ -18,7 +18,7 @@
     "punycode": "^1.4.1",
     "querystring-es3": "^0.2.1",
     "react": "^16.2.0",
-    "react-native": "^0.52.2",
+    "react-native": "0.59.1",
     "react-native-autoheight-webview": "^0.4.0",
     "react-native-camera": "^1.13.1",
     "react-native-device-info": "^0.15.3",
@@ -47,6 +47,7 @@
     "babel-preset-react-native": "4.0.0",
     "jest": "22.1.4",
     "jetifier": "^1.6.5",
+    "react-native-clean-project": "^3.3.0",
     "react-test-renderer": "16.2.0",
     "rn-nodeify": "github:mvayngrib/rn-nodeify"
   },
