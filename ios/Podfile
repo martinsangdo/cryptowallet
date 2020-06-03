@@ -11,5 +11,7 @@ target 'CryptoWallet' do
   pod 'Firebase/Messaging'
   pod 'Firebase/Firestore'
 
+  pod 'react-native-fbsdk', :path => '../node_modules/react-native-fbsdk'
+
 end
 

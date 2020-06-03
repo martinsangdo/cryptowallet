@@ -1,1 +1,1 @@
-/Users/sang/Library/Android/sdk/platform-tools/adb shell input keyevent 82
+/Users/sangdt/Library/Android/sdk/platform-tools/adb shell input keyevent 82
