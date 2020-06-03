@@ -35,7 +35,7 @@ class QRCode extends BaseScreen {
 			var me = this;
 			var logined_user_id = this.props.navigation.state.params.logined_user_id;
 			// Utils.xlog('logined_user_id', logined_user_id);
-			user_collection.doc(logined_user_id).get('').then(function(querySnapshot) {
+			user_collection.doc(logined_user_id).get().then(function(querySnapshot) {
 					if (querySnapshot.size == 0){
 						//there is no user
 						Utils.dlog('There is no user');
