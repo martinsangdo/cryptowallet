@@ -2,8 +2,8 @@
 * author: Martin SangDo
 */
 import React, {Component} from "react";
-import {Image, View, Platform, Alert, NetInfo} from "react-native";
-
+import {Image, View, Platform, Alert} from "react-native";
+import NetInfo from "@react-native-community/netinfo";
 import {Container} from "native-base";
 
 import BaseScreen from "../../base/BaseScreen.js";
@@ -29,8 +29,8 @@ class Splash extends BaseScreen {
 		//like onload event
 		componentDidMount() {
 			//check Internet connection
-			NetInfo.getConnectionInfo().then((connectionInfo) => {
-				if (connectionInfo.type == 'none'){
+			NetInfo.fetch().then(state => {
+				if (!state.isConnected){
 					//device is offline
 					Alert.alert(
 						'Alert',

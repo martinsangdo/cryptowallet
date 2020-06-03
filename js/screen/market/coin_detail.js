@@ -74,8 +74,8 @@ class CoinDetail extends BaseScreen {
 								}
 							}
 						}
-						this.setState({loading_indicator_state:false});
 					}
+					this.setState({loading_indicator_state:false});
 				});
 				//timeout of waiting request
 				setTimeout(() => {

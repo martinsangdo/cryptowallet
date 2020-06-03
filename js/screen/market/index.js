@@ -79,10 +79,8 @@ class Market extends BaseScreen {
 		_renderItem = ({item}) => (
 				<View style={[styles.list_item, common_styles.fetch_row, item.idx%2==0 && styles.odd_item]} key={item.key}>
 					<View style={styles.td_item_name}>
-						<TouchableOpacity onPress={() => this._coin_detail(item.symbol, item.name)}>
 							<Text style={styles.coin_name}>{item.name}</Text>
 							<Text>{item.symbol}</Text>
-						</TouchableOpacity>
 					</View>
 					<Text style={styles.td_item_last}>{item.price}</Text>
 					<Text style={styles.td_item}>{item.traded_volumn}</Text>
@@ -256,9 +254,6 @@ class Market extends BaseScreen {
 							</Header>
 							{/* END header */}
 							<Spinner visible={this.state.loading_indicator_state} textStyle={common_styles.whiteColor} />
-							<View style={{height:25, justifyContent: 'center', flexDirection: 'row'}}>
-								<Text style={styles.coin_name}>Tap coin name to view detail</Text>
-							</View>
 							<View style={[styles.tbl_header, common_styles.mainColorBg]}>
 								<Text style={[styles.td_item_name, common_styles.bold]}>Name</Text>
 								<View style={[styles.td_item_last]}>

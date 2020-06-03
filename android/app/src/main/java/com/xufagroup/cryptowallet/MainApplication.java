@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.facebook.CallbackManager;
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.netinfo.NetInfoPackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.learnium.RNDeviceInfo.BuildConfig;
 import com.tradle.react.UdpSocketsModule;
@@ -44,6 +45,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new NetInfoPackage(),
             new FBSDKPackage(mCallbackManager),
             new UdpSocketsModule(),
             new TcpSocketsModule(),
