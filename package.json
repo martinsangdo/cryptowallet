@@ -8,11 +8,14 @@
     "postinstall": "npx jetify"
   },
   "dependencies": {
+    "@babel/preset-env": "^7.10.2",
     "assert": "^1.5.0",
     "asyncstorage-down": "^3.2.1",
+    "babel-plugin-transform-object-rest-spread": "^7.0.0-beta.3",
     "crypto-js": "^3.3.0",
     "dns.js": "^1.0.1",
     "events": "^1.1.1",
+    "metro-react-native-babel-preset": "^0.59.0",
     "moment": "^2.26.0",
     "native-base": "^2.13.12",
     "process": "^0.11.10",
@@ -45,7 +48,7 @@
   },
   "devDependencies": {
     "babel-jest": "22.1.0",
-    "babel-preset-react-native": "4.0.0",
+    "babel-preset-react-native": "^4.0.0",
     "jest": "22.1.4",
     "jetifier": "^1.6.5",
     "react-native-clean-project": "^3.3.0",
